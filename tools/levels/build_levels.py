@@ -143,7 +143,10 @@ def _goal_type(goal, goal_cells: dict[str, set[tuple[int, int]]]) -> list | None
     cells = [{"cX": column, "cY": row} for row, column in sorted(goal_cells[goal.kind])]
     if goal.kind == "gelatin":
         return ["TGGelatin", cells]
-    return ["TGMercury", goal.cell_count, cells]
+    # The HUD shows the cells left to cover (ModuleGoal: num - arMerc.length), while
+    # the goal counts every cell to cover, including those covered at start.
+    cells_to_cover = goal.cell_count + len(cells)
+    return ["TGMercury", cells_to_cover, cells]
 
 
 def _manual_rocks(grid: list[list[str]]) -> list[dict]:

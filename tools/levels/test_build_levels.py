@@ -66,10 +66,20 @@ def test_overrides_replace_fields_and_clear_the_matching_review_reasons():
     assert fixed["review"] == []
 
 
+def test_a_mercury_goal_counts_the_cells_covered_at_start():
+    """The HUD shows what is left to cover (ModuleGoal: num - arMerc.length)."""
+    goal = _level(127)["type"]
+
+    assert goal[0] == "TGMercury"
+    assert len(goal[2]) == 11
+    assert goal[1] == 57 + 11
+
+
 if __name__ == "__main__":
     test_holes_get_the_variant_whose_rough_sides_face_playable_cells()
     test_level_8_is_a_gelatin_level_with_breakable_blocks()
     test_classic_rocks_feed_the_deck_instead_of_the_manual_rocks()
     test_level_88_time_bombs_are_manual_rocks()
     test_overrides_replace_fields_and_clear_the_matching_review_reasons()
+    test_a_mercury_goal_counts_the_cells_covered_at_start()
     print("PASS")
