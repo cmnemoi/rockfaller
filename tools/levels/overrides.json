@@ -1,0 +1,19 @@
+{
+  "1": {
+    "numMoves": 6,
+    "type": ["TGScoring", 5000],
+    "why": "Tutorial: the HUD is hidden and the game ends after 6 moves (Game.enableClick). The level popup asks for 5000 points."
+  },
+  "2": {
+    "numMoves": 20,
+    "why": "Tutorial: the moves are hidden and never checked; the game ends on the goal (Game.enableClick)."
+  },
+  "3": {
+    "numMoves": 20,
+    "why": "Tutorial: the moves are hidden and never checked; the game ends on the goal (Game.enableClick)."
+  },
+  "31": {
+    "numMoves": 30,
+    "why": "A falling particle hides the 0 on the start frame; the medallion reads 30."
+  }
+}
