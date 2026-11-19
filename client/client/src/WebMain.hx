@@ -38,7 +38,8 @@ class WebMain
 			flash.external.ExternalInterface.addCallback("onFriendRequest",onFriendRequest);
 
 		mt.flash.MouseWheelTrap.setup();
-		
+
+		Protocol.useProgressStore(new progress.SharedObjectProgressStore());
 		new Main();
 		//Main.PREPARE_FIRST_INIT(null);
 	}
