@@ -1,0 +1,35 @@
+.gitignore
+  s_370653b5630944::t_8a37719adf9010 1-7
+client/client/application.xml
+  s_370653b5630944::t_f9b6f793568578 7,33-35
+client/client/src/Main.hx
+  s_370653b5630944::t_e58647b2bff13b 50
+client/levelEditor/application.xml
+  s_370653b5630944::t_9d5ee59f8cb6e5 6,19,31,34,36,38-40
+client/levelEditor/src/DataManager.hx
+  s_370653b5630944::t_0a3c7ba190cc26 24
+client/levelEditor/src/Main.hx
+  s_370653b5630944::t_592b05dc0b8a1a 30
+mise.toml
+  s_370653b5630944::t_375e140d546848 1-12
+tools/build-flash.sh
+  s_370653b5630944::t_6c4d239ec4587c 1-90
+tools/install-deps.sh
+  s_370653b5630944::t_37e62feace1647 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "23ce54097087eee9431b78c9b6341d8cbda52792",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
