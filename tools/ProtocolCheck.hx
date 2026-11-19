@@ -18,7 +18,7 @@ class ProtocolCheck {
 		check(Type.enumEq(level1.biome, TypeBiome.TBClassic), "level 1 is in the classic biome");
 
 		for (level in levels)
-			check(Common.VALIDATE_LEVEL(level) || hasNoGoalCell(level), "level " + level.level + " passes the game's validation");
+			check(Common.VALIDATE_LEVEL(level), "level " + level.level + " passes the game's validation");
 
 		var level88 = levels[87];
 		check(hasManualRock(level88, 4, 0, TypeRock.TRBombCiv(7)), "level 88 has a time bomb at 7 on top of column 4");
@@ -44,15 +44,6 @@ class ProtocolCheck {
 				return data.levels;
 			default:
 				throw "offline bootstrap did not return init data";
-		}
-	}
-
-	/** Gelatin or mercury hidden on the start frame: fixed by hand later (docs/PLAN.md, lot 7). */
-	static function hasNoGoalCell(level:LevelInfo):Bool {
-		return switch (level.type) {
-			case TypeGoal.TGGelatin(cells): cells.length == 0;
-			case TypeGoal.TGMercury(_, cells): cells.length == 0;
-			default: false;
 		}
 	}
 

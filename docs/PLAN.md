@@ -12,7 +12,7 @@ Ce qui est vérifié :
 
 - Le client Flash compile avec `tools/build-flash.sh client release`, après `tools/install-deps.sh`.
 - Le jeu se joue dans Ruffle 0.6.0 sur les 180 niveaux extraits de la vidéo (`data/levels.json`). Testé à la main jusqu'au niveau 8.
-- `tools/ProtocolCheck.hx` vérifie que les 180 niveaux passent `Common.VALIDATE_LEVEL`, sauf 7 sans case de gélatine ou de mercure.
+- `tools/ProtocolCheck.hx` vérifie que les 180 niveaux passent `Common.VALIDATE_LEVEL`.
 
 Bugs trouvés en jouant, et corrigés :
 
@@ -24,7 +24,7 @@ Bugs trouvés en jouant, et corrigés :
 
 Ce qui manque :
 
-- 7 niveaux ne s'ouvrent pas (29, 35, 92, 124, 133, 138, 145), et 25 niveaux à gélatine sont à vérifier (lot 7).
+- 22 niveaux à gélatine sont à vérifier : moins de cases trouvées que dans l'objectif (lot 7).
 - `arGP` (eau, magma, motifs, geysers) n'est pas extrait.
 - L'éditeur de niveaux ne compile pas (`air3`).
 
@@ -211,7 +211,10 @@ C'est l'étape la plus incertaine. Elle dépend de données qui ne sont pas dans
      - Corrections à la main dans `tools/levels/overrides.json`, chacune avec sa raison : niveaux 1, 2 et 3 (tutoriels, coups cachés) et niveau 31 (coups cachés par une particule).
      - Test : `haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProtocolCheck --interp`.
      - L'éditeur de niveaux n'intègre pas encore la ressource `levels` : il ne compile pas de toute façon (`air3`).
-  7. À faire : corriger à la main les 25 niveaux à gélatine à vérifier, et décider quoi faire pour `arGP`.
+  7. En cours : corrections à la main dans `tools/levels/overrides.json`.
+     - Fait : les 7 niveaux qui ne s'ouvraient pas (29, 35, 92 : gélatine sous la glace ; 124, 133, 138, 145 : ciment en halo gris autour de la glace ou des bombes). Positions lues sur l'image de départ ; leur nombre égale l'objectif.
+     - Fait : le total d'un objectif de mercure ajoute les cases couvertes au départ (le haut de l'écran affiche ce qu'il reste, `ModuleGoal` : `num - arMerc.length`).
+     - À faire : les 22 niveaux à gélatine incomplets, et `arGP`.
 - Si une source existe : écrire un import vers `Array<LevelInfo>`, testé sur 2 ou 3 niveaux connus.
 - Si aucune source n'existe : créer des niveaux avec l'éditeur (étape 5).
 - Quand de vrais niveaux sont disponibles, retirer le champ `offline` et les conditions du lot C. Les tutoriels des niveaux 2 et 3 redeviennent alors corrects.
