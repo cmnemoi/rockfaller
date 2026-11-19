@@ -1,0 +1,325 @@
+assets/ic/logo.svg
+  s_370653b5630944::t_36606bfd225955 1-42
+client/Data.hx
+  s_370653b5630944::t_9d2245bb282f33 1-8
+client/client/application.xml
+  s_370653b5630944::t_f9ce8ea88bebd5 1-35
+client/client/assetsWeb/assets1.xml
+  s_370653b5630944::t_2af3e7938b769d 1-251
+client/client/assetsWeb/benchNineFont.meta.json
+  s_370653b5630944::t_9bd368d25b827b 1
+client/client/assetsWeb/benchNineFont.xml
+  s_370653b5630944::t_ee7a1f04e129e2 1-68
+client/client/assetsWeb/birminghamFont.meta.json
+  s_370653b5630944::t_27a0849f15b759 1
+client/client/assetsWeb/birminghamFont.xml
+  s_370653b5630944::t_92e772aee46cd1 1-65
+client/client/assetsWeb/design.meta.json
+  s_370653b5630944::t_a56defe87234f9 1
+client/client/assetsWeb/design.xml
+  s_370653b5630944::t_0e8a6cb62a3c01 1-91
+client/client/assetsWeb/design2.xml
+  s_370653b5630944::t_3c749fa9558d00 1-84
+client/client/assetsWeb/fx.meta.json
+  s_370653b5630944::t_2810beb8c375d2 1
+client/client/assetsWeb/fx.xml
+  s_370653b5630944::t_a0e62e32b117d2 1-150
+client/client/assetsWeb/fx2.meta.json
+  s_370653b5630944::t_053ce9a450077c 1
+client/client/assetsWeb/fx2.xml
+  s_370653b5630944::t_ef67174611bd37 1-163
+client/client/assetsWeb/lang_en.xml
+  s_370653b5630944::t_555359e8d42ffc 1-11
+client/client/assetsWeb/levels.xml
+  s_370653b5630944::t_3c9c01ca138e58 1-142
+client/client/assetsWeb/levels2.meta.json
+  s_370653b5630944::t_e779079e15be38 1
+client/client/assetsWeb/levels2.xml
+  s_370653b5630944::t_cb64cacec34f0e 1-83
+client/client/assetsWeb/loader.xml
+  s_370653b5630944::t_1a54f9d5f4f943 1-14
+client/client/assetsWeb/noTrim.xml
+  s_370653b5630944::t_df1db37b8ffcef 1-19
+client/client/assetsWeb/taupiFlump/library.json
+  s_370653b5630944::t_dd023b829ab007 1
+client/client/assetsWeb/taupinotron.meta.json
+  s_370653b5630944::t_4f362fe064628a 1
+client/client/assetsWeb/taupinotron.xml
+  s_370653b5630944::t_40d12868d680c6 1-45
+client/client/assetsWeb/tuto/tutoBomb0.meta.json
+  s_370653b5630944::t_79eab6f12c6834 1
+client/client/assetsWeb/tuto/tutoBomb1.meta.json
+  s_370653b5630944::t_35917e57dd037c 1
+client/client/assetsWeb/tuto/tutoBomb2.meta.json
+  s_370653b5630944::t_e7d15cad20ef30 1
+client/client/assetsWeb/tuto/tutoBomb3.meta.json
+  s_370653b5630944::t_061831c240bc9a 1
+client/client/assetsWeb/universCIM.xml
+  s_370653b5630944::t_c1ea63bb6b5111 1-14
+client/client/assetsWeb/universNL.xml
+  s_370653b5630944::t_b91550dd465936 1-11
+client/client/assetsWeb/universWCC.xml
+  s_370653b5630944::t_b1af30acd2f37b 1-14
+client/client/assetsWeb/worlds/beginning.meta.json
+  s_370653b5630944::t_ced4a1231a6263 1
+client/client/assetsWeb/worlds/worldCiv.meta.json
+  s_370653b5630944::t_a952c5d482968a 1
+client/client/assetsWeb/worlds/worldClassic.meta.json
+  s_370653b5630944::t_e3741bd5141e39 1
+client/client/assetsWeb/worlds/worldCore.meta.json
+  s_370653b5630944::t_9d767c95751896 1
+client/client/assetsWeb/worlds/worldCorebegin.meta.json
+  s_370653b5630944::t_24e8d6294acf6a 1
+client/client/assetsWeb/worlds/worldIce.meta.json
+  s_370653b5630944::t_de34a46f9289dc 1
+client/client/assetsWeb/worlds/worldLimbo.meta.json
+  s_370653b5630944::t_f50d8e85c1a4b0 1
+client/client/assetsWeb/worlds/worldMagma.meta.json
+  s_370653b5630944::t_23d3bc95770fd6 1
+client/client/assetsWeb/worlds/worldNightmare.meta.json
+  s_370653b5630944::t_e2e07f310bc459 1
+client/client/assetsWeb/worlds/worldTree.meta.json
+  s_370653b5630944::t_29d392c2e7c4cf 1
+client/client/assetsWeb/worlds/worldTreeEnd.meta.json
+  s_370653b5630944::t_259acc11b8d035 1
+client/client/assetsWeb/worlds/worldWater.meta.json
+  s_370653b5630944::t_e6e50b9b7ae7ee 1
+client/client/include.xml
+  s_370653b5630944::t_c8dbd5b141e6ae 1-47
+client/client/lang/client.de.po
+  s_370653b5630944::t_58b8f2322916a0 1-823
+client/client/lang/client.en.po
+  s_370653b5630944::t_43f6b286868f2f 1-725
+client/client/lang/client.es.po
+  s_370653b5630944::t_722606bbbf5854 1-806
+client/client/lang/client.fr.po
+  s_370653b5630944::t_f48f775ac352ba 1-377
+client/client/lang/client.it.po
+  s_370653b5630944::t_10d8005a13bd9b 1-816
+client/client/lang/client.pot
+  s_370653b5630944::t_5e92e9c9715647 1-597
+client/client/lang/client.pt.po
+  s_370653b5630944::t_2a6fa999cb4eef 1-820
+client/client/src/Background.hx
+  s_370653b5630944::t_4f2abe591d4ce6 1-98
+client/client/src/FX.hx
+  s_370653b5630944::t_a6fa24ec5d7245 1-924
+client/client/src/Grip.hx
+  s_370653b5630944::t_a3da6d90fcb1c4 1-215
+client/client/src/GripZone.hx
+  s_370653b5630944::t_f44926e3d4294a 1-161
+client/client/src/Input.hx
+  s_370653b5630944::t_5460f67b894398 1-83
+client/client/src/Main.hx
+  s_370653b5630944::t_b9d355873720e1 1-337
+client/client/src/MobileServer.hx
+  s_370653b5630944::t_93e8bb10d02f83 1-227
+client/client/src/PreloaderH2D.hx
+  s_370653b5630944::t_25c78ce323b1a3 1-513
+client/client/src/PreloaderOFL.hx
+  s_370653b5630944::t_0cc1e9c5353ed9 1-137
+client/client/src/Rock.hx
+  s_370653b5630944::t_ce1800e0e5d36c 1-1367
+client/client/src/SubLoader.hx
+  s_370653b5630944::t_45ee948379915b 1-157
+client/client/src/Taupi.hx
+  s_370653b5630944::t_c39ebd9370164e 1-166
+client/client/src/Wall.hx
+  s_370653b5630944::t_4c9354b4f78921 1-214
+client/client/src/WebMain.hx
+  s_370653b5630944::t_a75f0640de89bf 1-92
+client/client/src/data/Data.hx
+  s_370653b5630944::t_f7e5fe5132bced 1-8
+client/client/src/data/DataManager.hx
+  s_370653b5630944::t_241571e4bb5262 1-383
+client/client/src/data/Lang.hx
+  s_370653b5630944::t_2ec29f406e4b94 1-311
+client/client/src/data/LevelDesign.hx
+  s_370653b5630944::t_3e468b91742432 1-351
+client/client/src/data/Settings.hx
+  s_370653b5630944::t_8a29ecccec5139 1-248
+client/client/src/manager/AssetManager.hx
+  s_370653b5630944::t_7355b4f115befe 1-131
+client/client/src/manager/GoalManager.hx
+  s_370653b5630944::t_a5343e4289354c 1-249
+client/client/src/manager/LifeManager.hx
+  s_370653b5630944::t_f01e299f6107a7 1-63
+client/client/src/manager/OptiManager.hx
+  s_370653b5630944::t_0d61564fa965a3 1-18
+client/client/src/manager/RegenManager.hx
+  s_370653b5630944::t_f58551dc670ca6 1-387
+client/client/src/manager/RockAssetManager.hx
+  s_370653b5630944::t_74db07a6f50e44 1-459
+client/client/src/manager/SoundManager.hx
+  s_370653b5630944::t_f2a88dd4f7623d 1-442
+client/client/src/manager/SpecialManager.hx
+  s_370653b5630944::t_ff246cbce0d3bb 1-806
+client/client/src/manager/StateManager.hx
+  s_370653b5630944::t_04f6d769179241 1-162
+client/client/src/manager/TutoManager.hx
+  s_370653b5630944::t_87f6337af3769b 1-1128
+client/client/src/process/Game.hx
+  s_370653b5630944::t_0e8f199f83d87a 1-1154
+client/client/src/process/Home.hx
+  s_370653b5630944::t_afb9715af4b7ea 1-330
+client/client/src/process/Home_Old.hx
+  s_370653b5630944::t_c6dec47a980aa4 1-640
+client/client/src/process/Levels.hx
+  s_370653b5630944::t_6290610bc2cd9f 1-831
+client/client/src/process/LootEarned.hx
+  s_370653b5630944::t_47f2f560abf4a3 1-407
+client/client/src/process/ProcessManaged.hx
+  s_370653b5630944::t_465343880b67a0 1-9
+client/client/src/process/ProcessManager.hx
+  s_370653b5630944::t_594d5873163e62 1-500
+client/client/src/process/popup/AskLife.hx
+  s_370653b5630944::t_a0d303cf437399 1-768
+client/client/src/process/popup/AskLog.hx
+  s_370653b5630944::t_e5fb6eb3aea9c1 1-140
+client/client/src/process/popup/AskMobile.hx
+  s_370653b5630944::t_b64e362e20ebd6 1-136
+client/client/src/process/popup/BasePopup.hx
+  s_370653b5630944::t_5688e2739a6280 1-830
+client/client/src/process/popup/BoosterMoves.hx
+  s_370653b5630944::t_d16fd368b92666 1-329
+client/client/src/process/popup/BoosterPickaxe.hx
+  s_370653b5630944::t_19f80c97eb7cf8 1-336
+client/client/src/process/popup/Collection.hx
+  s_370653b5630944::t_e5d038a3ffb88b 1-381
+client/client/src/process/popup/End.hx
+  s_370653b5630944::t_18f1f1482ed20d 1-549
+client/client/src/process/popup/Error.hx
+  s_370653b5630944::t_9e2cfe517b6972 1-58
+client/client/src/process/popup/GoalLevels.hx
+  s_370653b5630944::t_d4c83d8a399def 1-296
+client/client/src/process/popup/Life.hx
+  s_370653b5630944::t_3e66241ff289df 1-259
+client/client/src/process/popup/Mail.hx
+  s_370653b5630944::t_ac999cdd9ec80f 1-371
+client/client/src/process/popup/Pause.hx
+  s_370653b5630944::t_36eca62413fe94 1-358
+client/client/src/process/popup/Shop.hx
+  s_370653b5630944::t_4f914407ebc53e 1-367
+client/client/src/ui/Button.hx
+  s_370653b5630944::t_75c9fdfe06cea9 1-191
+client/client/src/ui/ButtonLevel.hx
+  s_370653b5630944::t_e1d5bc40a12087 1-284
+client/client/src/ui/ButtonWorld.hx
+  s_370653b5630944::t_d8bb9f07abcdbf 1-303
+client/client/src/ui/ModuleLife.hx
+  s_370653b5630944::t_582123da1daf6d 1-125
+client/client/src/ui/bottom/ButtonBooster.hx
+  s_370653b5630944::t_085e421f5fa6b9 1-291
+client/client/src/ui/bottom/UIBottomLevels.hx
+  s_370653b5630944::t_ee35a42c2ee1c2 1-368
+client/client/src/ui/top/ModuleGoal.hx
+  s_370653b5630944::t_6db06585aa40ea 1-357
+client/client/src/ui/top/ModuleMoves.hx
+  s_370653b5630944::t_067103925d5831 1-203
+client/client/src/ui/top/ModuleScore.hx
+  s_370653b5630944::t_ee0f7281286a76 1-83
+client/client/src/ui/top/ModuleScoreStar.hx
+  s_370653b5630944::t_e41f5e506ba704 1-135
+client/client/src/ui/top/UITop.hx
+  s_370653b5630944::t_d38c5089ab9acb 1-289
+client/levelEditor/application.xml
+  s_370653b5630944::t_e6b67987beea0a 1-36
+client/levelEditor/include.xml
+  s_370653b5630944::t_c40d8b863683fd 1-6
+client/levelEditor/src/DataManager.hx
+  s_370653b5630944::t_1d3fa3497bdd7a 1-111
+client/levelEditor/src/Input.hx
+  s_370653b5630944::t_cb2ba9889ce849 1-44
+client/levelEditor/src/LE.hx
+  s_370653b5630944::t_1d2d7bc150262d 1-262
+client/levelEditor/src/Main.hx
+  s_370653b5630944::t_01da89321d29bb 1-101
+client/levelEditor/src/RightMenu.hx
+  s_370653b5630944::t_dc5ce64fdfc0e3 1-131
+client/levelEditor/src/Settings.hx
+  s_370653b5630944::t_c40bc7779c6b9e 1-57
+client/levelEditor/src/elem/Grip.hx
+  s_370653b5630944::t_f52d8aa18608ad 1-51
+client/levelEditor/src/elem/Square.hx
+  s_370653b5630944::t_196a758718b282 1-332
+client/levelEditor/src/mod/ModAssets.hx
+  s_370653b5630944::t_4b8236ae71f315 1-213
+client/levelEditor/src/mod/ModBiome.hx
+  s_370653b5630944::t_e3a8b39aa32c70 1-162
+client/levelEditor/src/mod/ModDeck.hx
+  s_370653b5630944::t_d190d569069a2d 1-144
+client/levelEditor/src/mod/ModDeleteLevel.hx
+  s_370653b5630944::t_da91edfc0bf7e3 1-58
+client/levelEditor/src/mod/ModFile.hx
+  s_370653b5630944::t_bcf5ae685909e8 1-93
+client/levelEditor/src/mod/ModGP.hx
+  s_370653b5630944::t_20662a0bbde1ce 1-152
+client/levelEditor/src/mod/ModGoal.hx
+  s_370653b5630944::t_58f50790b94720 1-243
+client/levelEditor/src/mod/ModGrid.hx
+  s_370653b5630944::t_1f79467d4de3fa 1-265
+client/levelEditor/src/mod/ModInfos.hx
+  s_370653b5630944::t_bc784a1e79affc 1-76
+client/levelEditor/src/mod/ModMoveLevel.hx
+  s_370653b5630944::t_aeccfeee2ccea7 1-73
+client/levelEditor/src/mod/ModMoves.hx
+  s_370653b5630944::t_161d9d31517256 1-79
+client/levelEditor/src/mod/ModNewLevel.hx
+  s_370653b5630944::t_d1ef91df8a31dd 1-76
+client/levelEditor/src/mod/ModPattern.hx
+  s_370653b5630944::t_b8071d483c3ba5 1-171
+client/levelEditor/src/mod/ModSet.hx
+  s_370653b5630944::t_812cdf189f3c40 1-117
+client/levelEditor/src/mod/ModStepScore.hx
+  s_370653b5630944::t_a8c058815d2375 1-103
+client/levelEditor/src/mod/Module.hx
+  s_370653b5630944::t_6cb0715e404dfd 1-34
+client/levelEditor/src/ui/Button.hx
+  s_370653b5630944::t_73314121bd657b 1-79
+client/levelEditor/src/ui/InputText.hx
+  s_370653b5630944::t_0001086da88145 1-87
+data/data.cdb
+  s_370653b5630944::t_8001d1a35ebcb4 1-1162
+data/goals-translated.pot
+  s_370653b5630944::t_7edfee8140e261 1-4968
+data/goals.cdb
+  s_370653b5630944::t_9ee0ee8becc490 1-6593
+data/goals.en.po
+  s_370653b5630944::t_260c3547933e36 1-3275
+data/goals.pot
+  s_370653b5630944::t_d4316ebc61615b 1-3204
+data/loot.json
+  s_370653b5630944::t_28d034bad94d07 1-754
+src/com/Common.hx
+  s_370653b5630944::t_d4948cfa5e7200 1-284
+www/img/ss/lang_de.xml
+  s_370653b5630944::t_0401c5ceb0f135 1-11
+www/img/ss/lang_en.xml
+  s_370653b5630944::t_a7746c5784c9ee 1-11
+www/img/ss/lang_es.xml
+  s_370653b5630944::t_4e0a13acae4317 1-11
+www/img/ss/lang_fr.xml
+  s_370653b5630944::t_63b52edb462e9e 1-11
+www/img/ss/lang_it.xml
+  s_370653b5630944::t_6b1def92674257 1-11
+www/img/ss/lang_pt.xml
+  s_370653b5630944::t_8c4b3d938a4613 1-11
+www/img/ss/taupinotron.xml
+  s_370653b5630944::t_c666764777f29a 1-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "523210d04212a0b55e0473b378dd2db39e9c77ca",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
