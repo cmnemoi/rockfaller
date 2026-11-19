@@ -24,3 +24,43 @@ NEKOPATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-1-0"
 HAXE_STD_PATH = "{{env.HOME}}/.local/share/mise/installs/haxe/3.2.1/std"
 # Project-local haxelib repo, filled by tools/install-deps.sh.
 HAXELIB_PATH = "{{config_root}}/.haxelib"
+
+# Run `mise tasks` to list them, `mise run <task>` to run one.
+[tasks.install]
+description = "Install the haxelibs at their pinned versions, in .haxelib/"
+run = "bash tools/install-deps.sh"
+
+[tasks."check:protocol"]
+description = "Check the offline server and the 180 levels"
+run = "haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProtocolCheck --interp"
+
+[tasks."check:progress"]
+description = "Check the player's progress"
+run = "haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProgressCheck --interp"
+
+[tasks."test:levels"]
+description = "Test the level extraction (without the videos)"
+dir = "{{config_root}}/tools/levels"
+run = [
+  "uv run test_classify_cells.py",
+  "uv run test_read_hud.py",
+  "uv run test_build_levels.py",
+]
+
+[tasks.test]
+description = "Run every test that needs no video"
+depends = ["check:protocol", "check:progress", "test:levels"]
+
+[tasks.build]
+description = "Build the release Flash client"
+run = "bash tools/build-flash.sh client release"
+
+[tasks.web]
+description = "Assemble the web version in dist/web"
+depends = ["build"]
+run = "bash tools/build-web.sh"
+
+[tasks.serve]
+description = "Serve the web version on http://localhost:8000"
+depends = ["web"]
+run = "python3 -m http.server 8000 --directory dist/web"

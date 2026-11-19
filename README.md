@@ -20,19 +20,12 @@ Le détail est dans [`docs/PLAN.md`](docs/PLAN.md).
 Prérequis : [mise](https://mise.jdx.dev) (il installe Haxe 3.2.1 et Neko 2.1, voir `mise.toml`).
 
 ```bash
-mise exec -- bash tools/install-deps.sh               # haxelibs aux versions fixées, dans .haxelib/
-mise exec -- bash tools/build-flash.sh client release # client/client/bin/flash/bin/rockFallerMobile.swf
+mise run install  # haxelibs aux versions fixées, dans .haxelib/
+mise run test     # faux serveur, progression et extraction des niveaux
+mise run serve    # construit le SWF et la page web, puis les sert sur http://localhost:8000
 ```
 
-Tester :
-
-```bash
-mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProtocolCheck --interp
-mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProgressCheck --interp
-uv run tools/levels/test_classify_cells.py
-uv run tools/levels/test_read_hud.py
-uv run tools/levels/test_build_levels.py
-```
+`mise tasks` liste toutes les tâches (`build`, `web`, `check:protocol`…).
 
 `tools/levels/test_segment_video.py` demande les vidéos (`tools/levels/download_videos.sh`, 2,8 Go).
 

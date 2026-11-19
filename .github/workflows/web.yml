@@ -33,28 +33,24 @@ jobs:
           key: haxelib-${{ runner.os }}-${{ hashFiles('tools/install-deps.sh') }}
 
       - name: Install haxelibs
-        run: mise exec -- bash tools/install-deps.sh
+        run: mise run install
 
       - name: Check the offline server and the 180 levels
-        run: mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProtocolCheck --interp
+        run: mise run check:protocol
 
       - name: Check the player's progress
-        run: mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProgressCheck --interp
+        run: mise run check:progress
 
       - uses: astral-sh/setup-uv@v6
 
       - name: Test the level extraction
-        working-directory: tools/levels
-        run: |
-          uv run test_classify_cells.py
-          uv run test_read_hud.py
-          uv run test_build_levels.py
+        run: mise run test:levels
 
       - name: Build the Flash client
-        run: mise exec -- bash tools/build-flash.sh client release
+        run: mise run build
 
       - name: Assemble the web version
-        run: bash tools/build-web.sh
+        run: bash tools/build-web.sh  # not `mise run web`: the client is already built
 
       - uses: actions/upload-pages-artifact@v3
         with:
