@@ -1,0 +1,29 @@
+docs/AUDIT_CODEBASE.md
+  s_370653b5630944::t_00673c45671527 1-162
+docs/PLAN.md
+  s_370653b5630944::t_a473bff6873521 1-238
+README.md
+  s_370653b5630944::t_2ec9f0ee5e265e 1-57
+AGENTS.md
+  s_370653b5630944::t_09ad5ac40dbc01 1-10
+LICENSE.txt
+  s_370653b5630944::t_120189b66e7731 1-5
+docs/STUB_PLAN.md
+  s_370653b5630944::t_ae2c378d9acae9 1-520
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25c63714cbd897598f5a4548eb1d5cc17a1f6e2f",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
