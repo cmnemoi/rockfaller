@@ -85,6 +85,14 @@ class Protocol {
 
 	static var levels:Array<LevelInfo>;
 	static var progressStore:ProgressStore = new InMemoryProgressStore();
+	// The client never reports the tutorials of levels 1 to 3 (TutoManager sends
+	// DoUpdateTuto from level 4 on): winning those levels marks them seen.
+	static var LEVELS_WITH_UNREPORTED_TUTORIAL = [1, 2, 3];
+	// Tutorials not yet checked on the extracted levels: some point at cells of
+	// Motion-Twin's own layouts (level 2 at 3,4 then 4,6) and block the level on
+	// a random one. They are served as seen, without being saved as seen; remove
+	// one from here once it works.
+	static var UNVERIFIED_TUTORIALS = [2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 16, 36, 56, 76, 96, 121];
 
 	public static function init():Void {}
 
@@ -115,10 +123,15 @@ class Protocol {
 			case ProtocolCom.DoSendGame(gameData):
 				if (gameData.success == TypeEndGame.TEGVictory) {
 					var progress = progressStore.load().recordVictory(gameData.level, gameData.score, offlineLevels().length);
+					if (LEVELS_WITH_UNREPORTED_TUTORIAL.indexOf(gameData.level) >= 0)
+						progress = progress.markTutorialSeen(gameData.level);
 					progressStore.save(progress);
 				}
 				userData = offlineUserData();
 				return ProtocolCom.SendValidEndGame(userData, Date.now().getTime());
+			case ProtocolCom.DoUpdateTuto(tutorial):
+				progressStore.save(progressStore.load().markTutorialSeen(tutorial));
+				return ProtocolCom.SendUserData(offlineUserData());
 			case ProtocolCom.DoGetUserData:
 				return ProtocolCom.SendUserData(userData);
 			case ProtocolCom.DoBuyMoves(_):
@@ -150,7 +163,7 @@ class Protocol {
 			arAssets: [],
 			arLoots: [],
 			pickaxe: 1,
-			tutoDone: [2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 16, 36, 56, 76, 96, 121],
+			tutoDone: progress.seenTutorials().concat([for (tutorial in UNVERIFIED_TUTORIALS) if (!progress.hasSeenTutorial(tutorial)) tutorial]),
 			flags: flags,
 			requestsCount: 0
 		};

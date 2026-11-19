@@ -25,6 +25,14 @@ class ProgressCheck {
 		unreadableSavedProgressStartsANewGame();
 		theOfflineServerSavesVictoriesAndServesThemBack();
 		theOfflineServerIgnoresDefeats();
+		aNewGameHasSeenNoTutorial();
+		aSeenTutorialIsRemembered();
+		seenTutorialsSurviveAJsonRoundTrip();
+		aSaveWithoutTutorialsHasSeenNone();
+		theOfflineServerSavesSeenTutorials();
+		winningLevels1To3MarksTheirTutorialsSeen();
+		losingLevel1LeavesItsTutorialToSee();
+		aNewGameSkipsTheTutorialsNotCheckedOnExtractedLevels();
 		trace("PASS");
 	}
 
@@ -105,6 +113,80 @@ class ProgressCheck {
 
 		check(store.load().unlockedLevel == 1, "a defeat unlocks nothing");
 		check(initUserData().arHighScore[1] == null, "a defeat records no score");
+	}
+
+	static function aNewGameHasSeenNoTutorial() {
+		check(!Progress.newGame().hasSeenTutorial(1), "a new game has seen no tutorial");
+	}
+
+	static function aSeenTutorialIsRemembered() {
+		var progress = Progress.newGame().markTutorialSeen(4).markTutorialSeen(4);
+
+		check(progress.hasSeenTutorial(4), "a seen tutorial is remembered");
+		check(!progress.hasSeenTutorial(5), "other tutorials stay to see");
+		check(progress.seenTutorials().length == 1, "a tutorial seen twice counts once");
+	}
+
+	static function seenTutorialsSurviveAJsonRoundTrip() {
+		var progress = Progress.newGame().markTutorialSeen(4).markTutorialSeen(12);
+
+		var restored = ProgressJson.decode(ProgressJson.encode(progress));
+
+		check(restored.hasSeenTutorial(4) && restored.hasSeenTutorial(12), "seen tutorials survive JSON");
+	}
+
+	static function aSaveWithoutTutorialsHasSeenNone() {
+		var progress = ProgressJson.decode('{"version":1,"unlockedLevel":2,"bestScores":{"1":6525}}');
+
+		check(progress.unlockedLevel == 2, "a save from before tutorials keeps its levels");
+		check(progress.seenTutorials().length == 0, "a save from before tutorials has seen none");
+	}
+
+	static function theOfflineServerSavesSeenTutorials() {
+		var store = new InMemoryProgressStore();
+		Protocol.useProgressStore(store);
+
+		var response = Protocol.offlineResponse(ProtocolCom.DoUpdateTuto(4));
+
+		check(store.load().hasSeenTutorial(4), "the server saves a seen tutorial");
+		check(initUserData().tutoDone.indexOf(4) >= 0, "the server serves seen tutorials");
+		switch (response) {
+			case ProtocolCom.SendUserData(userData):
+				check(userData.tutoDone.indexOf(4) >= 0, "the server answers with the updated tutorials at once");
+			default:
+				throw "FAILED: the server answers a seen tutorial with the player's data";
+		}
+	}
+
+	static function winningLevels1To3MarksTheirTutorialsSeen() {
+		var store = new InMemoryProgressStore();
+		Protocol.useProgressStore(store);
+
+		for (level in 1...5)
+			Protocol.offlineResponse(ProtocolCom.DoSendGame(game(level, TypeEndGame.TEGVictory, 1000)));
+
+		check(store.load().seenTutorials().join(",") == "1,2,3", "winning levels 1 to 3 marks only their tutorials seen");
+	}
+
+	static function losingLevel1LeavesItsTutorialToSee() {
+		var store = new InMemoryProgressStore();
+		Protocol.useProgressStore(store);
+
+		Protocol.offlineResponse(ProtocolCom.DoSendGame(game(1, TypeEndGame.TEGDefeat, 800)));
+
+		check(initUserData().tutoDone.indexOf(1) < 0, "losing level 1 leaves its tutorial to see");
+	}
+
+	/** Tutorials 2 and 3 point at cells of Motion-Twin's layouts, which extracted levels lack. */
+	static function aNewGameSkipsTheTutorialsNotCheckedOnExtractedLevels() {
+		var store = new InMemoryProgressStore();
+		Protocol.useProgressStore(store);
+
+		var tutorialsDone = initUserData().tutoDone;
+
+		check(tutorialsDone.indexOf(1) < 0, "the level 1 tutorial, checked, shows in a new game");
+		check(tutorialsDone.indexOf(2) >= 0 && tutorialsDone.indexOf(3) >= 0, "the level 2 and 3 tutorials are skipped");
+		check(store.load().seenTutorials().length == 0, "skipped tutorials are not saved as seen");
 	}
 
 	static function game(level:Int, success:TypeEndGame, score:Int):GameData {
