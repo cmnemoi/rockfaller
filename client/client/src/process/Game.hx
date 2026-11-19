@@ -310,7 +310,10 @@ class Game extends HProcess implements ProcessManaged
 		arLoots = [];
 		
 	// INIT MOVE AND SCORE
-		
+		// Levels 1 and 2 count their moves here, and level 1 ends at 6: without this
+		// reset, replaying level 1 ended it at once with 0 points.
+		TutoManager.countMoves = 0;
+
 		movesLeft = new mt.flash.VarSecure(levelInfo.numMoves);
 	#if debug
 		//movesLeft.setValue(1);
