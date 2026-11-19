@@ -1,0 +1,83 @@
+client/mt/Assets.hx
+  s_370653b5630944::t_4162baf5e935e9 1-45
+client/mt/Console.hx
+  s_370653b5630944::t_bb4b97a5dd6f56 1-19
+client/mt/Cooldown.hx
+  s_370653b5630944::t_361f690da9c78f 22,145-148,152
+client/mt/Delayer.hx
+  s_370653b5630944::t_71f2eac5a43096 21,103-114
+client/mt/MLib.hx
+  s_370653b5630944::t_9eb3e699e844ef 1-81
+client/mt/Page.hx
+  s_370653b5630944::t_d5de3bae6e36b0 1-25
+client/mt/SecureSO.hx
+  s_370653b5630944::t_c3e08cf601b9e9 1-29
+client/mt/Std.hx
+  s_370653b5630944::t_6c9de2cf625c6f 1
+client/mt/Worker.hx
+  s_370653b5630944::t_eb8c0084d92fa7 1-58
+client/mt/deepnight/Color.hx
+  s_370653b5630944::t_f817bf6384f834 512,517-519
+client/mt/deepnight/HProcess.hx
+  s_370653b5630944::t_afc8f5ca78f7f5 1-3
+client/mt/deepnight/Process.hx
+  s_370653b5630944::t_abc65cab38bef1 1-3
+client/mt/deepnight/deprecated/Process.hx
+  s_370653b5630944::t_7f06825f9ae1aa 53
+client/mt/deepnight/deprecated/TinyProcess.hx
+  s_370653b5630944::t_b0ce1f0a674a7e 29
+client/mt/deepnight/slb/BLib.hx
+  s_370653b5630944::t_e0311f6f6d9347 671
+client/mt/device/Cash.hx
+  s_370653b5630944::t_124d5299a40e0f 1-21
+client/mt/device/EventTracker.hx
+  s_370653b5630944::t_4e333ba3ddeadc 1-31
+client/mt/device/Facebook.hx
+  s_370653b5630944::t_bbb19d948f7c22 1-7
+client/mt/device/FriendRequest.hx
+  s_370653b5630944::t_fa4d7e837a70cf 1-33
+client/mt/device/GameCenter.hx
+  s_370653b5630944::t_5c8cf79c0131a9 1-21
+client/mt/device/TextField.hx
+  s_370653b5630944::t_d0661120ddbcea 1-32
+client/mt/device/User.hx
+  s_370653b5630944::t_ae00ca0602d6fc 1-27
+client/mt/flash/Screenshot.hx
+  s_370653b5630944::t_d3038bffd01b6b 9-10
+client/mt/flash/Sfx.hx
+  s_370653b5630944::t_0018a8a71e43e4 48,312-321,333-342
+client/mt/flash/VarSecure.hx
+  s_370653b5630944::t_32d131ce92e16e 1-23
+client/mt/flash/Volatile.hx
+  s_370653b5630944::t_312e75bd0964aa 1-3
+client/mt/net/Codec.hx
+  s_370653b5630944::t_9cf908054e9f18 1-23
+client/mt/net/Error.hx
+  s_370653b5630944::t_0fdc94aeadfcf2 1-3
+client/mt/net/FriendRequest.hx
+  s_370653b5630944::t_25c7db59b26b5c 1-13
+client/mt/net/Http.hx
+  s_370653b5630944::t_638a64c4bebf36 1-21
+data/levels.json
+  s_370653b5630944::t_4118d3b7ce8b67 1-47794
+src/com/Protocol.hx
+  s_370653b5630944::t_f824a74e08c2ea 1-200
+tools/ProtocolCheck.hx
+  s_370653b5630944::t_fe581f19ba26dd 1-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "47de375e2d3e9a349e8c43966e80588dd82cffb8",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
