@@ -1,0 +1,37 @@
+tools/levels/build_levels.py
+  s_370653b5630944::t_0a9a201ff0cccf 1-249
+tools/levels/classify_cells.py
+  s_370653b5630944::t_ce786ad673bcf3 1-239
+tools/levels/download_videos.sh
+  s_370653b5630944::t_3f16d345787ab6 1-6
+tools/levels/overrides.json
+  s_370653b5630944::t_e07884acc393dd 1-19
+tools/levels/read_hud.py
+  s_370653b5630944::t_7dfa6e4da51bcc 1-178
+tools/levels/segment_video.py
+  s_370653b5630944::t_145f25d7185104 1-185
+tools/levels/test_build_levels.py
+  s_370653b5630944::t_ab41b270951a11 1-75
+tools/levels/test_classify_cells.py
+  s_370653b5630944::t_4c686d8c2d76d0 1-111
+tools/levels/test_read_hud.py
+  s_370653b5630944::t_16f77e7216d719 1-58
+tools/levels/test_segment_video.py
+  s_370653b5630944::t_5cf170ec3b5a1c 1-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "08f1789066578002cc2ef7af7cf7c42abcf0ea21",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
