@@ -9,7 +9,7 @@ Le serveur d'origine n'existe plus. Le jeu tourne donc hors-ligne : un faux serv
 ## État
 
 - Les 180 niveaux sont jouables, sauf 7 dont l'objectif n'a pas pu être lu dans la vidéo (29, 35, 92, 124, 133, 138, 145).
-- La progression n'est pas sauvegardée : elle revient au niveau 1 à chaque chargement.
+- La progression (niveaux débloqués et meilleurs scores) est sauvegardée dans le navigateur, par le stockage local de Ruffle.
 - Les mécaniques propres à certains niveaux (eau, magma, motifs, geysers) ne sont pas encore reconstruites.
 - L'éditeur de niveaux ne compile pas.
 

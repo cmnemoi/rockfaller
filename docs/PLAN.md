@@ -24,7 +24,6 @@ Bugs trouvés en jouant, et corrigés :
 
 Ce qui manque :
 
-- La progression revient au niveau 1 à chaque lancement.
 - 7 niveaux ne s'ouvrent pas (29, 35, 92, 124, 133, 138, 145), et 25 niveaux à gélatine sont à vérifier (lot 7).
 - `arGP` (eau, magma, motifs, geysers) n'est pas extrait.
 - L'éditeur de niveaux ne compile pas (`air3`).
@@ -157,10 +156,15 @@ Fait : dépôt séparé `rockfaller`, avec l'original de Motion-Twin en premier 
 
 ### Étape 3 : sauvegarder la progression
 
-- Problème : `offlineMaxLevel` est en mémoire. Il revient à 1 à chaque lancement.
-- Test d'abord : étendre `ProtocolCheck` pour vérifier qu'un niveau gagné est relu après une nouvelle initialisation.
-- Implémentation : lire et écrire `levelMax` et les meilleurs scores dans un `flash.net.SharedObject`. Le code a déjà `mt/SecureSO.hx`, je vérifierai s'il suffit.
-- Test manuel : gagner le niveau 1, fermer Ruffle, relancer, et vérifier que le niveau 2 est ouvert.
+Fait, en ports & adapters :
+
+- Domaine (`src/com/progress/`) : `Progress`, valeur immuable avec le niveau débloqué et les meilleurs scores, et la règle du serveur mobile d'origine (`MobileServer.SAVE_GAME`). `ProgressJson` est le format enregistré, versionné ; une donnée illisible donne une partie neuve.
+- Port : `ProgressStore` (`load`, `save`). `Protocol` ne connaît que lui.
+- Adaptateurs : `InMemoryProgressStore` (tests, et par défaut) et `SharedObjectProgressStore` (client Flash). Ruffle enregistre un `SharedObject` dans le `localStorage` du navigateur sur le web, et dans un fichier avec Ruffle desktop.
+- Composition : `WebMain` branche `SharedObjectProgressStore` au démarrage.
+- Test : `tools/ProgressCheck.hx` (10 cas). Test manuel dans Ruffle desktop : niveau 1 gagné, redémarrage, niveau 2 ouvert et meilleur score gardé.
+- Pas sauvegardé : vies, or, pioches, butin et tutoriels déjà vus. Le faux serveur les remet à leur valeur fixe à chaque chargement.
+- Plus tard : un adaptateur IndexedDB ou Eternaltwin implémentera `ProgressStore`.
 
 ### Étape 4 : retrouver les vrais niveaux
 
