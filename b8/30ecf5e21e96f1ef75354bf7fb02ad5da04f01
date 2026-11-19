@@ -1,0 +1,24 @@
+tools/build-web.sh
+  s_370653b5630944::t_4074397e80bb14 17-20
+web/index.html
+  s_370653b5630944::t_18a0d45ca12e9a 7-18,20-22,25-39,43-50,54-63
+  s_370653b5630944::t_dd22e583b7ba43 41-42
+.impeccable/config.json
+  s_370653b5630944::t_e5a0f69a839315 1-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b830ecf5e21e96f1ef75354bf7fb02ad5da04f01",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
