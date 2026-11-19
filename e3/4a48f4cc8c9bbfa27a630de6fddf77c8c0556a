@@ -1,0 +1,23 @@
+tools/levels/test_build_levels.py
+  s_370653b5630944::t_c8eb8d461f5f98 69-77,84
+data/levels.json
+  s_370653b5630944::t_8bc453ca727509 31150,31607,31757,33033,33322,33687,34707,35405,35838,36620,37077,37518,39035,39807,40040,40874,40959,42556,42793,44436,44637,47526
+tools/levels/build_levels.py
+  s_370653b5630944::t_eab019ddd7efca 146-149
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e34a48f4cc8c9bbfa27a630de6fddf77c8c0556a",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
