@@ -1,12 +1,12 @@
 [tools]
 haxe = "3.2.1"
-java = "corretto-8.402.07.1"
 neko = "2-1-0"
 
 [env]
+# Neko loads its libneko and ndll files from here: DYLD on macOS, LD on Linux.
 DYLD_LIBRARY_PATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-1-0"
-HAXE_STD_PATH = "{{env.HOME}}/.local/share/mise/installs/haxe/3.2.1/std"
+LD_LIBRARY_PATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-1-0"
 NEKOPATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-1-0"
-FLEX_HOME = "{{env.HOME}}/.local/share/mise/installs/flex/apache-flex-sdk-4.16.1-bin"
-_.path = "{{env.FLEX_HOME}}/bin"
+HAXE_STD_PATH = "{{env.HOME}}/.local/share/mise/installs/haxe/3.2.1/std"
+# Project-local haxelib repo, filled by tools/install-deps.sh.
 HAXELIB_PATH = "{{config_root}}/.haxelib"
