@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rockfaller Journey</title>
+<meta name="description" content="Rockfaller Journey, jeu de puzzle de Motion-Twin (2015), rejouable dans le navigateur avec Ruffle.">
+<style>
+  :root { color-scheme: dark; --background: #14110f; --text: #e9dfcf; --muted: #a89a86; --link: #f0b45a; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { display: flex; flex-direction: column; align-items: center; background: var(--background); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
+  main { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 0; padding: 8px 16px 0; }
+  #game { height: min(100%, 768px); aspect-ratio: 640 / 768; max-width: 100%; }
+  #game ruffle-player { width: 100%; height: 100%; }
+  footer { padding: 8px 16px 12px; color: var(--muted); font-size: 13px; text-align: center; }
+  a { color: var(--link); }
+</style>
+</head>
+<body>
+<main><div id="game"></div></main>
+<footer>
+  Rockfaller Journey, © Motion-Twin, sous licence
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.
+  Émulation Flash par <a href="https://ruffle.rs">Ruffle</a>.
+  <a href="https://github.com/cmnemoi/rockfaller">Code source</a>.
+</footer>
+<script>
+  window.RufflePlayer = window.RufflePlayer || {};
+  window.RufflePlayer.config = { autoplay: "on", unmuteOverlay: "hidden", letterbox: "on", splashScreen: true };
+</script>
+<script src="ruffle/ruffle.js"></script>
+<script>
+  window.addEventListener("load", () => {
+    const player = window.RufflePlayer.newest().createPlayer();
+    document.getElementById("game").appendChild(player);
+    player.ruffle().load("rockfaller.swf");
+  });
+</script>
+</body>
+</html>

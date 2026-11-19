@@ -5,3 +5,4 @@ bin/
 .cache/
 .vscode/
 client/client/lang/client-translated.pot
+dist/

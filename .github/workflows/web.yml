@@ -1,0 +1,69 @@
+name: Web
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Neko's system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgc1 libpcre3
+
+      - uses: jdx/mise-action@v2
+
+      - uses: actions/cache@v4
+        with:
+          path: .haxelib
+          key: haxelib-${{ runner.os }}-${{ hashFiles('tools/install-deps.sh') }}
+
+      - name: Install haxelibs
+        run: mise exec -- bash tools/install-deps.sh
+
+      - name: Check the offline server and the 180 levels
+        run: mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProtocolCheck --interp
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Test the level extraction
+        working-directory: tools/levels
+        run: |
+          uv run test_classify_cells.py
+          uv run test_read_hud.py
+          uv run test_build_levels.py
+
+      - name: Build the Flash client
+        run: mise exec -- bash tools/build-flash.sh client release
+
+      - name: Assemble the web version
+        run: bash tools/build-web.sh
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/web
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
