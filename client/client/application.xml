@@ -4,7 +4,7 @@
 	
 	<!-- output -->
 	<!--<app main="Main" file="rockFallerMobile" path="bin" />-->
-	<app main="WebMain" file="rockFallerMobile" path="bin" preloader="PreloaderOFL"/>
+	<app main="WebMain" file="rockFallerMobile" path="bin" preloader="PreloaderOFL" swf-version="11.2" />
 	
 	<!--<window background="#C0C0C0" fps="60" />-->
 	<window background="#C0C0C0" fps="30" />
@@ -30,6 +30,7 @@
 	
 	<include path="." />
 	
-	<postBuild if="flash" unless="display" command="obfu9 -fake bin/flash/bin/rockFallerMobile.swf -o ../../www/swf/rockFallerMobile.local.swf"/>
-	<postBuild if="flash" unless="display" command="obfu9 -keyfile ../../src/com/obfu.key bin/flash/bin/rockFallerMobile.swf -o ../../www/swf/rockFallerMobile.swf"/>
+	<!--<postBuild if="flash" unless="display" command="obfu9 -fake bin/flash/bin/rockFallerMobile.swf -o ../../www/swf/rockFallerMobile.local.swf"/>-->
+	<!--<postBuild if="flash" unless="display" command="obfu9 -keyfile ../../src/com/obfu.key bin/flash/bin/rockFallerMobile.swf -o ../../www/swf/rockFallerMobile.swf"/>-->
+	<app swf-version="11.2" />
 </project>

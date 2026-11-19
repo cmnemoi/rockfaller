@@ -21,7 +21,7 @@ class DataManager
 	public static var ON_UPDATE_JSON 	: Void->Void;
 	
 	public static function CREATE() {
-		mt.net.Codec.requestUrl( "/api", ProtocolCom.DoGetLevelsForEditor(), onFromServer, onError );
+		mt.net.Codec.requestUrl( "/api", ProtocolCom.DoGetLevelsForEditor, onFromServer, onError );
 	}
 	
 	public static function GET(numLevel:Int):LevelInfo {

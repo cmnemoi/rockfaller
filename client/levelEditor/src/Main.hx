@@ -27,6 +27,7 @@ class Main {
 	
 	function new() {
 		ME = this;
+		hxd.Res.initEmbed();
 
 		mt.deepnight.Lib.redirectTracesToConsole();
 		

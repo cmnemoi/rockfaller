@@ -3,7 +3,7 @@
 	<meta title="Level Editor" package="com.motiontwin.RFM" version="1.0.0" company="Motion-Twin" />
 	
 	<!-- output -->
-	<app main="Main" file="levelEditor" path="bin" />
+	<app main="Main" file="levelEditor" path="bin" swf-version="11.2" />
 	
 	<window background="#C0C0C0" fps="60" />
 	
@@ -16,6 +16,7 @@
 	<!--<window width="1280" height="720" unless="mobile" />-->
 	
 	<haxelib name="castle" />
+	<haxelib name="format" version="3.2.1" />
 	<haxelib name="openfl" />
 	<haxelib name="h3d" />
 	<haxelib name="air3" />
@@ -27,10 +28,14 @@
 	<!--<haxedef name="sound"/>-->
 	
 	<assets path="../client/assets" rename="" />
+	<assets path="../client/assetsWeb" rename="" exclude="loading.swf" />
 	<assets path="../../src/com" rename="com" />
 	
+	<source path="../client/assetsWeb" />
 	<include path="." />
+	<haxeflag name="-D" value="resourcesPath=../client/assetsWeb" />
 	
-	<postBuild if="flash" unless="display" command="obfu9 -fake bin/flash/bin/levelEditor.swf -o ../../www/swf/levelEditor.local.swf"/>
-	<postBuild if="flash" unless="display" command="obfu9 -keyfile ../../src/com/obfu.key bin/flash/bin/levelEditor.swf -o ../../www/swf/levelEditor.swf"/>
+	<!--<postBuild if="flash" unless="display" command="obfu9 -fake bin/flash/bin/levelEditor.swf -o ../../www/swf/levelEditor.local.swf"/>-->
+	<!--<postBuild if="flash" unless="display" command="obfu9 -keyfile ../../src/com/obfu.key bin/flash/bin/levelEditor.swf -o ../../www/swf/levelEditor.swf"/>-->
+	<app swf-version="11.2" />
 </project>

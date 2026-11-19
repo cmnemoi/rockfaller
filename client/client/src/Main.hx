@@ -47,6 +47,7 @@ class Main {
 	}
 
 	public static function PREPARE_FIRST_INIT(onReady:Void->Void) {
+		hxd.Res.initEmbed();
 		h2d.Drawable.DEFAULT_FILTER = true;
 		initWorkers();
 

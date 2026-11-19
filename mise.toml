@@ -1,0 +1,12 @@
+[tools]
+haxe = "3.2.1"
+java = "corretto-8.402.07.1"
+neko = "2-1-0"
+
+[env]
+DYLD_LIBRARY_PATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-1-0"
+HAXE_STD_PATH = "{{env.HOME}}/.local/share/mise/installs/haxe/3.2.1/std"
+NEKOPATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-1-0"
+FLEX_HOME = "{{env.HOME}}/.local/share/mise/installs/flex/apache-flex-sdk-4.16.1-bin"
+_.path = "{{env.FLEX_HOME}}/bin"
+HAXELIB_PATH = "{{config_root}}/.haxelib"

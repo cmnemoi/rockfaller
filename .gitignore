@@ -1,0 +1,7 @@
+.DS_Store
+__pycache__/
+bin/
+.haxelib/
+.cache/
+.vscode/
+client/client/lang/client-translated.pot
