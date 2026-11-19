@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "web/index.html"
+        ],
+        "createdAt": "2026-11-19T12:34:23.401Z",
+        "reason": "user request: reproduce Motion-Twin's original game page; the #0a89f3 menu glow is copied from data-rockfaller.twinoid.com/css/80/style.css"
+      }
+    ]
+  }
+}
