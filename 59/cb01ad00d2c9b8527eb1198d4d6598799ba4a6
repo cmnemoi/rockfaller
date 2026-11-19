@@ -1,0 +1,33 @@
+src/com/progress/ProgressJson.hx
+  s_370653b5630944::t_8d3a64223febf3 1-38
+tools/ProgressCheck.hx
+  s_370653b5630944::t_0c19d792a7459c 1-132
+src/com/progress/Progress.hx
+  s_370653b5630944::t_25a245ee95cdab 1-49
+src/com/Protocol.hx
+  s_370653b5630944::t_b30c24790b6c52 4-5,87,91-95,116-119,140,145,149
+src/com/progress/ProgressStore.hx
+  s_370653b5630944::t_e8cfe55cd91893 1-13
+src/com/progress/InMemoryProgressStore.hx
+  s_370653b5630944::t_80d2f459e91770 1-18
+.github/workflows/web.yml
+  s_370653b5630944::t_223abe172c44cd 38-40
+README.md
+  s_370653b5630944::t_a7d42ff59caad0 31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "59cb01ad00d2c9b8527eb1198d4d6598799ba4a6",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
