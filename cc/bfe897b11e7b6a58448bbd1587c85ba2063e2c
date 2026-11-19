@@ -1,0 +1,607 @@
+client/mt/Color.hx
+  s_370653b5630944::t_4ac00275fd3d5f 1-519
+client/mt/Cooldown.hx
+  s_370653b5630944::t_2279c0631ebf98 1-162
+client/mt/Delayer.hx
+  s_370653b5630944::t_dc68090b04be5f 1-111
+client/mt/Lib.hx
+  s_370653b5630944::t_63b4deef6d0122 1-116
+client/mt/Metrics.hx
+  s_370653b5630944::t_debced752a78d4 1-255
+client/mt/Process.hx
+  s_370653b5630944::t_3dd426b57b85d8 1-333
+client/mt/Rand.hx
+  s_370653b5630944::t_567f90fb4c1bbb 1-125
+client/mt/RandDeck.hx
+  s_370653b5630944::t_813b499b7579af 1-83
+client/mt/RandList.hx
+  s_370653b5630944::t_bfcb450809df4c 1-144
+client/mt/StringEx.hx
+  s_370653b5630944::t_f59034f80ec83b 1-28
+client/mt/Ticker.hx
+  s_370653b5630944::t_d43e2506240874 1-106
+client/mt/Timer.hx
+  s_370653b5630944::t_ef0677f0b7d662 1-46
+client/mt/Utf8.hx
+  s_370653b5630944::t_c39037bd888760 1-163
+client/mt/data/CastleLoader.hx
+  s_370653b5630944::t_c9e4fe591f5022 1-98
+client/mt/data/Const.hx
+  s_370653b5630944::t_102a72446a1955 1-93
+client/mt/data/GetText.hx
+  s_370653b5630944::t_d9be289fdbef01 1-734
+client/mt/data/MkFat.hx
+  s_370653b5630944::t_5a3cd60fa671c5 1-58
+client/mt/data/RandomText.hx
+  s_370653b5630944::t_db93ed53a709e6 1-103
+client/mt/data/Tag.hx
+  s_370653b5630944::t_e424780cd20313 1-87
+client/mt/data/Texts.hx
+  s_370653b5630944::t_f0b9f1d760c897 1-223
+client/mt/data/XmlTools.hx
+  s_370653b5630944::t_48a476ae1dde22 1-310
+client/mt/db/Phoneme.hx
+  s_370653b5630944::t_7d7802f7797ae7 1-175
+client/mt/deepnight/BitmapDataPool.hx
+  s_370653b5630944::t_550434ddd36b14 1-136
+client/mt/deepnight/Bresenham.hx
+  s_370653b5630944::t_dde7a73a8c55ff 1-306
+client/mt/deepnight/Buffer.hx
+  s_370653b5630944::t_f9b107ab44a6af 1-392
+client/mt/deepnight/Cinematic.hx
+  s_370653b5630944::t_4b485476dfec9b 1-424
+client/mt/deepnight/Color.hx
+  s_370653b5630944::t_2ac3638ca1e7ad 1-974
+client/mt/deepnight/FParticle.hx
+  s_370653b5630944::t_c49bd4626b2176 1-447
+client/mt/deepnight/HParticle.hx
+  s_370653b5630944::t_190b7df4a72775 1-360
+client/mt/deepnight/HaxeJson.hx
+  s_370653b5630944::t_0b703aa764e5ad 1-221
+client/mt/deepnight/Lib.hx
+  s_370653b5630944::t_74d078c36d9a15 1-700
+client/mt/deepnight/MacroTools.hx
+  s_370653b5630944::t_52987498d4e7c0 1-50
+client/mt/deepnight/ParticleInterface.hx
+  s_370653b5630944::t_abbb2ff7778c46 1-62
+client/mt/deepnight/PathFinder.hx
+  s_370653b5630944::t_734be5b245b2a2 1-297
+client/mt/deepnight/TinyProcess.hx
+  s_370653b5630944::t_b98c97c5a378c0 1-85
+client/mt/deepnight/Tweenie.hx
+  s_370653b5630944::t_aa73428f413c22 1-432
+client/mt/deepnight/deprecated/FProcess.hx
+  s_370653b5630944::t_0208d61edafd1a 1-38
+client/mt/deepnight/deprecated/HProcess.hx
+  s_370653b5630944::t_f0332d225a2c43 1-58
+client/mt/deepnight/deprecated/Mode.hx
+  s_370653b5630944::t_fcb6ec57f5c2c3 1-115
+client/mt/deepnight/deprecated/Process.hx
+  s_370653b5630944::t_4bab5ee0c23578 1-298
+client/mt/deepnight/deprecated/SpriteLibBitmap.hx
+  s_370653b5630944::t_48f3a46435f3d6 1-931
+client/mt/deepnight/deprecated/T.hx
+  s_370653b5630944::t_c36f4c1d32338c 1-375
+client/mt/deepnight/deprecated/TinyProcess.hx
+  s_370653b5630944::t_bdf9669308dd07 1-83
+client/mt/deepnight/deprecated/assets/AssetTools.hx
+  s_370653b5630944::t_2cf35d0ad5a7f7 1-23
+client/mt/deepnight/deprecated/assets/ShoeBox.hx
+  s_370653b5630944::t_c4879aa96c69d2 1-181
+client/mt/deepnight/deprecated/assets/TexturePacker.hx
+  s_370653b5630944::t_701547e0a057ef 1-152
+client/mt/deepnight/hui/Button.hx
+  s_370653b5630944::t_53fd2eb79ba967 1-114
+client/mt/deepnight/hui/Check.hx
+  s_370653b5630944::t_89c5f227c15c42 1-157
+client/mt/deepnight/hui/Component.hx
+  s_370653b5630944::t_7e5e14ff7a8b1c 1-556
+client/mt/deepnight/hui/Group.hx
+  s_370653b5630944::t_b1c08089036157 1-123
+client/mt/deepnight/hui/HGroup.hx
+  s_370653b5630944::t_aeb128ada8ff07 1-85
+client/mt/deepnight/hui/Image.hx
+  s_370653b5630944::t_754fc1f15e3df3 1-64
+client/mt/deepnight/hui/ImageButton.hx
+  s_370653b5630944::t_2fa3bd1d641b82 1-47
+client/mt/deepnight/hui/Input.hx
+  s_370653b5630944::t_56ea6419ed76f3 1-217
+client/mt/deepnight/hui/LGroup.hx
+  s_370653b5630944::t_5c6249be2430df 1-61
+client/mt/deepnight/hui/Label.hx
+  s_370653b5630944::t_5ac18a3dfced65 1-121
+client/mt/deepnight/hui/Radio.hx
+  s_370653b5630944::t_2f544530559853 1-67
+client/mt/deepnight/hui/Separator.hx
+  s_370653b5630944::t_2382b8e8af16bd 1-86
+client/mt/deepnight/hui/Style.hx
+  s_370653b5630944::t_f9933a1f761966 1-235
+client/mt/deepnight/hui/VGroup.hx
+  s_370653b5630944::t_b2512420e6958f 1-84
+client/mt/deepnight/hui/Window.hx
+  s_370653b5630944::t_055524e64d2e70 1-101
+client/mt/deepnight/mui/Button.hx
+  s_370653b5630944::t_ab8dbf8f3c8f3b 1-114
+client/mt/deepnight/mui/Check.hx
+  s_370653b5630944::t_9e9485dca8c3af 1-188
+client/mt/deepnight/mui/Component.hx
+  s_370653b5630944::t_f702bc968aec27 1-588
+client/mt/deepnight/mui/Group.hx
+  s_370653b5630944::t_f5367157d44ea2 1-154
+client/mt/deepnight/mui/HGroup.hx
+  s_370653b5630944::t_5185c4cf4232d5 1-72
+client/mt/deepnight/mui/IconButton.hx
+  s_370653b5630944::t_93980c642a7a36 1-42
+client/mt/deepnight/mui/Image.hx
+  s_370653b5630944::t_c68ca6644cf852 1-33
+client/mt/deepnight/mui/Joystick.hx
+  s_370653b5630944::t_5cd6035e6d3f20 1-158
+client/mt/deepnight/mui/LGroup.hx
+  s_370653b5630944::t_aaa4fd9caf0d27 1-61
+client/mt/deepnight/mui/Label.hx
+  s_370653b5630944::t_03815ebe1ea3bb 1-140
+client/mt/deepnight/mui/Radio.hx
+  s_370653b5630944::t_bf87e7664bb8bb 1-75
+client/mt/deepnight/mui/Separator.hx
+  s_370653b5630944::t_7ee941d20f7d0b 1-44
+client/mt/deepnight/mui/TextInput.hx
+  s_370653b5630944::t_d283853ef79302 1-311
+client/mt/deepnight/mui/VGroup.hx
+  s_370653b5630944::t_595e061fbe3286 1-70
+client/mt/deepnight/mui/Window.hx
+  s_370653b5630944::t_275fdc5a36ab14 1-114
+client/mt/deepnight/slb/AnimManager.hx
+  s_370653b5630944::t_a5b839f3dec70c 1-385
+client/mt/deepnight/slb/BLib.hx
+  s_370653b5630944::t_9e7d692c987c4c 1-875
+client/mt/deepnight/slb/BSprite.hx
+  s_370653b5630944::t_e7313cf12ea9a5 1-320
+client/mt/deepnight/slb/BatchElementAnim.hx
+  s_370653b5630944::t_afb29ba28c7973 1-57
+client/mt/deepnight/slb/HSprite.hx
+  s_370653b5630944::t_bdc193cd937d62 1-243
+client/mt/deepnight/slb/HSpriteBE.hx
+  s_370653b5630944::t_05e39f1dba4ff6 1-218
+client/mt/deepnight/slb/SpriteInterface.hx
+  s_370653b5630944::t_8c0678c08028ce 1-43
+client/mt/deepnight/slb/SpritePivot.hx
+  s_370653b5630944::t_575f4570fda52d 1-55
+client/mt/deepnight/slb/assets/AssetTools.hx
+  s_370653b5630944::t_edf0d2000f53f5 1-32
+client/mt/deepnight/slb/assets/Builder.hx
+  s_370653b5630944::t_9927bc28f74fc5 1-140
+client/mt/deepnight/slb/assets/ShoeBox.hx
+  s_370653b5630944::t_a3033dd18738d4 1-187
+client/mt/deepnight/slb/assets/TexturePacker.hx
+  s_370653b5630944::t_f3d24c1ec43625 1-340
+client/mt/deepnight/ted/TinyEd.hx
+  s_370653b5630944::t_2586ca79023b3f 1-443
+client/mt/deepnight/ted/TinyLevel.hx
+  s_370653b5630944::t_4637cb228ed7fa 1-161
+client/mt/ds/VectorSort.hx
+  s_370653b5630944::t_c2abdb6b755dea 1-160
+client/mt/flash/BitmapLoader.hx
+  s_370653b5630944::t_918fbcc42e02a2 1-167
+client/mt/flash/Color.hx
+  s_370653b5630944::t_2989fbc8a72884 1-235
+client/mt/flash/ColorArgb.hx
+  s_370653b5630944::t_88c759b4731173 1-97
+client/mt/flash/ColorMatrix.hx
+  s_370653b5630944::t_501b3f781feb8e 1-153
+client/mt/flash/Controller.hx
+  s_370653b5630944::t_15d862cccb0184 1-270
+client/mt/flash/DepthManager.hx
+  s_370653b5630944::t_6052ce036cd79d 1-166
+client/mt/flash/EventTools.hx
+  s_370653b5630944::t_65295f4fa214cd 1-204
+client/mt/flash/GamePad.hx
+  s_370653b5630944::t_2b3371eed3d840 1-372
+client/mt/flash/Key.hx
+  s_370653b5630944::t_d45d29c6539ff2 1-211
+client/mt/flash/Lib.hx
+  s_370653b5630944::t_e8954d9ec145ec 1-499
+client/mt/flash/MouseWheelTrap.hx
+  s_370653b5630944::t_967fbc4e6017d0 1-77
+client/mt/flash/MultiTouchViewport.hx
+  s_370653b5630944::t_18e935a1999142 1-132
+client/mt/flash/Particle.hx
+  s_370653b5630944::t_6ce18b46e40da5 1-321
+client/mt/flash/PngEncoder.hx
+  s_370653b5630944::t_a78f826d6ed339 1-99
+client/mt/flash/Profiler.hx
+  s_370653b5630944::t_53b5bff5989bad 1-123
+client/mt/flash/Screenshot.hx
+  s_370653b5630944::t_e7a9bc8d805544 1-47
+client/mt/flash/Sfx.hx
+  s_370653b5630944::t_51f1cb38035877 1-763
+client/mt/flash/Stats.hx
+  s_370653b5630944::t_9416bac7a80f00 1-159
+client/mt/flash/TimelineWatcher.hx
+  s_370653b5630944::t_35828461933ed5 1-118
+client/mt/flash/Timer.hx
+  s_370653b5630944::t_278f8915715ea3 1-43
+client/mt/fx/Arrow.hx
+  s_370653b5630944::t_048f54ab891f04 1-37
+client/mt/fx/Blink.hx
+  s_370653b5630944::t_e829d6595ecee9 1-35
+client/mt/fx/Blob.hx
+  s_370653b5630944::t_6e2bbd0a022e04 1-57
+client/mt/fx/Delay.hx
+  s_370653b5630944::t_a84a70e1f4136c 1-31
+client/mt/fx/FadeBack.hx
+  s_370653b5630944::t_1e70440435133c 1-36
+client/mt/fx/FadeTo.hx
+  s_370653b5630944::t_2a823f4b60dcab 1-38
+client/mt/fx/Flash.hx
+  s_370653b5630944::t_97a689761df40b 1-96
+client/mt/fx/FluidCanvas.hx
+  s_370653b5630944::t_c5c98c8cf77ee8 1-748
+client/mt/fx/Fx.hx
+  s_370653b5630944::t_77c24d429fa932 1-111
+client/mt/fx/GotoAndStop.hx
+  s_370653b5630944::t_92b97c31c33a02 1-33
+client/mt/fx/Grow.hx
+  s_370653b5630944::t_92a0ca1a5f4d98 1-45
+client/mt/fx/Line.hx
+  s_370653b5630944::t_e6f6290a214236 1-25
+client/mt/fx/Manager.hx
+  s_370653b5630944::t_c28503c49824df 1-54
+client/mt/fx/Part.hx
+  s_370653b5630944::t_22b37dfd847469 1-184
+client/mt/fx/Play.hx
+  s_370653b5630944::t_802d084f056d64 1-37
+client/mt/fx/Queue.hx
+  s_370653b5630944::t_ca7c15eea46e7e 1-51
+client/mt/fx/Radiate.hx
+  s_370653b5630944::t_03afade6cebc51 1-42
+client/mt/fx/Rainbow.hx
+  s_370653b5630944::t_1a8e5555146356 1-24
+client/mt/fx/Rotate.hx
+  s_370653b5630944::t_8b9c5e8aa5b503 1-28
+client/mt/fx/Sequence.hx
+  s_370653b5630944::t_25f187aace5912 1-33
+client/mt/fx/Shake.hx
+  s_370653b5630944::t_87ba5cb93ea8d6 1-73
+client/mt/fx/ShockWave.hx
+  s_370653b5630944::t_1499fa57049232 1-88
+client/mt/fx/Sleep.hx
+  s_370653b5630944::t_8e40e41554d29e 1-37
+client/mt/fx/Sock.hx
+  s_370653b5630944::t_f49fa42cb938c3 1-237
+client/mt/fx/Spawn.hx
+  s_370653b5630944::t_68635f80231435 1-45
+client/mt/fx/Spinner.hx
+  s_370653b5630944::t_1253f1ccd3ed8d 1-32
+client/mt/fx/Tween.hx
+  s_370653b5630944::t_036c9acdb91ea7 1-150
+client/mt/fx/Update.hx
+  s_370653b5630944::t_361bfa7c4b878a 1-21
+client/mt/fx/Vanish.hx
+  s_370653b5630944::t_c0c076aa975752 1-56
+client/mt/fx/VaporMc.hx
+  s_370653b5630944::t_dee69f459ca125 1-17
+client/mt/fx/Visibility.hx
+  s_370653b5630944::t_08f850c2633359 1-42
+client/mt/geom/RectangleTools.hx
+  s_370653b5630944::t_ed73fdbf467f80 1-105
+client/mt/gx/ArrayEx.hx
+  s_370653b5630944::t_13d3c94db45df9 1-299
+client/mt/gx/BigInteger.hx
+  s_370653b5630944::t_b40f66bda83708 1-2527
+client/mt/gx/BitArray.hx
+  s_370653b5630944::t_fc353a4b5c8f49 1-130
+client/mt/gx/CryptoEx.hx
+  s_370653b5630944::t_b993272def5629 1-43
+client/mt/gx/DateEx.hx
+  s_370653b5630944::t_5ed51954807f36 1-64
+client/mt/gx/Debug.hx
+  s_370653b5630944::t_9ae839487555fc 1-51
+client/mt/gx/Dice.hx
+  s_370653b5630944::t_a29e1ff6cf4265 1-122
+client/mt/gx/EnumEx.hx
+  s_370653b5630944::t_08209cb787538d 1-88
+client/mt/gx/EnumFlagsEx.hx
+  s_370653b5630944::t_090dd9b76ba9d1 1-105
+client/mt/gx/Ex.hx
+  s_370653b5630944::t_d57685e75f7e47 1-48
+client/mt/gx/Iota.hx
+  s_370653b5630944::t_14a26c0ea99e02 1-84
+client/mt/gx/Key.hx
+  s_370653b5630944::t_84a0dd273e2c7a 1-119
+client/mt/gx/LambdaEx.hx
+  s_370653b5630944::t_2d1c0f29445b9a 1-485
+client/mt/gx/ListEx.hx
+  s_370653b5630944::t_d3c7d2b51fffd4 1-168
+client/mt/gx/Macros.hx
+  s_370653b5630944::t_8f02992e59b6db 1-62
+client/mt/gx/MathEx.hx
+  s_370653b5630944::t_cfad6fa4d13294 1-251
+client/mt/gx/Pair.hx
+  s_370653b5630944::t_2d104b35d682b2 1-13
+client/mt/gx/Pool.hx
+  s_370653b5630944::t_86f09233838a3e 1-104
+client/mt/gx/Profiler.hx
+  s_370653b5630944::t_955aa7a5287582 1-97
+client/mt/gx/Proto.hx
+  s_370653b5630944::t_e58765a5a7f3a1 1-105
+client/mt/gx/Quantic.hx
+  s_370653b5630944::t_b2c240b795b984 1-88
+client/mt/gx/Rand.hx
+  s_370653b5630944::t_dbc413124c06b2 1-173
+client/mt/gx/RandomEx.hx
+  s_370653b5630944::t_80144a8d287492 1-122
+client/mt/gx/ReflectMore.hx
+  s_370653b5630944::t_2c28acdcb6e8c7 1-45
+client/mt/gx/Scaler.hx
+  s_370653b5630944::t_d30e9f6d1e8fb2 1-313
+client/mt/gx/Slots.hx
+  s_370653b5630944::t_0d0c97725bd6d6 1-142
+client/mt/gx/SpriteLibBitmap.hx
+  s_370653b5630944::t_e76242018acaa3 1-848
+client/mt/gx/StdEx.hx
+  s_370653b5630944::t_04922f027ba3ee 1-49
+client/mt/gx/StringEx.hx
+  s_370653b5630944::t_fac41bbe5b7135 1-118
+client/mt/gx/StringMap.hx
+  s_370653b5630944::t_b78fdbbd34e62a 1-7
+client/mt/gx/Time.hx
+  s_370653b5630944::t_7c94e29c03a91a 1-119
+client/mt/gx/UnsafeCookie.hx
+  s_370653b5630944::t_028e9a0081f2d0 1-35
+client/mt/gx/algo/Dijkstra.hx
+  s_370653b5630944::t_758e825a46027e 1-130
+client/mt/gx/algo/Graph.hx
+  s_370653b5630944::t_c742be822a763d 1-215
+client/mt/gx/algo/Heap.hx
+  s_370653b5630944::t_352af95f1efd89 1-303
+client/mt/gx/algo/RingBuffer.hx
+  s_370653b5630944::t_2bdcf9950839ef 1-39
+client/mt/gx/algo/RuleFile.hx
+  s_370653b5630944::t_82252dc0f5e566 1-80
+client/mt/gx/as/Button.hx
+  s_370653b5630944::t_25e30137dd7bae 1-114
+client/mt/gx/as/Cached.hx
+  s_370653b5630944::t_420a12c7bac76d 1-17
+client/mt/gx/as/CachedSp.hx
+  s_370653b5630944::t_bb8f864c69e827 1-38
+client/mt/gx/as/ColTransEx.hx
+  s_370653b5630944::t_78ba5888d80ff2 1-29
+client/mt/gx/as/Lib.hx
+  s_370653b5630944::t_73c1a38f82fc53 1-152
+client/mt/gx/as/McEx.hx
+  s_370653b5630944::t_3cdac2dff4d6e9 1-161
+client/mt/gx/h2d/Button.hx
+  s_370653b5630944::t_aef69d657fb678 1-41
+client/mt/gx/h2d/Ex.hx
+  s_370653b5630944::t_29b7ce246cf619 1-27
+client/mt/gx/h2d/Proto.hx
+  s_370653b5630944::t_e14a3d38baf94c 1-115
+client/mt/gx/math/Algo.hx
+  s_370653b5630944::t_a513fa141e5987 1-140
+client/mt/gx/math/Bounds.hx
+  s_370653b5630944::t_98d99486360cba 1-197
+client/mt/gx/math/Catmull3.hx
+  s_370653b5630944::t_49dd5f10aa6bd9 1-60
+client/mt/gx/math/QuadFloat.hx
+  s_370653b5630944::t_0a4f3dcc6dc74a 1-62
+client/mt/gx/math/Quat.hx
+  s_370653b5630944::t_dbacdc592265d3 1-216
+client/mt/gx/math/Seg2.hx
+  s_370653b5630944::t_eea4f4e8a6ba49 1-9
+client/mt/gx/math/Vec2.hx
+  s_370653b5630944::t_b35cf1034d969e 1-162
+client/mt/gx/math/Vec2i.hx
+  s_370653b5630944::t_7a9e8d68ff0d9e 1-136
+client/mt/gx/math/Vec3.hx
+  s_370653b5630944::t_d35384e091b1ee 1-249
+client/mt/gx/math/Vec4.hx
+  s_370653b5630944::t_61f941e3fbac13 1-92
+client/mt/gx/sc/Screen.hx
+  s_370653b5630944::t_5ac44ba1435b95 1-46
+client/mt/gx/sc/ScreenMan.hx
+  s_370653b5630944::t_bc4c4edc1921e6 1-61
+client/mt/heaps/Api2D.hx
+  s_370653b5630944::t_a6618b95ba3867 1-28
+client/mt/heaps/Api3D.hx
+  s_370653b5630944::t_c45df6da0c8c66 1-1069
+client/mt/heaps/ColorMatrix.hx
+  s_370653b5630944::t_3481fff4b388de 1-15
+client/mt/heaps/Controller.hx
+  s_370653b5630944::t_9e9b250ceeaaa3 1-274
+client/mt/heaps/GamePad.hx
+  s_370653b5630944::t_db2708fa717211 1-200
+client/mt/heaps/GraphicsExtender.hx
+  s_370653b5630944::t_ff41e7d985a861 1-37
+client/mt/heaps/HParticle.hx
+  s_370653b5630944::t_d855a43809e521 1-626
+client/mt/heaps/OffscreenScene3D.hx
+  s_370653b5630944::t_e86f898277a1f0 1-108
+client/mt/heaps/ParticleBatch.hx
+  s_370653b5630944::t_d9e232715d05ef 1-339
+client/mt/heaps/Repacker.hx
+  s_370653b5630944::t_fe28f5c9a9f7e7 1-144
+client/mt/heaps/TileFont.hx
+  s_370653b5630944::t_c0e9b6af4a401c 1-123
+client/mt/heaps/Tip.hx
+  s_370653b5630944::t_0eba262ca9e513 1-167
+client/mt/heaps/Tools.hx
+  s_370653b5630944::t_b677b033e82268 1-164
+client/mt/heaps/bhv/Link.hx
+  s_370653b5630944::t_55d48416573a7d 1-96
+client/mt/heaps/fx/Arrow.hx
+  s_370653b5630944::t_738d70e8b1e0f1 1-39
+client/mt/heaps/fx/Blink.hx
+  s_370653b5630944::t_0714578bb6a30b 1-35
+client/mt/heaps/fx/Blob.hx
+  s_370653b5630944::t_f075b66b5a5280 1-58
+client/mt/heaps/fx/Blob3D.hx
+  s_370653b5630944::t_d824b1ab1e0a86 1-77
+client/mt/heaps/fx/Flash.hx
+  s_370653b5630944::t_3c8225b95da1aa 1-70
+client/mt/heaps/fx/Grow.hx
+  s_370653b5630944::t_378a3164c4dadd 1-46
+client/mt/heaps/fx/Lib.hx
+  s_370653b5630944::t_e9eea262b1b547 1-57
+client/mt/heaps/fx/Part.hx
+  s_370653b5630944::t_4ed30caa104138 1-185
+client/mt/heaps/fx/Queue.hx
+  s_370653b5630944::t_c2744effafbf25 1-52
+client/mt/heaps/fx/Rotate.hx
+  s_370653b5630944::t_c8b84194709788 1-28
+client/mt/heaps/fx/Shake.hx
+  s_370653b5630944::t_70a5d57dad2a99 1-74
+client/mt/heaps/fx/Sleep.hx
+  s_370653b5630944::t_5c8449066d9f35 1-36
+client/mt/heaps/fx/Spawn.hx
+  s_370653b5630944::t_90fa80640fe536 1-41
+client/mt/heaps/fx/Spawn3D.hx
+  s_370653b5630944::t_2677e81667c726 1-46
+client/mt/heaps/fx/Spinner.hx
+  s_370653b5630944::t_a71ed15c13e7aa 1-32
+client/mt/heaps/fx/Tween.hx
+  s_370653b5630944::t_7a544c1c5b8d06 1-150
+client/mt/heaps/fx/Vanish.hx
+  s_370653b5630944::t_5b3005dd638245 1-65
+client/mt/heaps/fx/Vanish3D.hx
+  s_370653b5630944::t_b2150ec8f1ac75 1-61
+client/mt/heaps/fx/Visibility.hx
+  s_370653b5630944::t_a42504f3cdd111 1-46
+client/mt/heaps/fx/Visibility3D.hx
+  s_370653b5630944::t_984ffb1d3cb916 1-47
+client/mt/heaps/scene/Camera.hx
+  s_370653b5630944::t_04984f5a7bf865 1-101
+client/mt/heaps/slib/AnimManager.hx
+  s_370653b5630944::t_36418d2aeb28f0 1-552
+client/mt/heaps/slib/HSprite.hx
+  s_370653b5630944::t_9b6e712048a489 1-207
+client/mt/heaps/slib/HSpriteBE.hx
+  s_370653b5630944::t_2b3080049149e3 1-221
+client/mt/heaps/slib/SpriteInterface.hx
+  s_370653b5630944::t_bbc27676835542 1-42
+client/mt/heaps/slib/SpriteLib.hx
+  s_370653b5630944::t_0c1a3cdb8de8cb 1-661
+client/mt/heaps/slib/SpritePivot.hx
+  s_370653b5630944::t_37fb207ae871ef 1-57
+client/mt/heaps/slib/assets/Atlas.hx
+  s_370653b5630944::t_c1c72fdcc25a6d 1-96
+client/mt/heaps/slib/assets/TexturePacker.hx
+  s_370653b5630944::t_6fd1c61204779a 1-152
+client/mt/kiroukou/macros/IntInliner.hx
+  s_370653b5630944::t_d91f3ebd530acd 1-75
+client/mt/kiroukou/math/Vec3.hx
+  s_370653b5630944::t_80ad4e8cef595d 1-134
+client/mt/math/Range.hx
+  s_370653b5630944::t_5ee6d0abb134aa 1-44
+client/mt/math/Vec2.hx
+  s_370653b5630944::t_df5b84ee308b38 1-257
+client/mt/motion/Duration.hx
+  s_370653b5630944::t_2f4dd3d2d970f9 1-82
+client/mt/motion/Ease.hx
+  s_370653b5630944::t_8bcfd48b983424 1-250
+client/mt/motion/Flump.hx
+  s_370653b5630944::t_3a3a81dc077a36 1-344
+client/mt/motion/FlumpTP.hx
+  s_370653b5630944::t_209bf6e95efd35 1-328
+client/mt/motion/Tween.hx
+  s_370653b5630944::t_a6a48b1e6deebd 1-527
+client/mt/motion/Tweener.hx
+  s_370653b5630944::t_c63ac9134266ad 1-76
+client/mt/motion/macros/TweenBuilder.hx
+  s_370653b5630944::t_aea63393e477a8 1-105
+client/mt/pix/Anim.hx
+  s_370653b5630944::t_b31789739ce24a 1-87
+client/mt/pix/Element.hx
+  s_370653b5630944::t_b7425f9c4226e3 1-272
+client/mt/pix/Frame.hx
+  s_370653b5630944::t_14aa044376d5bf 1-84
+client/mt/pix/Store.hx
+  s_370653b5630944::t_895b6ec4b11c45 1-196
+client/mt/pix/Utils.hx
+  s_370653b5630944::t_f15d2f49ae6d0e 1-300
+client/mt/pix/tools/Viewer.hx
+  s_370653b5630944::t_7c3aee25249f1b 1-130
+client/mt/signal/Bindable.hx
+  s_370653b5630944::t_b75d30a19da871 1-34
+client/mt/signal/Signal.hx
+  s_370653b5630944::t_d42313b2e296a7 1-12
+client/mt/signal/Signaler.hx
+  s_370653b5630944::t_49c0c7fda743fe 1-13
+client/mt/signal/Signaler2.hx
+  s_370653b5630944::t_536331050c53ec 1-3
+client/mt/signal/macros/SignalBuilder.hx
+  s_370653b5630944::t_f53569908c0eac 1-326
+client/mt/signal/macros/SignalBuilder2.hx
+  s_370653b5630944::t_38c595b4fa7a7c 1-349
+client/mt/text/Levensthein.hx
+  s_370653b5630944::t_8b2b0c770c8c2d 1-88
+client/mt/tipyx/AssetNamesBuilder.hx
+  s_370653b5630944::t_88db4aeb544c8a 1-72
+client/mt/tipyx/Lib.hx
+  s_370653b5630944::t_5c0538ab5974c7 1-26
+client/mt/tipyx/XMLParserBuilder.hx
+  s_370653b5630944::t_9479ec86ef20c3 1-93
+client/mt/tipyx/shader/AlarmFilter.hx
+  s_370653b5630944::t_849621151edfb1 1-81
+client/mt/tipyx/shader/AlarmFilter2.hx
+  s_370653b5630944::t_c564d0a2265d56 1-91
+client/mt/tipyx/shader/BlurFFVIFilter.hx
+  s_370653b5630944::t_723b452d120822 1-89
+client/mt/tipyx/shader/BlurFilter.hx
+  s_370653b5630944::t_b2966c36fac7fd 1-64
+client/mt/tipyx/shader/BrightnessFilter.hx
+  s_370653b5630944::t_bd0686b8cb66d2 1-64
+client/mt/tipyx/shader/ColorFilter.hx
+  s_370653b5630944::t_412d2718c06daa 1-65
+client/mt/tipyx/shader/LightScat.hx
+  s_370653b5630944::t_92a633ac9db460 1-151
+client/mt/tipyx/shader/OutlineFilterWIP.hx
+  s_370653b5630944::t_0bd7caa8ce826e 1-72
+client/mt/tipyx/shader/ReverseFilter.hx
+  s_370653b5630944::t_5265c5c536fa75 1-55
+client/mt/tipyx/shader/SampleFilter.hx
+  s_370653b5630944::t_28018a2051e519 1-49
+client/mt/tipyx/shader/ScreenLineFilter.hx
+  s_370653b5630944::t_35932ad3def70e 1-78
+client/mt/tipyx/shader/TestFilter.hx
+  s_370653b5630944::t_9bbac266d6db9c 1-109
+client/mt/tipyx/shader/TorchLightFilter.hx
+  s_370653b5630944::t_4d499c33e76ed6 1-89
+client/mt/ui/Button.hx
+  s_370653b5630944::t_7ef3bb75874314 1-243
+client/mt/ui/ButtonData.hx
+  s_370653b5630944::t_90d27b8dc27115 1-15
+client/mt/ui/HSlice3.hx
+  s_370653b5630944::t_38f26ebc1a4e00 1-153
+client/mt/ui/VMenu.hx
+  s_370653b5630944::t_08461e25ae697e 1-266
+client/mt/ui/VSlice3.hx
+  s_370653b5630944::t_615cdf9dabba04 1-151
+client/mt/ui/layout/BoxLayout.hx
+  s_370653b5630944::t_e95633e172c8e7 1-497
+client/mt/ui/layout/CanvasLayout.hx
+  s_370653b5630944::t_24e329363b2093 1-146
+client/mt/ui/layout/Element.hx
+  s_370653b5630944::t_0c315b11e400e5 1-334
+client/mt/ui/layout/ElementStack.hx
+  s_370653b5630944::t_69067d2d3d3a1a 1-192
+client/mt/ui/layout/IElementContainer.hx
+  s_370653b5630944::t_36fa0ea754f9f9 1-46
+client/mt/ui/layout/UIBuilder.hx
+  s_370653b5630944::t_8c947ff06ac85b 1-191
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ccbfe897b11e7b6a58448bbd1587c85ba2063e2c",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
