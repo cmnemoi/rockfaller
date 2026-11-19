@@ -3,6 +3,8 @@ package tools;
 import Common;
 import Protocol;
 import progress.InMemoryProgressStore;
+import progress.Inventory;
+import progress.UnlimitedEconomy;
 import progress.Progress;
 import progress.ProgressJson;
 
@@ -33,6 +35,15 @@ class ProgressCheck {
 		winningLevels1To3MarksTheirTutorialsSeen();
 		losingLevel1LeavesItsTutorialToSee();
 		aNewGameSkipsTheTutorialsNotCheckedOnExtractedLevels();
+		aNewGameHasOnePickaxeAndNoLoot();
+		usingAPickaxeRemovesOneButNeverGoesBelowZero();
+		lootIsCollectedByKind();
+		theInventorySurvivesAJsonRoundTrip();
+		aSaveWithoutInventoryStartsWithTheStartingOne();
+		theOfflineServerSavesPickaxesUsedAndBought();
+		theOfflineServerCollectsLootFromEveryGameOnUnlockedLevels();
+		theUnlimitedEconomyNeverRunsOut();
+		theOfflineServerSpendsLivesAndGoldThroughTheEconomy();
 		trace("PASS");
 	}
 
@@ -187,6 +198,101 @@ class ProgressCheck {
 		check(tutorialsDone.indexOf(1) < 0, "the level 1 tutorial, checked, shows in a new game");
 		check(tutorialsDone.indexOf(2) >= 0 && tutorialsDone.indexOf(3) >= 0, "the level 2 and 3 tutorials are skipped");
 		check(store.load().seenTutorials().length == 0, "skipped tutorials are not saved as seen");
+	}
+
+	static function aNewGameHasOnePickaxeAndNoLoot() {
+		var inventory = Progress.newGame().inventory;
+
+		check(inventory.pickaxes == 1, "a new game has one pickaxe");
+		check(inventory.collectedLoots().length == 0, "a new game has no loot");
+	}
+
+	static function usingAPickaxeRemovesOneButNeverGoesBelowZero() {
+		var inventory = Inventory.starting().usePickaxe();
+
+		check(inventory.pickaxes == 0, "using a pickaxe removes one");
+		check(inventory.usePickaxe().pickaxes == 0, "pickaxes never go below zero");
+		check(inventory.addPickaxes(5).pickaxes == 5, "bought pickaxes are added");
+	}
+
+	static function lootIsCollectedByKind() {
+		var inventory = Inventory.starting()
+			.collectLoots([{id: "fossilFish", num: 1}, {id: "gearPump", num: 2}])
+			.collectLoots([{id: "fossilFish", num: 3}]);
+
+		check(inventory.lootCount("fossilFish") == 4, "loot of the same kind adds up");
+		check(inventory.lootCount("gearPump") == 2, "each kind of loot is counted");
+		check(inventory.lootCount("dragonEgg") == 0, "loot never found counts zero");
+	}
+
+	static function theInventorySurvivesAJsonRoundTrip() {
+		var inventory = Inventory.starting().addPickaxes(5).collectLoots([{id: "fossilFish", num: 2}]);
+		var progress = Progress.newGame().withInventory(inventory);
+
+		var restored = ProgressJson.decode(ProgressJson.encode(progress)).inventory;
+
+		check(restored.pickaxes == 6, "pickaxes survive JSON");
+		check(restored.lootCount("fossilFish") == 2, "loot survives JSON");
+	}
+
+	static function aSaveWithoutInventoryStartsWithTheStartingOne() {
+		var inventory = ProgressJson.decode('{"version":1,"unlockedLevel":2,"bestScores":{}}').inventory;
+
+		check(inventory.pickaxes == 1 && inventory.collectedLoots().length == 0, "a save from before the inventory gets the starting one");
+	}
+
+	static function theOfflineServerSavesPickaxesUsedAndBought() {
+		var store = new InMemoryProgressStore();
+		Protocol.useProgressStore(store);
+
+		Protocol.offlineResponse(ProtocolCom.DoUsePickaxe);
+		check(store.load().inventory.pickaxes == 0, "the server saves a used pickaxe");
+		check(Type.enumEq(Protocol.offlineResponse(ProtocolCom.DoCheckPickaxe), ProtocolCom.SendUsePickaxe(false)), "no pickaxe left to use");
+
+		switch (Protocol.offlineResponse(ProtocolCom.DoBuyPickaxes(false))) {
+			case ProtocolCom.SendValidPurchasePickaxe(userData):
+				check(userData.pickaxe == 5, "the server answers a purchase with the new pickaxes");
+			default:
+				throw "FAILED: the server validates a pickaxe purchase";
+		}
+		check(store.load().inventory.pickaxes == 5, "the server saves bought pickaxes");
+		check(initUserData().pickaxe == 5, "the server serves saved pickaxes");
+	}
+
+	static function theOfflineServerCollectsLootFromEveryGameOnUnlockedLevels() {
+		var store = new InMemoryProgressStore();
+		Protocol.useProgressStore(store);
+
+		Protocol.offlineResponse(ProtocolCom.DoSendGame(gameWithLoot(1, TypeEndGame.TEGVictory, "fossilFish")));
+		Protocol.offlineResponse(ProtocolCom.DoSendGame(gameWithLoot(1, TypeEndGame.TEGDefeat, "fossilFish")));
+		Protocol.offlineResponse(ProtocolCom.DoSendGame(gameWithLoot(9, TypeEndGame.TEGVictory, "gearPump")));
+
+		var loots = initUserData().arLoots;
+		check(loots.length == 1 && loots[0].id == "fossilFish" && loots[0].num == 2, "loot from games on unlocked levels is collected");
+	}
+
+	static function theUnlimitedEconomyNeverRunsOut() {
+		var economy = new UnlimitedEconomy();
+		var progress = economy.spendGold(economy.spendLife(Progress.newGame()), Protocol.PRICE_5_LIFES);
+
+		check(economy.livesLeft(progress) == Protocol.MAX_LIFES, "lives are unlimited");
+		check(economy.goldLeft(progress) == 10000, "gold is unlimited");
+	}
+
+	static function theOfflineServerSpendsLivesAndGoldThroughTheEconomy() {
+		Protocol.useProgressStore(new InMemoryProgressStore());
+
+		Protocol.offlineResponse(ProtocolCom.DoLaunchGame(1));
+		Protocol.offlineResponse(ProtocolCom.DoBuyMoves(false));
+
+		var userData = initUserData();
+		check(userData.life == Protocol.MAX_LIFES && userData.gold == 10000, "the server serves the economy's lives and gold");
+	}
+
+	static function gameWithLoot(level:Int, success:TypeEndGame, loot:String):GameData {
+		var played = game(level, success, 1000);
+		played.arLoots = [{id: loot, num: 1}];
+		return played;
 	}
 
 	static function game(level:Int, success:TypeEndGame, score:Int):GameData {

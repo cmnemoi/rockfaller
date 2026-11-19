@@ -1,8 +1,11 @@
 package;
 
 import Common;
+import progress.Economy;
 import progress.InMemoryProgressStore;
+import progress.Progress;
 import progress.ProgressStore;
+import progress.UnlimitedEconomy;
 
 typedef InitClient = {
 	var level:Int;
@@ -85,6 +88,9 @@ class Protocol {
 
 	static var levels:Array<LevelInfo>;
 	static var progressStore:ProgressStore = new InMemoryProgressStore();
+	static var economy:Economy = new UnlimitedEconomy();
+	// DoBuyPickaxes(true) is the tutorial's free pack (BoosterPickaxe).
+	static inline var PICKAXES_PER_PACK = 5;
 	// The client never reports the tutorials of levels 1 to 3 (TutoManager sends
 	// DoUpdateTuto from level 4 on): winning those levels marks them seen.
 	static var LEVELS_WITH_UNREPORTED_TUTORIAL = [1, 2, 3];
@@ -119,14 +125,10 @@ class Protocol {
 			case ProtocolCom.DoGetLevelsForEditor:
 				return ProtocolCom.SendLevels(offlineLevels());
 			case ProtocolCom.DoLaunchGame(_):
-				return ProtocolCom.SendValidLaunchGame(userData);
+				progressStore.save(economy.spendLife(progressStore.load()));
+				return ProtocolCom.SendValidLaunchGame(offlineUserData());
 			case ProtocolCom.DoSendGame(gameData):
-				if (gameData.success == TypeEndGame.TEGVictory) {
-					var progress = progressStore.load().recordVictory(gameData.level, gameData.score, offlineLevels().length);
-					if (LEVELS_WITH_UNREPORTED_TUTORIAL.indexOf(gameData.level) >= 0)
-						progress = progress.markTutorialSeen(gameData.level);
-					progressStore.save(progress);
-				}
+				progressStore.save(recordGame(progressStore.load(), gameData));
 				userData = offlineUserData();
 				return ProtocolCom.SendValidEndGame(userData, Date.now().getTime());
 			case ProtocolCom.DoUpdateTuto(tutorial):
@@ -135,11 +137,21 @@ class Protocol {
 			case ProtocolCom.DoGetUserData:
 				return ProtocolCom.SendUserData(userData);
 			case ProtocolCom.DoBuyMoves(_):
-				return ProtocolCom.SendValidPurchaseMoves(userData);
-			case ProtocolCom.DoBuyPickaxes(_):
-				return ProtocolCom.SendValidPurchasePickaxe(userData);
+				progressStore.save(economy.spendGold(progressStore.load(), PRICE_5_MOVES));
+				return ProtocolCom.SendValidPurchaseMoves(offlineUserData());
+			case ProtocolCom.DoBuyPickaxes(free):
+				var progress = progressStore.load();
+				if (!free)
+					progress = economy.spendGold(progress, PRICE_5_PICKAXE);
+				progressStore.save(progress.withInventory(progress.inventory.addPickaxes(PICKAXES_PER_PACK)));
+				return ProtocolCom.SendValidPurchasePickaxe(offlineUserData());
 			case ProtocolCom.DoBuyLifes:
-				return ProtocolCom.SendValidPurchaseLife(userData);
+				progressStore.save(economy.spendGold(progressStore.load(), PRICE_5_LIFES));
+				return ProtocolCom.SendValidPurchaseLife(offlineUserData());
+			case ProtocolCom.DoUsePickaxe:
+				var progress = progressStore.load();
+				progressStore.save(progress.withInventory(progress.inventory.usePickaxe()));
+				return ProtocolCom.PCDone;
 			case ProtocolCom.DoCheckPickaxe:
 				return ProtocolCom.SendUsePickaxe(userData.pickaxe > 0);
 			case ProtocolCom.DoMobileAPI(_, _):
@@ -149,6 +161,19 @@ class Protocol {
 		}
 	}
 
+	/** Same rule as Motion-Twin's mobile server (MobileServer.SAVE_GAME). */
+	static function recordGame(progress:Progress, gameData:GameData):Progress {
+		if (!progress.hasUnlocked(gameData.level))
+			return progress;
+		progress = progress.withInventory(progress.inventory.collectLoots(gameData.arLoots));
+		if (gameData.success != TypeEndGame.TEGVictory)
+			return progress;
+		progress = progress.recordVictory(gameData.level, gameData.score, offlineLevels().length);
+		if (LEVELS_WITH_UNREPORTED_TUTORIAL.indexOf(gameData.level) >= 0)
+			progress = progress.markTutorialSeen(gameData.level);
+		return progress;
+	}
+
 	static function offlineUserData():UserData {
 		var progress = progressStore.load();
 		var flags:haxe.EnumFlags<UserFlags> = cast 0;
@@ -156,13 +181,13 @@ class Protocol {
 		flags.set(UserFlags.UFSFX);
 		return {
 			levelMax: progress.unlockedLevel,
-			life: MAX_LIFES,
+			life: economy.livesLeft(progress),
 			lastGivingLife: Date.now().getTime(),
-			gold: 10000,
+			gold: economy.goldLeft(progress),
 			arHighScore: [for (level in 0...(offlineLevels().length + 1)) progress.bestScore(level)],
 			arAssets: [],
-			arLoots: [],
-			pickaxe: 1,
+			arLoots: progress.inventory.collectedLoots(),
+			pickaxe: progress.inventory.pickaxes,
 			tutoDone: progress.seenTutorials().concat([for (tutorial in UNVERIFIED_TUTORIALS) if (!progress.hasSeenTutorial(tutorial)) tutorial]),
 			flags: flags,
 			requestsCount: 0
