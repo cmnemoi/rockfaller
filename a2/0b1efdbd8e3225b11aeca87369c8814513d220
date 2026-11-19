@@ -1,0 +1,21 @@
+README.md
+  s_370653b5630944::t_f81974cc483e43 12
+docs/PLAN.md
+  s_370653b5630944::t_01ab6c412f5412 159-167
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a20b1efdbd8e3225b11aeca87369c8814513d220",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
