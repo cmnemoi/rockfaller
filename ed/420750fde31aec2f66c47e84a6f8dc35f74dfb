@@ -1,0 +1,21 @@
+client/client/src/WebMain.hx
+  s_370653b5630944::t_dc34d8113fb3d2 41-42
+client/client/src/progress/SharedObjectProgressStore.hx
+  s_370653b5630944::t_8aa2291d8af678 1-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ed420750fde31aec2f66c47e84a6f8dc35f74dfb",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
