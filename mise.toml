@@ -1,6 +1,20 @@
-[tools]
-haxe = "3.2.1"
-neko = "2-1-0"
+# Haxe and Neko releases also ship 32-bit Linux archives: mise could pick them,
+# so each platform names its archive.
+[tools.haxe]
+version = "3.2.1"
+
+[tools.haxe.platforms]
+linux-x64 = { asset_pattern = "haxe-3.2.1-linux64.tar.gz" }
+macos-x64 = { asset_pattern = "haxe-3.2.1-osx.tar.gz" }
+macos-arm64 = { asset_pattern = "haxe-3.2.1-osx.tar.gz" }
+
+[tools.neko]
+version = "2-1-0"
+
+[tools.neko.platforms]
+linux-x64 = { asset_pattern = "neko-2.1.0-linux64.tar.gz" }
+macos-x64 = { asset_pattern = "neko-2.1.0-osx64.tar.gz" }
+macos-arm64 = { asset_pattern = "neko-2.1.0-osx64.tar.gz" }
 
 [env]
 # Neko loads its libneko and ndll files from here: DYLD on macOS, LD on Linux.
