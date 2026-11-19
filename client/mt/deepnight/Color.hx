@@ -509,14 +509,14 @@ class Color {
 	}
 
 	public static inline function uncolorizeBatchElement(e:h2d.SpriteBatch.BatchElement) {
-		e.r = e.g = e.b = 1;
+		e.color.x = e.color.y = e.color.z = 1;
 	}
 
 	public static inline function colorizeBatchElement(e:h2d.SpriteBatch.BatchElement, c:UInt, ?ratio=1.0) {
 		var c = Color.intToRgb( mt.deepnight.Color.interpolateInt(0xFFFFFF, c, ratio) );
-		e.r = c.r/255;
-		e.g = c.g/255;
-		e.b = c.b/255;
+		e.color.x = c.r/255;
+		e.color.y = c.g/255;
+		e.color.z = c.b/255;
 	}
 	#end
 

@@ -18,7 +18,7 @@ private class Task { //classes are faster
 
 class Delayer {
 	var delays		: Array<Task>;
-	var now			: mt.flash.Volatile<Float>;
+	var now			: Float;
 	var fps			: Float;
 
 	public function new(fps:Float) { //no need for nullability because no other nullable args
@@ -100,7 +100,18 @@ class Delayer {
 		haxe.ds.ArraySort.sort(delays, cmp);
 	}
 
-	public function update(dt:Float) {
+	public function add(a:Dynamic, b:Dynamic, ?c:Dynamic) {
+		if( c == null )
+			addF(null, cast a, cast b);
+		else
+			addF(cast a, cast b, cast c);
+	}
+
+	public function addFrameBased(a:Dynamic, b:Dynamic, ?c:Dynamic) {
+		add(a, b, c);
+	}
+
+	public function update(?dt:Float = 1) {
 		while( delays.length>0 && delays[0].t<=now ) {
 			var d = delays.shift();
 			d.cb();

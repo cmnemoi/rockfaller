@@ -45,7 +45,7 @@ class Sfx {
 	static var MUTED = false;
 	static var DISABLED = false;
 	static var GLOBAL_VOLUME = 1.0;
-	@:noCompletion public static var TW = new Tweenie();
+	@:noCompletion public static var TW = new Tweenie(30);
 	static var CHANNELS : Map<Int,ChannelInfos> = new Map();
 
 	static var LISTENER_X = 0.0;
@@ -309,7 +309,16 @@ class Sfx {
 		if( from!=null )
 			setVolume(from);
 
-		vtween = TW.create(volume, to, milliseconds);
+		vtween = @:privateAccess TW.create_(
+			function() return volume,
+			function(v) {
+				volume = v;
+			},
+			null,
+			to,
+			null,
+			milliseconds
+		);
 		vtween.onUpdate = refresh;
 		return vtween;
 	}
@@ -321,7 +330,16 @@ class Sfx {
 		if( from!=null )
 			panning = from;
 
-		ptween = TW.create(panning, to, milliseconds);
+		ptween = @:privateAccess TW.create_(
+			function() return panning,
+			function(v) {
+				panning = v;
+			},
+			null,
+			to,
+			null,
+			milliseconds
+		);
 		ptween.onUpdate = refresh;
 		return ptween;
 	}

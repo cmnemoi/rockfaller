@@ -26,7 +26,7 @@ class TinyProcess {
 
 		delayer = new Delayer(parent.baseFps);
 		tw = new Tweenie(parent.baseFps);
-		cd = new Cooldown();
+		cd = new Cooldown(parent.baseFps);
 	}
 
 	public dynamic function onUpdate() {}

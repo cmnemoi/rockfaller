@@ -50,7 +50,7 @@ class Process {
 
 		delayer = new Delayer(baseFps);
 		tw = new Tweenie(baseFps);
-		cd = new Cooldown();
+		cd = new Cooldown(baseFps);
 
 		#if (flash || openfl)
 		if( flash.Lib.current.stage==null )
@@ -295,4 +295,3 @@ class Process {
 	}
 
 }
-

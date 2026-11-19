@@ -6,7 +6,8 @@ package mt.flash;
 
 class Screenshot {
 	public static function setCallback( cb : Void -> String ){
-		flash.external.ExternalInterface.addCallback('exportScreenshot', cb);
+		if (flash.external.ExternalInterface.available)
+			flash.external.ExternalInterface.addCallback('exportScreenshot', cb);
 	}
 
 	#if h3d

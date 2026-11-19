@@ -19,7 +19,7 @@ class Cooldown {
 	var fastCheck					: Map<String, Bool>;
 	var baseFps						: Float;
 
-	public function new(fps:Float) {
+	public function new(?fps:Float = 30) {
 		reset();
 		baseFps = fps;
 	}
@@ -142,10 +142,14 @@ class Cooldown {
 		}
 	}
 
+	public inline function hasSet(k, frames:Float) {
+		return hasSetF(k, frames);
+	}
+
 	public inline function hasSetS(k, seconds:Float)   return hasSetF(k, secToFrames(seconds));
 	public inline function hasSetMs(k, ms:Float)       return hasSetF(k, msToFrames(ms));
 
-	public function update(dt:Float) {
+	public function update(?dt:Float = 1) {
 		var i = 0;
 		while( i<cdList.length ) {
 			var cd = cdList[i];
