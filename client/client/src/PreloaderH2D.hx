@@ -2,6 +2,7 @@ package;
 
 import mt.deepnight.slb.*;
 import mt.deepnight.slb.assets.TexturePacker;
+import h3d.mat.Data.TextureFlags;
 
 import Protocol;
 
@@ -184,7 +185,7 @@ class PreloaderH2D extends mt.deepnight.deprecated.HProcess
 			},
 			#if standalone
 			function(){
-				getSLBTaupi();
+				Settings.SLB_TAUPI = TexturePacker.importXmlMt("taupinotron.xml", true);
 				loadBar();
 			},
 			#end
@@ -212,8 +213,6 @@ class PreloaderH2D extends mt.deepnight.deprecated.HProcess
 			function(){
 				#if standalone
 				Settings.SLB_LANG = TexturePacker.importXmlMt("lang_en.xml");
-				if (data.Lang.LANG != "en")
-					getSLBLang();
 				loadBar();
 				#else
 				Settings.SLB_LANG_IS_DL = true;

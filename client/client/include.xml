@@ -11,8 +11,8 @@
 		<assets path="assets/worlds" rename="worlds" include="*.8888.pvr.z" unless="mobile"/>
 	</section>
 	
-	<assets path="sfx_low" include="*.mp3" rename="" unless="cpp" />
-	<assets path="sfxOgg" include="*.ogg" rename="" if="cpp" />
+	<assets path="sfx" include="*.mp3" rename="" unless="cpp" />
+	<assets path="sfx" include="*.ogg" rename="" if="cpp" />
 
 	<source path="." />
 	<source path="src" />
@@ -25,12 +25,15 @@
 	<source path="assets" unless="standalone" />
 	
 	<haxelib name="castle" />
+	<haxelib name="format" version="3.2.1" />
 	<haxelib name="openfl" />
 	<haxelib name="h3d" />
 	<!--<haxedef name="advanced-telemetry"/>-->
 	<haxedef name="NoTextureGC"/>
 	<haxedef name="sound"/>
 	<haxedef name="version2_1"/>
+	<haxeflag name="-D" value="resourcesPath=assetsWeb" if="standalone" />
+	<haxeflag name="-D" value="resourcesPath=assets" unless="standalone" />
 	
 	<assets path="../../data" rename="data" exclude="goals.*"/>
 	
@@ -38,6 +41,7 @@
 	<assets path="assets/Mouse_Deco.ttf"/>
 	
 	<haxeflag name="-resource data.cdb@data" />
+	<haxeflag name="-resource levels.json@levels" />
 	<haxeflag name="-resource lang/client.fr.mo@fr" />
 	<haxeflag name="-resource lang/client.es.mo@es" />
 	<haxeflag name="-resource lang/client.en.mo@en" />

@@ -18,7 +18,7 @@ class SoundManager
 	#if cpp
 		static var SBANK 			= Sfx.importFromAssets("sfxOgg");
 	#else
-		static var SBANK 			= Sfx.importFromAssets("sfx_low");
+		static var SBANK 			= Sfx.importFromAssets("sfx");
 	#end
 
 	static var sMenu			: mt.flash.Sfx;
@@ -84,6 +84,12 @@ class SoundManager
 		isMusicGameReady = true;
 		sMenu = SBANK.Rockfaller_interface();
 		sGame = SBANK.Rockfaller_ingame();
+	#elseif standalone
+		// Offline Flash has no URL sound service, so use the embedded tracks.
+		isMusicMenuReady = true;
+		isMusicGameReady = true;
+		sMenu = SBANK.Rockfaller_interface();
+		sGame = SBANK.Rockfaller_ingame();
 	#else
 		if( sMenu == null )
 			sMenu = SBANK.empty();
@@ -143,8 +149,13 @@ class SoundManager
 	}
 
 	static function initDownloads() {
-		if (Settings.INIT_CLIENT != null) {
-			Sfx.SHOW_PROGRESS_BARS = false;
+		if (Settings.INIT_CLIENT == null || Settings.INIT_CLIENT.urlSounds == "") {
+			isMusicMenuReady = true;
+			isMusicGameReady = true;
+			return;
+		}
+
+		Sfx.SHOW_PROGRESS_BARS = false;
 			if (!isMusicMenuReady) {
 				sMenu = new mt.flash.Sfx(null);
 				trace("init downloading menu music");
@@ -177,7 +188,6 @@ class SoundManager
 					}, numTry * 15 * Settings.FPS);
 				});
 			}
-		}
 	}
 
 	public static function SET_VOLUME(vol:Int = -1) {
