@@ -39,7 +39,9 @@ class PreloaderOFL extends NMEPreloader
 		
 		Settings.SET();
 		
-		mt.deepnight.Lib.redirectTracesToConsole();
+		// Offline players (Ruffle desktop) have no page console: keep the Flash traces.
+		if (flash.external.ExternalInterface.available)
+			mt.deepnight.Lib.redirectTracesToConsole();
 		
 		ME = this;
 		

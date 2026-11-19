@@ -34,7 +34,8 @@ class WebMain
 		mt.flash.Screenshot.setCallback(function() {
 			return mt.flash.Screenshot.exportScene2d( mt.deepnight.deprecated.HProcess.GLOBAL_SCENE );
 		});
-		flash.external.ExternalInterface.addCallback("onFriendRequest",onFriendRequest);
+		if (flash.external.ExternalInterface.available)
+			flash.external.ExternalInterface.addCallback("onFriendRequest",onFriendRequest);
 
 		mt.flash.MouseWheelTrap.setup();
 		
