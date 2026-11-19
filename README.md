@@ -28,6 +28,7 @@ Tester :
 
 ```bash
 mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProtocolCheck --interp
+mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProgressCheck --interp
 uv run tools/levels/test_classify_cells.py
 uv run tools/levels/test_read_hud.py
 uv run tools/levels/test_build_levels.py

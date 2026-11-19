@@ -35,6 +35,9 @@ jobs:
       - name: Check the offline server and the 180 levels
         run: mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProtocolCheck --interp
 
+      - name: Check the player's progress
+        run: mise exec -- haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProgressCheck --interp
+
       - uses: astral-sh/setup-uv@v6
 
       - name: Test the level extraction

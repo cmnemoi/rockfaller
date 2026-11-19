@@ -1,6 +1,8 @@
 package;
 
 import Common;
+import progress.InMemoryProgressStore;
+import progress.ProgressStore;
 
 typedef InitClient = {
 	var level:Int;
@@ -81,10 +83,15 @@ class Protocol {
 	public static inline var PRICE_5_PICKAXE:Int = 400;
 	public static inline var PRICE_5_LIFES:Int = 900;
 
-	static var offlineMaxLevel:Int = 1;
 	static var levels:Array<LevelInfo>;
+	static var progressStore:ProgressStore = new InMemoryProgressStore();
 
 	public static function init():Void {}
+
+	/** The client plugs its persistent store at startup; tests keep one in memory. */
+	public static function useProgressStore(store:ProgressStore):Void {
+		progressStore = store;
+	}
 
 	public static function offlineResponse(command:Null<ProtocolCom>):ProtocolCom {
 		var userData = offlineUserData();
@@ -106,10 +113,10 @@ class Protocol {
 			case ProtocolCom.DoLaunchGame(_):
 				return ProtocolCom.SendValidLaunchGame(userData);
 			case ProtocolCom.DoSendGame(gameData):
-				if (gameData.success == TypeEndGame.TEGVictory
-				&& gameData.level >= offlineMaxLevel
-				&& offlineMaxLevel < offlineLevels().length)
-					offlineMaxLevel = gameData.level + 1;
+				if (gameData.success == TypeEndGame.TEGVictory) {
+					var progress = progressStore.load().recordVictory(gameData.level, gameData.score, offlineLevels().length);
+					progressStore.save(progress);
+				}
 				userData = offlineUserData();
 				return ProtocolCom.SendValidEndGame(userData, Date.now().getTime());
 			case ProtocolCom.DoGetUserData:
@@ -130,15 +137,16 @@ class Protocol {
 	}
 
 	static function offlineUserData():UserData {
+		var progress = progressStore.load();
 		var flags:haxe.EnumFlags<UserFlags> = cast 0;
 		flags.set(UserFlags.UFMusic);
 		flags.set(UserFlags.UFSFX);
 		return {
-			levelMax: offlineMaxLevel,
+			levelMax: progress.unlockedLevel,
 			life: MAX_LIFES,
 			lastGivingLife: Date.now().getTime(),
 			gold: 10000,
-			arHighScore: [for (i in 0...(offlineLevels().length + 1)) null],
+			arHighScore: [for (level in 0...(offlineLevels().length + 1)) progress.bestScore(level)],
 			arAssets: [],
 			arLoots: [],
 			pickaxe: 1,
