@@ -87,16 +87,27 @@ BIOME_WALLS = {
     "TBLimbo": ("universNL", "wall_tree0"),
 }
 BIOME_NEIGHBOURHOOD = 3
+# Golden flashes and screen shakes make a cell look gold on 7 frames at most
+# (measured on the 27 gelatin levels whose start frame shows all the gold).
+MIN_GOLD_FRAMES = 8
 
 
-def level_info(level: int, start: np.ndarray, star_strip: np.ndarray | None, biome: str) -> dict:
+def level_info(
+    level: int,
+    start: np.ndarray,
+    star_strip: np.ndarray | None,
+    biome: str,
+    gold_sightings: dict[tuple[int, int], int] | None = None,
+) -> dict:
+    """gold_sightings: the frames on which each cell looked gold during the attempt
+    (see collect_gold_cells.py)."""
     grid = classify_grid(start)
     manual_rocks = _manual_rocks(grid)
     moves = read_moves(start)
     goal = read_goal(start)
     goal_cells = find_goal_cells(start)
     if goal is not None and goal.kind == "gelatin":
-        goal_cells["gelatin"] = _gelatin_cells(goal_cells["gelatin"], grid, goal.cell_count)
+        goal_cells["gelatin"] = gelatin_cells(goal_cells["gelatin"], gold_sightings or {}, _iced_cells(grid), goal.cell_count)
     star_thresholds = read_star_thresholds(star_strip) if star_strip is not None else None
     review = []
     if moves is None:
@@ -122,12 +133,35 @@ def level_info(level: int, start: np.ndarray, star_strip: np.ndarray | None, bio
     }
 
 
-def _gelatin_cells(visible: set[tuple[int, int]], grid: list[list[str]], goal_count: int) -> set[tuple[int, int]]:
-    """Ice hides the gold under it. When the iced cells make up exactly the gold
-    missing from the goal, the gold is under them."""
-    iced = {(row, column) for row, pieces in enumerate(grid) for column, piece in enumerate(pieces) if piece.startswith("freeze")}
-    with_iced = visible | iced
-    return with_iced if len(with_iced) == goal_count else visible
+def gelatin_cells(
+    visible: set[tuple[int, int]],
+    sightings: dict[tuple[int, int], int],
+    iced: set[tuple[int, int]],
+    goal_count: int,
+) -> set[tuple[int, int]]:
+    """The gold cells: those visible at start, then those seen gold later in the
+    video, most seen first, up to the goal. Then ice, which hides the gold under it:
+    when the iced cells make up exactly the gold still missing, the gold is under them."""
+    cells = visible | _gold_seen_later(visible, sightings, goal_count - len(visible))
+    with_iced = cells | iced
+    return with_iced if len(with_iced) == goal_count else cells
+
+
+def _gold_seen_later(visible: set[tuple[int, int]], sightings: dict[tuple[int, int], int], missing: int) -> set[tuple[int, int]]:
+    """A tie at the limit leaves both cells out: the video cannot tell them apart."""
+    if missing <= 0:
+        return set()
+    seen = sorted(
+        ((frames, cell) for cell, frames in sightings.items() if cell not in visible and frames >= MIN_GOLD_FRAMES),
+        reverse=True,
+    )
+    if len(seen) > missing and seen[missing - 1][0] == seen[missing][0]:
+        seen = [(frames, cell) for frames, cell in seen if frames > seen[missing][0]]
+    return {cell for _, cell in seen[:missing]}
+
+
+def _iced_cells(grid: list[list[str]]) -> set[tuple[int, int]]:
+    return {(row, column) for row, pieces in enumerate(grid) for column, piece in enumerate(pieces) if piece.startswith("freeze")}
 
 
 def apply_overrides(info: dict, override: dict) -> dict:
@@ -246,6 +280,13 @@ def smooth_biomes(biomes: list[str]) -> list[str]:
     return smoothed
 
 
+def _gold_sightings(start: Path) -> dict[tuple[int, int], int]:
+    gold_file = start.with_name(f"{start.stem}-gold.json")
+    if not gold_file.exists():
+        return {}
+    return {(row, column): frames for row, column, frames in json.loads(gold_file.read_text())}
+
+
 def _won_attempts() -> list[tuple[int, Path, Path]]:
     """(level, start frame, star strip) for the won attempt of each level."""
     won = []
@@ -260,11 +301,15 @@ def _won_attempts() -> list[tuple[int, Path, Path]]:
 if __name__ == "__main__":
     attempts = _won_attempts()
     starts = [cv2.imread(str(start)) for _, start, _ in attempts]
+    sightings = [_gold_sightings(start) for _, start, _ in attempts]
     biomes = smooth_biomes([biome_of(start) for start in starts])
     overrides = json.loads(OVERRIDES.read_text())
     levels = [
-        apply_overrides(level_info(level, start, cv2.imread(str(star_strip)), biome), overrides.get(str(level), {}))
-        for (level, _, star_strip), start, biome in zip(attempts, starts, biomes, strict=True)
+        apply_overrides(
+            level_info(level, start, cv2.imread(str(star_strip)), biome, gold),
+            overrides.get(str(level), {}),
+        )
+        for (level, _, star_strip), start, biome, gold in zip(attempts, starts, biomes, sightings, strict=True)
     ]
     OUTPUT.write_text(json.dumps(levels, indent=1))
     to_review = [level for level in levels if level["review"]]

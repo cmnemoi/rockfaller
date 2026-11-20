@@ -5,7 +5,7 @@
 from pathlib import Path
 
 import cv2
-from build_levels import apply_overrides, level_info
+from build_levels import apply_overrides, gelatin_cells, level_info
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -97,6 +97,25 @@ def test_a_level_without_bubbles_has_no_water():
     assert _level(8)["arGP"] == []
 
 
+def test_gold_seen_later_in_the_video_fills_the_goal_most_seen_first():
+    visible = {(0, 0), (0, 1)}
+    sightings = {(0, 0): 90, (5, 5): 60, (6, 6): 9, (7, 7): 8}
+
+    assert gelatin_cells(visible, sightings, iced=set(), goal_count=4) == visible | {(5, 5), (6, 6)}
+
+
+def test_a_short_golden_flash_is_not_gold():
+    sightings = {(5, 5): 7}
+
+    assert gelatin_cells({(0, 0)}, sightings, iced=set(), goal_count=2) == {(0, 0)}
+
+
+def test_a_tie_at_the_limit_of_the_goal_adds_neither_cell():
+    sightings = {(5, 5): 20, (6, 6): 20}
+
+    assert gelatin_cells({(0, 0)}, sightings, iced=set(), goal_count=2) == {(0, 0)}
+
+
 if __name__ == "__main__":
     test_holes_get_the_variant_whose_rough_sides_face_playable_cells()
     test_level_8_is_a_gelatin_level_with_breakable_blocks()
@@ -107,4 +126,7 @@ if __name__ == "__main__":
     test_a_level_with_bubbles_is_a_water_level()
     test_gold_hidden_under_ice_completes_the_gelatin_goal()
     test_a_level_without_bubbles_has_no_water()
+    test_gold_seen_later_in_the_video_fills_the_goal_most_seen_first()
+    test_a_short_golden_flash_is_not_gold()
+    test_a_tie_at_the_limit_of_the_goal_adds_neither_cell()
     print("PASS")

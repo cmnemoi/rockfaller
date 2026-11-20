@@ -15,6 +15,74 @@
     "numMoves": 20,
     "why": "Tutorial: the moves are hidden and never checked; the game ends on the goal (Game.enableClick)."
   },
+  "7": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 2,
+          "cY": 6
+        },
+        {
+          "cX": 3,
+          "cY": 6
+        },
+        {
+          "cX": 4,
+          "cY": 6
+        },
+        {
+          "cX": 5,
+          "cY": 6
+        },
+        {
+          "cX": 6,
+          "cY": 6
+        },
+        {
+          "cX": 2,
+          "cY": 7
+        },
+        {
+          "cX": 3,
+          "cY": 7
+        },
+        {
+          "cX": 4,
+          "cY": 7
+        },
+        {
+          "cX": 5,
+          "cY": 7
+        },
+        {
+          "cX": 6,
+          "cY": 7
+        },
+        {
+          "cX": 2,
+          "cY": 8
+        },
+        {
+          "cX": 3,
+          "cY": 8
+        },
+        {
+          "cX": 4,
+          "cY": 8
+        },
+        {
+          "cX": 5,
+          "cY": 8
+        },
+        {
+          "cX": 6,
+          "cY": 8
+        }
+      ]
+    ],
+    "why": "The gold fills rows 6-8, columns 2-6 (15 cells, like the goal); rocks dragged under the cursor hide 5 of them on the start frame. Read by hand, cells as (row, column)."
+  },
   "29": {
     "type": [
       "TGGelatin",
@@ -62,6 +130,122 @@
   "31": {
     "numMoves": 30,
     "why": "A falling particle hides the 0 on the start frame; the medallion reads 30."
+  },
+  "34": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 3,
+          "cY": 1
+        },
+        {
+          "cX": 4,
+          "cY": 1
+        },
+        {
+          "cX": 5,
+          "cY": 1
+        },
+        {
+          "cX": 3,
+          "cY": 2
+        },
+        {
+          "cX": 4,
+          "cY": 2
+        },
+        {
+          "cX": 5,
+          "cY": 2
+        },
+        {
+          "cX": 3,
+          "cY": 3
+        },
+        {
+          "cX": 4,
+          "cY": 3
+        },
+        {
+          "cX": 5,
+          "cY": 3
+        },
+        {
+          "cX": 0,
+          "cY": 7
+        },
+        {
+          "cX": 1,
+          "cY": 7
+        },
+        {
+          "cX": 2,
+          "cY": 7
+        },
+        {
+          "cX": 6,
+          "cY": 7
+        },
+        {
+          "cX": 7,
+          "cY": 7
+        },
+        {
+          "cX": 8,
+          "cY": 7
+        },
+        {
+          "cX": 0,
+          "cY": 8
+        },
+        {
+          "cX": 1,
+          "cY": 8
+        },
+        {
+          "cX": 2,
+          "cY": 8
+        },
+        {
+          "cX": 6,
+          "cY": 8
+        },
+        {
+          "cX": 7,
+          "cY": 8
+        },
+        {
+          "cX": 8,
+          "cY": 8
+        },
+        {
+          "cX": 0,
+          "cY": 9
+        },
+        {
+          "cX": 1,
+          "cY": 9
+        },
+        {
+          "cX": 2,
+          "cY": 9
+        },
+        {
+          "cX": 6,
+          "cY": 9
+        },
+        {
+          "cX": 7,
+          "cY": 9
+        },
+        {
+          "cX": 8,
+          "cY": 9
+        }
+      ]
+    ],
+    "why": "10 of the 13 ice cells hide gold, all but the 3 in the middle of row 9 (checked by eye on the video): 17 visible + 10 = 27, like the goal. Read by hand, cells as (row, column)."
   },
   "35": {
     "type": [
@@ -191,6 +375,186 @@
     ],
     "why": "Gelatin under ice does not show to the extraction. A yellow outline marks rows 2-7, columns 2-6 inside the ice: 30 cells like the goal. Read by hand on the start frame, cells as (row, column)."
   },
+  "69": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 4,
+          "cY": 2
+        },
+        {
+          "cX": 3,
+          "cY": 3
+        },
+        {
+          "cX": 4,
+          "cY": 3
+        },
+        {
+          "cX": 5,
+          "cY": 3
+        },
+        {
+          "cX": 1,
+          "cY": 4
+        },
+        {
+          "cX": 4,
+          "cY": 4
+        },
+        {
+          "cX": 7,
+          "cY": 4
+        },
+        {
+          "cX": 0,
+          "cY": 5
+        },
+        {
+          "cX": 1,
+          "cY": 5
+        },
+        {
+          "cX": 2,
+          "cY": 5
+        },
+        {
+          "cX": 4,
+          "cY": 5
+        },
+        {
+          "cX": 6,
+          "cY": 5
+        },
+        {
+          "cX": 7,
+          "cY": 5
+        },
+        {
+          "cX": 8,
+          "cY": 5
+        },
+        {
+          "cX": 1,
+          "cY": 6
+        },
+        {
+          "cX": 2,
+          "cY": 6
+        },
+        {
+          "cX": 3,
+          "cY": 6
+        },
+        {
+          "cX": 4,
+          "cY": 6
+        },
+        {
+          "cX": 5,
+          "cY": 6
+        },
+        {
+          "cX": 6,
+          "cY": 6
+        },
+        {
+          "cX": 7,
+          "cY": 6
+        },
+        {
+          "cX": 4,
+          "cY": 7
+        },
+        {
+          "cX": 2,
+          "cY": 8
+        },
+        {
+          "cX": 4,
+          "cY": 8
+        },
+        {
+          "cX": 6,
+          "cY": 8
+        },
+        {
+          "cX": 1,
+          "cY": 9
+        },
+        {
+          "cX": 2,
+          "cY": 9
+        },
+        {
+          "cX": 3,
+          "cY": 9
+        },
+        {
+          "cX": 4,
+          "cY": 9
+        },
+        {
+          "cX": 5,
+          "cY": 9
+        },
+        {
+          "cX": 6,
+          "cY": 9
+        },
+        {
+          "cX": 7,
+          "cY": 9
+        }
+      ]
+    ],
+    "why": "The gold is symmetric around column 4: the whole column from row 2 to 9 is gold, and gray blocks hide the pair at row 9, columns 2 and 6, and the cell at row 3; a bubble hides row 5. 28 visible + 4 = 32, like the goal. Read by hand, cells as (row, column)."
+  },
+  "90": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 0,
+          "cY": 9
+        },
+        {
+          "cX": 1,
+          "cY": 9
+        },
+        {
+          "cX": 2,
+          "cY": 9
+        },
+        {
+          "cX": 3,
+          "cY": 9
+        },
+        {
+          "cX": 4,
+          "cY": 9
+        },
+        {
+          "cX": 5,
+          "cY": 9
+        },
+        {
+          "cX": 6,
+          "cY": 9
+        },
+        {
+          "cX": 7,
+          "cY": 9
+        },
+        {
+          "cX": 8,
+          "cY": 9
+        }
+      ]
+    ],
+    "why": "Row 9 is all gold (9 cells, like the goal); bubbles hide 4 of them. Read by hand, cells as (row, column)."
+  },
   "92": {
     "type": [
       "TGGelatin",
@@ -282,6 +646,142 @@
       ]
     ],
     "why": "Gelatin under ice does not show to the extraction: it lies under all 21 ice cells, like the goal. Read by hand on the start frame, cells as (row, column)."
+  },
+  "93": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 2,
+          "cY": 2
+        },
+        {
+          "cX": 3,
+          "cY": 2
+        },
+        {
+          "cX": 4,
+          "cY": 2
+        },
+        {
+          "cX": 5,
+          "cY": 2
+        },
+        {
+          "cX": 6,
+          "cY": 2
+        },
+        {
+          "cX": 2,
+          "cY": 3
+        },
+        {
+          "cX": 2,
+          "cY": 4
+        },
+        {
+          "cX": 2,
+          "cY": 5
+        },
+        {
+          "cX": 4,
+          "cY": 5
+        },
+        {
+          "cX": 5,
+          "cY": 5
+        },
+        {
+          "cX": 2,
+          "cY": 6
+        },
+        {
+          "cX": 2,
+          "cY": 7
+        }
+      ]
+    ],
+    "why": "The time bomb at row 5, column 5 stands on gold, and so does the rock dragged at row 5, column 4 (seen gold on 22 frames). 10 visible + 2 = 12, like the goal. Read by hand, cells as (row, column)."
+  },
+  "101": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 0,
+          "cY": 8
+        },
+        {
+          "cX": 1,
+          "cY": 8
+        },
+        {
+          "cX": 2,
+          "cY": 8
+        },
+        {
+          "cX": 3,
+          "cY": 8
+        },
+        {
+          "cX": 4,
+          "cY": 8
+        },
+        {
+          "cX": 5,
+          "cY": 8
+        },
+        {
+          "cX": 6,
+          "cY": 8
+        },
+        {
+          "cX": 7,
+          "cY": 8
+        },
+        {
+          "cX": 8,
+          "cY": 8
+        },
+        {
+          "cX": 0,
+          "cY": 9
+        },
+        {
+          "cX": 1,
+          "cY": 9
+        },
+        {
+          "cX": 2,
+          "cY": 9
+        },
+        {
+          "cX": 3,
+          "cY": 9
+        },
+        {
+          "cX": 4,
+          "cY": 9
+        },
+        {
+          "cX": 5,
+          "cY": 9
+        },
+        {
+          "cX": 6,
+          "cY": 9
+        },
+        {
+          "cX": 7,
+          "cY": 9
+        },
+        {
+          "cX": 8,
+          "cY": 9
+        }
+      ]
+    ],
+    "why": "Rows 8 and 9 are all gold (18 cells, like the goal); rocks dragged under the cursor hide 5 of them. Read by hand, cells as (row, column)."
   },
   "124": {
     "type": [
@@ -410,5 +910,573 @@
       ]
     ],
     "why": "Mercury (cement) shows as a grey halo around the 4 corner bombs, which the colour rule misses. The level popup asks for x82, the HUD shows 78 left: 4 cells covered at start. Read by hand on the start frame, cells as (row, column)."
+  },
+  "159": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 1,
+          "cY": 2
+        },
+        {
+          "cX": 2,
+          "cY": 2
+        },
+        {
+          "cX": 3,
+          "cY": 2
+        },
+        {
+          "cX": 4,
+          "cY": 2
+        },
+        {
+          "cX": 5,
+          "cY": 2
+        },
+        {
+          "cX": 6,
+          "cY": 2
+        },
+        {
+          "cX": 7,
+          "cY": 2
+        },
+        {
+          "cX": 1,
+          "cY": 3
+        },
+        {
+          "cX": 2,
+          "cY": 3
+        },
+        {
+          "cX": 3,
+          "cY": 3
+        },
+        {
+          "cX": 4,
+          "cY": 3
+        },
+        {
+          "cX": 5,
+          "cY": 3
+        },
+        {
+          "cX": 6,
+          "cY": 3
+        },
+        {
+          "cX": 7,
+          "cY": 3
+        },
+        {
+          "cX": 1,
+          "cY": 4
+        },
+        {
+          "cX": 2,
+          "cY": 4
+        },
+        {
+          "cX": 3,
+          "cY": 4
+        },
+        {
+          "cX": 4,
+          "cY": 4
+        },
+        {
+          "cX": 5,
+          "cY": 4
+        },
+        {
+          "cX": 6,
+          "cY": 4
+        },
+        {
+          "cX": 7,
+          "cY": 4
+        },
+        {
+          "cX": 1,
+          "cY": 5
+        },
+        {
+          "cX": 2,
+          "cY": 5
+        },
+        {
+          "cX": 3,
+          "cY": 5
+        },
+        {
+          "cX": 4,
+          "cY": 5
+        },
+        {
+          "cX": 5,
+          "cY": 5
+        },
+        {
+          "cX": 6,
+          "cY": 5
+        },
+        {
+          "cX": 7,
+          "cY": 5
+        },
+        {
+          "cX": 1,
+          "cY": 6
+        },
+        {
+          "cX": 2,
+          "cY": 6
+        },
+        {
+          "cX": 3,
+          "cY": 6
+        },
+        {
+          "cX": 4,
+          "cY": 6
+        },
+        {
+          "cX": 5,
+          "cY": 6
+        },
+        {
+          "cX": 6,
+          "cY": 6
+        },
+        {
+          "cX": 7,
+          "cY": 6
+        },
+        {
+          "cX": 1,
+          "cY": 7
+        },
+        {
+          "cX": 2,
+          "cY": 7
+        },
+        {
+          "cX": 3,
+          "cY": 7
+        },
+        {
+          "cX": 4,
+          "cY": 7
+        },
+        {
+          "cX": 5,
+          "cY": 7
+        },
+        {
+          "cX": 6,
+          "cY": 7
+        },
+        {
+          "cX": 7,
+          "cY": 7
+        }
+      ]
+    ],
+    "why": "The gold fills rows 2-7, columns 1-7: the gray blocks of column 4 stand on it (row 2 shows a golden rim). 36 visible + 6 = 42, like the goal. Read by hand, cells as (row, column)."
+  },
+  "160": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 0,
+          "cY": 1
+        },
+        {
+          "cX": 1,
+          "cY": 1
+        },
+        {
+          "cX": 2,
+          "cY": 1
+        },
+        {
+          "cX": 6,
+          "cY": 1
+        },
+        {
+          "cX": 7,
+          "cY": 1
+        },
+        {
+          "cX": 8,
+          "cY": 1
+        },
+        {
+          "cX": 0,
+          "cY": 2
+        },
+        {
+          "cX": 1,
+          "cY": 2
+        },
+        {
+          "cX": 2,
+          "cY": 2
+        },
+        {
+          "cX": 3,
+          "cY": 2
+        },
+        {
+          "cX": 4,
+          "cY": 2
+        },
+        {
+          "cX": 5,
+          "cY": 2
+        },
+        {
+          "cX": 6,
+          "cY": 2
+        },
+        {
+          "cX": 7,
+          "cY": 2
+        },
+        {
+          "cX": 8,
+          "cY": 2
+        },
+        {
+          "cX": 0,
+          "cY": 3
+        },
+        {
+          "cX": 1,
+          "cY": 3
+        },
+        {
+          "cX": 2,
+          "cY": 3
+        },
+        {
+          "cX": 3,
+          "cY": 3
+        },
+        {
+          "cX": 4,
+          "cY": 3
+        },
+        {
+          "cX": 5,
+          "cY": 3
+        },
+        {
+          "cX": 6,
+          "cY": 3
+        },
+        {
+          "cX": 7,
+          "cY": 3
+        },
+        {
+          "cX": 8,
+          "cY": 3
+        },
+        {
+          "cX": 8,
+          "cY": 4
+        },
+        {
+          "cX": 0,
+          "cY": 5
+        },
+        {
+          "cX": 1,
+          "cY": 5
+        },
+        {
+          "cX": 2,
+          "cY": 5
+        },
+        {
+          "cX": 3,
+          "cY": 5
+        },
+        {
+          "cX": 4,
+          "cY": 5
+        },
+        {
+          "cX": 5,
+          "cY": 5
+        },
+        {
+          "cX": 6,
+          "cY": 5
+        },
+        {
+          "cX": 7,
+          "cY": 5
+        },
+        {
+          "cX": 8,
+          "cY": 5
+        },
+        {
+          "cX": 0,
+          "cY": 6
+        },
+        {
+          "cX": 0,
+          "cY": 7
+        },
+        {
+          "cX": 1,
+          "cY": 7
+        },
+        {
+          "cX": 2,
+          "cY": 7
+        },
+        {
+          "cX": 3,
+          "cY": 7
+        },
+        {
+          "cX": 4,
+          "cY": 7
+        },
+        {
+          "cX": 5,
+          "cY": 7
+        },
+        {
+          "cX": 6,
+          "cY": 7
+        },
+        {
+          "cX": 7,
+          "cY": 7
+        },
+        {
+          "cX": 8,
+          "cY": 7
+        },
+        {
+          "cX": 8,
+          "cY": 8
+        },
+        {
+          "cX": 0,
+          "cY": 9
+        },
+        {
+          "cX": 1,
+          "cY": 9
+        },
+        {
+          "cX": 2,
+          "cY": 9
+        },
+        {
+          "cX": 3,
+          "cY": 9
+        },
+        {
+          "cX": 4,
+          "cY": 9
+        },
+        {
+          "cX": 5,
+          "cY": 9
+        },
+        {
+          "cX": 6,
+          "cY": 9
+        },
+        {
+          "cX": 7,
+          "cY": 9
+        },
+        {
+          "cX": 8,
+          "cY": 9
+        }
+      ]
+    ],
+    "why": "The gold snakes through rows 1-3, 5, 7 and 9: the gray blocks of column 4 on rows 5, 7 and 9 stand on it. 51 visible + 3 = 54, like the goal. Read by hand, cells as (row, column)."
+  },
+  "166": {
+    "type": [
+      "TGGelatin",
+      [
+        {
+          "cX": 3,
+          "cY": 1
+        },
+        {
+          "cX": 4,
+          "cY": 1
+        },
+        {
+          "cX": 5,
+          "cY": 1
+        },
+        {
+          "cX": 3,
+          "cY": 2
+        },
+        {
+          "cX": 4,
+          "cY": 2
+        },
+        {
+          "cX": 5,
+          "cY": 2
+        },
+        {
+          "cX": 3,
+          "cY": 3
+        },
+        {
+          "cX": 4,
+          "cY": 3
+        },
+        {
+          "cX": 5,
+          "cY": 3
+        },
+        {
+          "cX": 0,
+          "cY": 4
+        },
+        {
+          "cX": 1,
+          "cY": 4
+        },
+        {
+          "cX": 2,
+          "cY": 4
+        },
+        {
+          "cX": 4,
+          "cY": 4
+        },
+        {
+          "cX": 6,
+          "cY": 4
+        },
+        {
+          "cX": 7,
+          "cY": 4
+        },
+        {
+          "cX": 8,
+          "cY": 4
+        },
+        {
+          "cX": 0,
+          "cY": 5
+        },
+        {
+          "cX": 1,
+          "cY": 5
+        },
+        {
+          "cX": 2,
+          "cY": 5
+        },
+        {
+          "cX": 3,
+          "cY": 5
+        },
+        {
+          "cX": 5,
+          "cY": 5
+        },
+        {
+          "cX": 6,
+          "cY": 5
+        },
+        {
+          "cX": 7,
+          "cY": 5
+        },
+        {
+          "cX": 8,
+          "cY": 5
+        },
+        {
+          "cX": 0,
+          "cY": 6
+        },
+        {
+          "cX": 1,
+          "cY": 6
+        },
+        {
+          "cX": 2,
+          "cY": 6
+        },
+        {
+          "cX": 4,
+          "cY": 6
+        },
+        {
+          "cX": 6,
+          "cY": 6
+        },
+        {
+          "cX": 7,
+          "cY": 6
+        },
+        {
+          "cX": 8,
+          "cY": 6
+        },
+        {
+          "cX": 3,
+          "cY": 7
+        },
+        {
+          "cX": 4,
+          "cY": 7
+        },
+        {
+          "cX": 5,
+          "cY": 7
+        },
+        {
+          "cX": 3,
+          "cY": 8
+        },
+        {
+          "cX": 4,
+          "cY": 8
+        },
+        {
+          "cX": 5,
+          "cY": 8
+        },
+        {
+          "cX": 3,
+          "cY": 9
+        },
+        {
+          "cX": 4,
+          "cY": 9
+        },
+        {
+          "cX": 5,
+          "cY": 9
+        }
+      ]
+    ],
+    "why": "The gold fills rows 7-9, columns 3-5, symmetric like the rest of the level; rocks dragged under the cursor hide 4 of them. 36 visible + 4 = 40, like the goal. Read by hand, cells as (row, column)."
   }
 }
