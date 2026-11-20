@@ -401,10 +401,7 @@ class Levels extends HProcess implements ProcessManaged
 				new process.popup.GoalLevels(LevelDesign.GET_LEVEL(numLevel), false);
 				return;
 			#end
-			#if standalone
-			if (!mt.device.User.isLogged() && numLevel >= 16)
-				process.ProcessManager.ME.showAskLog(this, false);
-			else #end if (numLevel <= LevelDesign.USER_DATA.levelMax && LevelDesign.GET_LIFE() > 0)
+			if (numLevel <= LevelDesign.USER_DATA.levelMax && LevelDesign.GET_LIFE() > 0)
 				new process.popup.GoalLevels(LevelDesign.GET_LEVEL(numLevel), false);
 			else if (LevelDesign.GET_LIFE() == 0) {
 				process.ProcessManager.ME.showLife(Levels.ME);

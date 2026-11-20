@@ -185,12 +185,7 @@ class Life extends process.popup.BasePopup
 		animEnd(function() {
 			process.ProcessManager.ME.hideLife(hparent, this);
 			if (Levels.ME != null && Levels.ME.lastLevelClicked > 0) {
-				#if standalone
-				if (!mt.device.User.isLogged() && Levels.ME.lastLevelClicked >= 16)
-					process.ProcessManager.ME.showAskLog(Levels.ME, false);
-				else
-				#end
-					new process.popup.GoalLevels(LevelDesign.GET_LEVEL(Levels.ME.lastLevelClicked), false);
+				new process.popup.GoalLevels(LevelDesign.GET_LEVEL(Levels.ME.lastLevelClicked), false);
 			}
 			else if (Game.ME != null && GoalLevels.ME != null)
 				GoalLevels.ME.goToLevel();
