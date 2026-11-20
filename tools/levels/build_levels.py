@@ -9,7 +9,8 @@ segment_video.py, and writes data/levels.json.
 Enums are written as ["Constructor", arguments...], for example ["TRHole", 12],
 so the Haxe side can rebuild them with Type.createEnum.
 Each record carries a "review" list: the reasons to check it by hand.
-Not extracted: arGP and arGrip (game mechanics that do not show on the start frame).
+Not extracted: arGrip, and the arGP mechanics other than water (they do not show
+on the start frame).
 
 Usage: uv run build_levels.py
 """
@@ -90,6 +91,7 @@ BIOME_NEIGHBOURHOOD = 3
 
 def level_info(level: int, start: np.ndarray, star_strip: np.ndarray | None, biome: str) -> dict:
     grid = classify_grid(start)
+    manual_rocks = _manual_rocks(grid)
     goal_cells = find_goal_cells(start)
     moves = read_moves(start)
     goal = read_goal(start)
@@ -110,8 +112,8 @@ def level_info(level: int, start: np.ndarray, star_strip: np.ndarray | None, bio
         "arStepScore": star_thresholds,
         "type": _goal_type(goal, goal_cells),
         "arGrip": [],
-        "arManualRocks": _manual_rocks(grid),
-        "arGP": [],
+        "arManualRocks": manual_rocks,
+        "arGP": _game_mechanics(manual_rocks),
         "arDeck": _deck(grid),
         "biome": [biome],
         "review": review,
@@ -159,6 +161,13 @@ def _manual_rocks(grid: list[list[str]]) -> list[dict]:
             type_rock = _hole(grid, row, column) if piece == HOLE else _type_rock(piece)
             rocks.append({"tr": type_rock, "x": column, "y": row})
     return rocks
+
+
+def _game_mechanics(manual_rocks: list[dict]) -> list[list]:
+    """The game draws bubbles only in water levels, where they spread each turn."""
+    if any(rock["tr"] == ["TRBubble"] for rock in manual_rocks):
+        return [["TGWater"]]
+    return []
 
 
 def _hole(grid: list[list[str]], row: int, column: int) -> list:

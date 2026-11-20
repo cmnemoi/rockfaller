@@ -75,6 +75,18 @@ def test_a_mercury_goal_counts_the_cells_covered_at_start():
     assert goal[1] == 57 + 11
 
 
+def test_a_level_with_bubbles_is_a_water_level():
+    # The game draws bubbles only in water levels, where they spread each turn.
+    info = _level(18)
+
+    assert ["TRBubble"] in _manual_rocks(info).values()
+    assert info["arGP"] == [["TGWater"]]
+
+
+def test_a_level_without_bubbles_has_no_water():
+    assert _level(8)["arGP"] == []
+
+
 if __name__ == "__main__":
     test_holes_get_the_variant_whose_rough_sides_face_playable_cells()
     test_level_8_is_a_gelatin_level_with_breakable_blocks()
@@ -82,4 +94,6 @@ if __name__ == "__main__":
     test_level_88_time_bombs_are_manual_rocks()
     test_overrides_replace_fields_and_clear_the_matching_review_reasons()
     test_a_mercury_goal_counts_the_cells_covered_at_start()
+    test_a_level_with_bubbles_is_a_water_level()
+    test_a_level_without_bubbles_has_no_water()
     print("PASS")

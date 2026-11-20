@@ -217,7 +217,7 @@ class Protocol {
 			type: goal(record.type),
 			arGrip: [],
 			arManualRocks: [for (rock in manualRocks) {tr: typeRock(rock.tr), x: rock.x, y: rock.y}],
-			arGP: [],
+			arGP: [for (mechanic in (record.arGP:Array<Array<Dynamic>>)) Type.createEnum(TypeGP, mechanic[0], mechanic.slice(1))],
 			arDeck: [for (entry in deck) {t: typeRock(entry.t), v: entry.v}],
 			biome: Type.createEnum(TypeBiome, record.biome[0])
 		};

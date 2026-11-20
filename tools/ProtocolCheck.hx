@@ -24,6 +24,9 @@ class ProtocolCheck {
 		check(hasManualRock(level88, 4, 0, TypeRock.TRBombCiv(7)), "level 88 has a time bomb at 7 on top of column 4");
 		check(level88.arStepScore.join(",") == "30000,40000,50000", "level 88 star thresholds");
 
+		var level18 = levels[17];
+		check(level18.arGP.length == 1 && Type.enumEq(level18.arGP[0], TypeGP.TGWater), "level 18 is a water level, so its bubbles can be drawn");
+
 		var end = Protocol.offlineResponse(ProtocolCom.DoSendGame({
 			mobileID: null, level: 1, version: 1, date: null,
 			success: TypeEndGame.TEGVictory, score: 1000,
