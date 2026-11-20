@@ -1,0 +1,24 @@
+tools/levels/read_hud.py
+  s_370653b5630944::t_5518bbfedf2508 41-42,56-57,92,119-141
+  s_370653b5630944::t_6baae1568a6234 142-143
+data/levels.json
+  s_370653b5630944::t_40a2dfcd12b716 16398,44656-44662,46607
+tools/levels/test_read_hud.py
+  s_370653b5630944::t_b05042ce723299 42-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "374f3c56c5226ec853704e80b0758b77276dd084",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
