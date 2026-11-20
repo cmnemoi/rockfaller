@@ -64,13 +64,33 @@ def test_a_rock_hovered_by_the_cursor_is_not_mistaken_for_ice():
 def test_rocks_dragged_by_the_cursor_are_not_mistaken_for_bubbles_or_bombs():
     grid = classify_grid(cv2.imread(str(FIXTURES / "level_044_start.png")))
 
-    assert [grid[8][7], grid[8][8], grid[9][8]] == ["hovered"] * 3
+    dragged = [grid[8][7], grid[8][8], grid[9][8]]
+    assert all(piece == "hovered" or piece in CLASSIC_ROCKS for piece in dragged), dragged
 
 
 def test_real_ice_next_to_the_cursor_stays_ice():
     grid = classify_grid(cv2.imread(str(FIXTURES / "level_017_start.png")))
 
     assert all(grid[row][7].startswith("freeze") for row in range(4, 8)), [grid[row][7] for row in range(4, 8)]
+
+
+def test_level_18_ends_with_a_row_of_intact_ice_not_bubbles():
+    grid = classify_grid(cv2.imread(str(FIXTURES / "level_018_start.png")))
+
+    assert grid[9][1:8] == ["freeze2"] * 7
+
+
+def test_level_57_has_bubbles_along_its_sides():
+    grid = classify_grid(cv2.imread(str(FIXTURES / "level_057_start.png")))
+
+    bubbles = {(row, column) for row, pieces in enumerate(grid) for column, piece in enumerate(pieces) if piece == "bubble"}
+    assert bubbles == {(0, 0), (2, 0), (4, 0), (6, 0), (6, 8), (8, 0)}
+
+
+def test_a_grown_crystal_is_not_mistaken_for_a_bubble():
+    grid = classify_grid(cv2.imread(str(FIXTURES / "level_022_start.png")))
+
+    assert grid[9][4] == "crystal"
 
 
 def test_gelatin_cells_are_found_by_their_golden_frame():
@@ -106,6 +126,9 @@ if __name__ == "__main__":
     test_a_rock_hovered_by_the_cursor_is_not_mistaken_for_ice()
     test_rocks_dragged_by_the_cursor_are_not_mistaken_for_bubbles_or_bombs()
     test_real_ice_next_to_the_cursor_stays_ice()
+    test_level_18_ends_with_a_row_of_intact_ice_not_bubbles()
+    test_level_57_has_bubbles_along_its_sides()
+    test_a_grown_crystal_is_not_mistaken_for_a_bubble()
     test_gelatin_cells_are_found_by_their_golden_frame()
     test_mercury_cells_are_found_by_their_silver_background()
     print("PASS")

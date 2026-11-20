@@ -54,6 +54,13 @@ HOLE = "hole"
 # Cracks are pixels darker than 70 % of the median grey, in the 30 px middle of an
 # ice cell. They cover about 0.12 of it when cracked, 0 when intact.
 ICE_MIDDLE_HALF_SIDE = 15
+# Intact ice is a flat blue square, and can beat it on correlation alone: its middle
+# varies by 2 to 5 grey levels, a bubble's by 20 or more (the rock inside shows).
+FLAT_MIDDLE_HALF_SIDE = 10
+MAX_FLAT_MIDDLE_DEVIATION = 10
+# Bubbles match at 0.39 or more (sand inside them scores lowest). A crystal grown
+# under the cursor matches at 0.33 to 0.37.
+MIN_BUBBLE_CORRELATION = 0.38
 CRACK_DARKNESS = 0.7
 MIN_CRACKED_ICE_DARK_SHARE = 0.05
 # Hovered rocks are drawn with their "Over" sprite; they are the same rock.
@@ -110,7 +117,7 @@ def classify_grid(frame: np.ndarray) -> list[list[str]]:
             match = _best_match(frame, column, row)
             if cursor is not None and _is_near(cursor, column, row) and _may_be_a_hovered_rock(match):
                 pieces.append(HOVERED)
-            elif match.piece == "freeze":
+            elif match.piece == "freeze" or (match.piece == "bubble" and _has_flat_middle(frame, *_cell_center(column, row))):
                 pieces.append(_ice_state(frame, *_cell_center(column, row)))
             else:
                 pieces.append(match.piece)
@@ -179,9 +186,17 @@ def _best_match(frame: np.ndarray, column: int, row: int) -> Match:
     for piece, sprite_names in SPRITES.items():
         for sprite_name in sprite_names:
             correlation, colour_gap = _compare(frame, center_x, center_y, atlas_sprite(sprite_name))
+            if piece == "bubble" and correlation < MIN_BUBBLE_CORRELATION:
+                continue
             if colour_gap <= MAX_COLOUR_GAP and correlation > best.correlation:
                 best = Match(piece=piece, correlation=correlation, colour_gap=colour_gap)
     return best
+
+
+def _has_flat_middle(frame: np.ndarray, center_x: float, center_y: float) -> bool:
+    x, y = round(center_x), round(center_y)
+    middle = frame[y - FLAT_MIDDLE_HALF_SIDE: y + FLAT_MIDDLE_HALF_SIDE, x - FLAT_MIDDLE_HALF_SIDE: x + FLAT_MIDDLE_HALF_SIDE]
+    return cv2.cvtColor(middle, cv2.COLOR_BGR2GRAY).std() <= MAX_FLAT_MIDDLE_DEVIATION
 
 
 def _ice_state(frame: np.ndarray, center_x: float, center_y: float) -> str:

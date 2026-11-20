@@ -4855,6 +4855,34 @@
     {
      "cX": 8,
      "cY": 8
+    },
+    {
+     "cX": 1,
+     "cY": 9
+    },
+    {
+     "cX": 2,
+     "cY": 9
+    },
+    {
+     "cX": 3,
+     "cY": 9
+    },
+    {
+     "cX": 4,
+     "cY": 9
+    },
+    {
+     "cX": 5,
+     "cY": 9
+    },
+    {
+     "cX": 6,
+     "cY": 9
+    },
+    {
+     "cX": 7,
+     "cY": 9
     }
    ]
   ],
@@ -4862,59 +4890,62 @@
   "arManualRocks": [
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 1,
     "y": 9
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 9
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 9
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 9
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 9
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 9
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 7,
     "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -4955,9 +4986,7 @@
   "biome": [
    "TBFreeze"
   ],
-  "review": [
-   "8 gelatin cells found for 15 in the goal"
-  ]
+  "review": []
  },
  {
   "level": 19,
@@ -5279,6 +5308,30 @@
    "TGGelatin",
    [
     {
+     "cX": 2,
+     "cY": 2
+    },
+    {
+     "cX": 3,
+     "cY": 2
+    },
+    {
+     "cX": 4,
+     "cY": 2
+    },
+    {
+     "cX": 5,
+     "cY": 2
+    },
+    {
+     "cX": 6,
+     "cY": 2
+    },
+    {
+     "cX": 2,
+     "cY": 3
+    },
+    {
      "cX": 3,
      "cY": 3
     },
@@ -5289,6 +5342,14 @@
     {
      "cX": 5,
      "cY": 3
+    },
+    {
+     "cX": 6,
+     "cY": 3
+    },
+    {
+     "cX": 2,
+     "cY": 4
     },
     {
      "cX": 3,
@@ -5303,6 +5364,14 @@
      "cY": 4
     },
     {
+     "cX": 6,
+     "cY": 4
+    },
+    {
+     "cX": 2,
+     "cY": 5
+    },
+    {
      "cX": 3,
      "cY": 5
     },
@@ -5315,6 +5384,14 @@
      "cY": 5
     },
     {
+     "cX": 6,
+     "cY": 5
+    },
+    {
+     "cX": 2,
+     "cY": 6
+    },
+    {
      "cX": 3,
      "cY": 6
     },
@@ -5325,6 +5402,30 @@
     {
      "cX": 5,
      "cY": 6
+    },
+    {
+     "cX": 6,
+     "cY": 6
+    },
+    {
+     "cX": 2,
+     "cY": 7
+    },
+    {
+     "cX": 3,
+     "cY": 7
+    },
+    {
+     "cX": 4,
+     "cY": 7
+    },
+    {
+     "cX": 5,
+     "cY": 7
+    },
+    {
+     "cX": 6,
+     "cY": 7
     }
    ]
   ],
@@ -5436,45 +5537,46 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 7
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -5515,9 +5617,7 @@
   "biome": [
    "TBFreeze"
   ],
-  "review": [
-   "12 gelatin cells found for 30 in the goal"
-  ]
+  "review": []
  },
  {
   "level": 21,
@@ -5788,55 +5888,44 @@
     ],
     "x": 5,
     "y": 6
-   },
-   {
-    "tr": [
-     "TRBubble"
-    ],
-    "x": 4,
-    "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
      "TRClassic",
      "crystal"
     ],
-    "v": 106
+    "v": 111
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 106
+    "v": 105
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 69
+    "v": 68
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 125
+    "v": 123
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 94
+    "v": 93
    }
   ],
   "biome": [
@@ -6735,7 +6824,8 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     1
     ],
     "x": 6,
     "y": 7
@@ -6893,11 +6983,7 @@
     "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -7980,7 +8066,8 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 4
@@ -8019,21 +8106,24 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 5
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 5
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 5
@@ -8056,21 +8146,24 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 6
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 6
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 6
@@ -8138,48 +8231,37 @@
     ],
     "x": 4,
     "y": 9
-   },
-   {
-    "tr": [
-     "TRBubble"
-    ],
-    "x": 5,
-    "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
      "TRClassic",
      "crystal"
     ],
-    "v": 89
+    "v": 95
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 129
+    "v": 127
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 113
+    "v": 111
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 97
+    "v": 95
    },
    {
     "t": [
@@ -9208,63 +9290,72 @@
   "arManualRocks": [
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 0,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 1,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 7,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 8,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 8
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 8
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 9
@@ -9295,17 +9386,14 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -9616,7 +9704,8 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 3
@@ -9671,14 +9760,16 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 4
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 4
@@ -9725,21 +9816,24 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 5
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 5
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 5
@@ -9778,21 +9872,24 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 6
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 6
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 6
@@ -9926,11 +10023,7 @@
     "y": 8
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -11963,28 +12056,28 @@
      "TRClassic",
      "crystal"
     ],
-    "v": 102
+    "v": 112
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 138
+    "v": 134
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 130
+    "v": 127
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 130
+    "v": 127
    }
   ],
   "biome": [
@@ -12009,13 +12102,6 @@
   "arManualRocks": [
    {
     "tr": [
-     "TRBubble"
-    ],
-    "x": 4,
-    "y": 8
-   },
-   {
-    "tr": [
      "TRFreeze",
      1
     ],
@@ -12023,46 +12109,42 @@
     "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
      "TRClassic",
      "crystal"
     ],
-    "v": 102
+    "v": 107
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 97
+    "v": 95
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 80
+    "v": 79
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 136
+    "v": 135
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 85
+    "v": 84
    }
   ],
   "biome": [
@@ -15953,35 +16035,35 @@
      "TRClassic",
      "crystal"
     ],
-    "v": 152
+    "v": 160
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 76
+    "v": 75
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 109
+    "v": 106
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 87
+    "v": 85
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 76
+    "v": 74
    }
   ],
   "biome": [
@@ -18576,14 +18658,16 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 8
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 8
@@ -20410,13 +20494,6 @@
     ],
     "x": 4,
     "y": 9
-   },
-   {
-    "tr": [
-     "TRBubble"
-    ],
-    "x": 5,
-    "y": 9
    }
   ],
   "arGP": [
@@ -20430,35 +20507,35 @@
      "TRClassic",
      "crystal"
     ],
-    "v": 91
+    "v": 97
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 83
+    "v": 82
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 129
+    "v": 127
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 99
+    "v": 97
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 98
+    "v": 97
    }
   ],
   "biome": [
@@ -20686,21 +20763,7 @@
     "tr": [
      "TRBubble"
     ],
-    "x": 4,
-    "y": 8
-   },
-   {
-    "tr": [
-     "TRBubble"
-    ],
     "x": 0,
-    "y": 9
-   },
-   {
-    "tr": [
-     "TRBubble"
-    ],
-    "x": 4,
     "y": 9
    },
    {
@@ -20722,35 +20785,35 @@
      "TRClassic",
      "crystal"
     ],
-    "v": 82
+    "v": 94
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 120
+    "v": 116
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 67
+    "v": 65
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 112
+    "v": 109
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 119
+    "v": 116
    }
   ],
   "biome": [
@@ -23491,35 +23554,35 @@
      "TRClassic",
      "crystal"
     ],
-    "v": 98
+    "v": 103
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 117
+    "v": 115
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 78
+    "v": 77
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 110
+    "v": 109
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 97
+    "v": 96
    }
   ],
   "biome": [
@@ -24347,84 +24410,96 @@
   "arManualRocks": [
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 2
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 2
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 2
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 2
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 2
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 3
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 3
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 4
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 4
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 4
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 4
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 4
@@ -24439,56 +24514,64 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 3,
     "y": 5
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 5
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 6
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 6
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 6
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 5,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 7
@@ -24502,11 +24585,7 @@
     "y": 8
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -31466,24 +31545,10 @@
    },
    {
     "tr": [
-     "TRBubble"
-    ],
-    "x": 4,
-    "y": 8
-   },
-   {
-    "tr": [
      "TRBlockBreakable",
      1
     ],
     "x": 0,
-    "y": 9
-   },
-   {
-    "tr": [
-     "TRBubble"
-    ],
-    "x": 4,
     "y": 9
    },
    {
@@ -31505,35 +31570,35 @@
      "TRClassic",
      "crystal"
     ],
-    "v": 113
+    "v": 123
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 147
+    "v": 143
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 53
+    "v": 52
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 67
+    "v": 65
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 120
+    "v": 117
    }
   ],
   "biome": [
@@ -33698,35 +33763,35 @@
      "TRClassic",
      "crystal"
     ],
-    "v": 62
+    "v": 68
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 123
+    "v": 121
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 115
+    "v": 114
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 115
+    "v": 114
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 85
+    "v": 83
    }
   ],
   "biome": [
@@ -38203,7 +38268,8 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 4,
     "y": 4
@@ -38305,11 +38371,7 @@
     "y": 6
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -38921,7 +38983,8 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     1
     ],
     "x": 4,
     "y": 8
@@ -38991,11 +39054,7 @@
     "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -45603,7 +45662,8 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 0,
     "y": 4
@@ -45650,7 +45710,8 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 0,
     "y": 5
@@ -45785,13 +45846,6 @@
    },
    {
     "tr": [
-     "TRBubble"
-    ],
-    "x": 4,
-    "y": 8
-   },
-   {
-    "tr": [
      "TRHole",
      9
     ],
@@ -45816,13 +45870,6 @@
    },
    {
     "tr": [
-     "TRBubble"
-    ],
-    "x": 4,
-    "y": 9
-   },
-   {
-    "tr": [
      "TRHole",
      15
     ],
@@ -45830,46 +45877,42 @@
     "y": 9
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
      "TRClassic",
      "crystal"
     ],
-    "v": 128
+    "v": 143
    },
    {
     "t": [
      "TRClassic",
      "ground"
     ],
-    "v": 159
+    "v": 153
    },
    {
     "t": [
      "TRClassic",
      "roc"
     ],
-    "v": 64
+    "v": 61
    },
    {
     "t": [
      "TRClassic",
      "sand"
     ],
-    "v": 96
+    "v": 92
    },
    {
     "t": [
      "TRClassic",
      "vegeta"
     ],
-    "v": 53
+    "v": 51
    }
   ],
   "biome": [
@@ -47546,6 +47589,10 @@
      "cY": 3
     },
     {
+     "cX": 2,
+     "cY": 3
+    },
+    {
      "cX": 3,
      "cY": 3
     },
@@ -47555,6 +47602,10 @@
     },
     {
      "cX": 5,
+     "cY": 3
+    },
+    {
+     "cX": 6,
      "cY": 3
     },
     {
@@ -47578,6 +47629,10 @@
      "cY": 5
     },
     {
+     "cX": 2,
+     "cY": 5
+    },
+    {
      "cX": 3,
      "cY": 5
     },
@@ -47587,6 +47642,10 @@
     },
     {
      "cX": 5,
+     "cY": 5
+    },
+    {
+     "cX": 6,
      "cY": 5
     },
     {
@@ -47610,6 +47669,10 @@
      "cY": 7
     },
     {
+     "cX": 2,
+     "cY": 7
+    },
+    {
      "cX": 3,
      "cY": 7
     },
@@ -47619,6 +47682,10 @@
     },
     {
      "cX": 5,
+     "cY": 7
+    },
+    {
+     "cX": 6,
      "cY": 7
     },
     {
@@ -47647,14 +47714,16 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 3
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 3
@@ -47669,14 +47738,16 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 5
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 5
@@ -47699,14 +47770,16 @@
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 2,
     "y": 7
    },
    {
     "tr": [
-     "TRBubble"
+     "TRFreeze",
+     2
     ],
     "x": 6,
     "y": 7
@@ -47720,11 +47793,7 @@
     "y": 8
    }
   ],
-  "arGP": [
-   [
-    "TGWater"
-   ]
-  ],
+  "arGP": [],
   "arDeck": [
    {
     "t": [
@@ -47765,9 +47834,7 @@
   "biome": [
    "TBLimbo"
   ],
-  "review": [
-   "24 gelatin cells found for 30 in the goal"
-  ]
+  "review": []
  },
  {
   "level": 178,

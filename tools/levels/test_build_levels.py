@@ -77,10 +77,20 @@ def test_a_mercury_goal_counts_the_cells_covered_at_start():
 
 def test_a_level_with_bubbles_is_a_water_level():
     # The game draws bubbles only in water levels, where they spread each turn.
-    info = _level(18)
+    info = _level(57)
 
     assert ["TRBubble"] in _manual_rocks(info).values()
     assert info["arGP"] == [["TGWater"]]
+
+
+def test_gold_hidden_under_ice_completes_the_gelatin_goal():
+    info = _level(18)
+
+    cells = {(cell["cY"], cell["cX"]) for cell in info["type"][1]}
+    assert len(cells) == 15
+    assert {(9, column) for column in range(1, 8)} <= cells
+    assert not any("gelatin" in reason for reason in info["review"])
+    assert info["arGP"] == []
 
 
 def test_a_level_without_bubbles_has_no_water():
@@ -95,5 +105,6 @@ if __name__ == "__main__":
     test_overrides_replace_fields_and_clear_the_matching_review_reasons()
     test_a_mercury_goal_counts_the_cells_covered_at_start()
     test_a_level_with_bubbles_is_a_water_level()
+    test_gold_hidden_under_ice_completes_the_gelatin_goal()
     test_a_level_without_bubbles_has_no_water()
     print("PASS")

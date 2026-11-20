@@ -92,9 +92,11 @@ BIOME_NEIGHBOURHOOD = 3
 def level_info(level: int, start: np.ndarray, star_strip: np.ndarray | None, biome: str) -> dict:
     grid = classify_grid(start)
     manual_rocks = _manual_rocks(grid)
-    goal_cells = find_goal_cells(start)
     moves = read_moves(start)
     goal = read_goal(start)
+    goal_cells = find_goal_cells(start)
+    if goal is not None and goal.kind == "gelatin":
+        goal_cells["gelatin"] = _gelatin_cells(goal_cells["gelatin"], grid, goal.cell_count)
     star_thresholds = read_star_thresholds(star_strip) if star_strip is not None else None
     review = []
     if moves is None:
@@ -118,6 +120,14 @@ def level_info(level: int, start: np.ndarray, star_strip: np.ndarray | None, bio
         "biome": [biome],
         "review": review,
     }
+
+
+def _gelatin_cells(visible: set[tuple[int, int]], grid: list[list[str]], goal_count: int) -> set[tuple[int, int]]:
+    """Ice hides the gold under it. When the iced cells make up exactly the gold
+    missing from the goal, the gold is under them."""
+    iced = {(row, column) for row, pieces in enumerate(grid) for column, piece in enumerate(pieces) if piece.startswith("freeze")}
+    with_iced = visible | iced
+    return with_iced if len(with_iced) == goal_count else visible
 
 
 def apply_overrides(info: dict, override: dict) -> dict:
