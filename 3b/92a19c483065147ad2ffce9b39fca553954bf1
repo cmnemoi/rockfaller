@@ -1,0 +1,21 @@
+client/client/src/process/popup/Life.hx
+  s_370653b5630944::t_7f8059c3514dd0 188
+client/client/src/process/Levels.hx
+  s_370653b5630944::t_eff35676fc74ba 404
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3b92a19c483065147ad2ffce9b39fca553954bf1",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
