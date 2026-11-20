@@ -39,6 +39,14 @@ def test_collect_goals_list_each_rock_and_its_quantity():
     assert read_goal(_start(88)) == Goal(kind="collect", rocks={"crystal": 20, "ground": 20, "roc": 20, "sand": 20})
 
 
+def test_a_three_digit_count_starts_left_of_its_icon():
+    assert read_goal(_start(60)) == Goal(kind="collect", rocks={"crystal": 100})
+
+
+def test_counts_that_touch_belong_to_their_own_icon():
+    assert read_goal(_start(165)) == Goal(kind="collect", rocks={"crystal": 100, "ground": 100})
+
+
 def test_star_thresholds_are_read_on_the_victory_panel():
     thresholds = {
         level: read_star_thresholds(cv2.imread(str(FIXTURES / f"level_{level:03d}_stars.png")))

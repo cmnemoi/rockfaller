@@ -38,7 +38,8 @@ class TextArea:
 
 MOVES = TextArea("moves", left=600, top=50, right=662, bottom=76, dark_digits=True, digit_heights=range(12, 22))
 SCORE_GOAL = TextArea("objective", left=362, top=60, right=520, bottom=100, dark_digits=False, digit_heights=range(20, 33))
-ICON_COUNTS = TextArea("count", left=362, top=88, right=520, bottom=108, dark_digits=False, digit_heights=range(8, 15))
+# A count wider than its icon, like "100", starts left of the icon.
+ICON_COUNTS = TextArea("count", left=350, top=88, right=520, bottom=108, dark_digits=False, digit_heights=range(8, 15))
 # Inside the star thresholds strip that segment_video.py saves from the victory panel.
 STAR_THRESHOLDS = TextArea("stars", left=0, top=12, right=370, bottom=52, dark_digits=False, digit_heights=range(10, 20))
 STAR_COUNT = 3
@@ -52,6 +53,8 @@ MAX_GLYPH_GAP = 0.5
 MIN_GAP_BETWEEN_NUMBERS = 8
 # Goal icons sit above their number, in a 26 px box.
 ICON_TOP, ICON_BOTTOM, ICON_HALF_WIDTH = 62, 88, 13
+# Narrower bright runs in the icon row are sparks, not icons.
+MIN_ICON_WIDTH = 10
 # Icon pixels are brighter than the dark HUD background.
 MIN_ICON_BRIGHTNESS = 70
 GOAL_ICONS = {
@@ -86,7 +89,7 @@ def read_goal(frame: np.ndarray) -> Goal | None:
     score_goal = _read_numbers(frame, SCORE_GOAL)
     if len(score_goal) == 1:
         return Goal(kind="scoring", score=score_goal[0][0])
-    icons = [(_icon_at(frame, center_x), count) for count, center_x in _read_numbers(frame, ICON_COUNTS)]
+    icons = [(_icon_at(frame, center_x), count) for count, center_x in _counts_under_icons(frame)]
     if not icons:
         return None
     if len(icons) == 1 and icons[0][0] in ("gelatin", "mercury"):
@@ -111,6 +114,31 @@ def _read_numbers(frame: np.ndarray, area: TextArea) -> list[tuple[int, float]]:
         else:
             numbers.append((digit, left, right))
     return [(int(text), area.left + (first_left + last_right) / 2) for text, first_left, last_right in numbers]
+
+
+def _counts_under_icons(frame: np.ndarray) -> list[tuple[int, float]]:
+    """Two counts can touch ("100100"), so each digit goes to the icon above it, not to its neighbour."""
+    icon_centers = _icon_centers(frame)
+    counts = {center_x: "" for center_x in icon_centers}
+    for left, right, digit in _digits(frame, ICON_COUNTS):
+        digit_center_x = ICON_COUNTS.left + (left + right) / 2
+        counts[min(icon_centers, key=lambda center_x: abs(center_x - digit_center_x))] += digit
+    return [(int(count), center_x) for center_x, count in counts.items() if count]
+
+
+def _icon_centers(frame: np.ndarray) -> list[float]:
+    icon_row = frame[ICON_TOP:ICON_BOTTOM, ICON_COUNTS.left: ICON_COUNTS.right]
+    bright_columns = (cv2.cvtColor(icon_row, cv2.COLOR_BGR2HSV)[:, :, 2] > MIN_ICON_BRIGHTNESS).any(axis=0)
+    centers = []
+    run_start = None
+    for column, bright in enumerate([*bright_columns, False]):
+        if bright and run_start is None:
+            run_start = column
+        elif not bright and run_start is not None:
+            if column - run_start >= MIN_ICON_WIDTH:
+                centers.append(ICON_COUNTS.left + (run_start + column - 1) / 2)
+            run_start = None
+    return centers
 
 
 def _digits(frame: np.ndarray, area: TextArea) -> list[tuple[int, int, str]]:

@@ -16395,7 +16395,7 @@
       "TRClassic",
       "crystal"
      ],
-     "num": 0
+     "num": 100
     }
    ]
   ],
@@ -44656,6 +44656,13 @@
     {
      "tr": [
       "TRClassic",
+      "crystal"
+     ],
+     "num": 100
+    },
+    {
+     "tr": [
+      "TRClassic",
       "ground"
      ],
      "num": 100
@@ -46597,7 +46604,7 @@
       "TRClassic",
       "crystal"
      ],
-     "num": 0
+     "num": 100
     },
     {
      "tr": [
