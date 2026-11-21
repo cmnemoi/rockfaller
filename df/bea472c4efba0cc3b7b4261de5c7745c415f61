@@ -1,0 +1,25 @@
+client/client/lang/client.es.po
+  s_370653b5630944::t_dfc0eba90a8e2f 244,333,461
+client/client/lang/client.it.po
+  s_370653b5630944::t_dfc0eba90a8e2f 244,333,462
+client/client/lang/client.pt.po
+  s_370653b5630944::t_dfc0eba90a8e2f 244,339,467
+client/client/lang/client.de.po
+  s_370653b5630944::t_dfc0eba90a8e2f 244,334,468
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dfbea472c4efba0cc3b7b4261de5c7745c415f61",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
