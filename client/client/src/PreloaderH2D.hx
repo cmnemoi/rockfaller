@@ -212,7 +212,15 @@ class PreloaderH2D extends mt.deepnight.deprecated.HProcess
 			},
 			function(){
 				#if standalone
-				Settings.SLB_LANG = TexturePacker.importXmlMt("lang_en.xml");
+				Settings.SLB_LANG_IS_DL = true;
+				Settings.SLB_LANG = switch (Lang.LANG) {
+					case "fr" : TexturePacker.importXmlMt("lang_fr.xml");
+					case "pt" : TexturePacker.importXmlMt("lang_pt.xml");
+					case "es" : TexturePacker.importXmlMt("lang_es.xml");
+					case "it" : TexturePacker.importXmlMt("lang_it.xml");
+					case "de" : TexturePacker.importXmlMt("lang_de.xml");
+					default : TexturePacker.importXmlMt("lang_en.xml");
+				}
 				loadBar();
 				#else
 				Settings.SLB_LANG_IS_DL = true;
