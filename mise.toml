@@ -49,7 +49,7 @@ run = [
 
 [tasks."test:web"]
 description = "Test the web page's scripts"
-run = "node --test web/"
+run = "node --test 'web/*.test.mjs'"
 
 [tasks.test]
 description = "Run every test that needs no video"
