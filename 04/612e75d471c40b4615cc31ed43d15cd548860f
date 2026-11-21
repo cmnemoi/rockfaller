@@ -1,0 +1,30 @@
+client/client/assetsWeb/lang_de.xml
+  s_370653b5630944::t_b574cecf3c372a 1-11
+client/client/assetsWeb/lang_es.xml
+  s_370653b5630944::t_b574cecf3c372a 1-11
+client/client/assetsWeb/lang_pt.xml
+  s_370653b5630944::t_b574cecf3c372a 1-11
+client/client/assetsWeb/lang_it.xml
+  s_370653b5630944::t_b574cecf3c372a 1-11
+client/client/src/PreloaderH2D.hx
+  s_370653b5630944::t_3647a86e72aa69 215
+  s_370653b5630944::t_b574cecf3c372a 216-223
+client/client/assetsWeb/lang_fr.xml
+  s_370653b5630944::t_b574cecf3c372a 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "04612e75d471c40b4615cc31ed43d15cd548860f",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
