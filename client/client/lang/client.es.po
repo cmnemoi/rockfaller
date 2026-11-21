@@ -240,9 +240,8 @@ msgid "Points"
 msgstr "Puntos"
 
 #: src/data/Lang.hx:166
-#, fuzzy
 msgid "6 vies max dès le premier achat !"
-msgstr "¡+1 máximo de vidas con tu primera compra!"
+msgstr "¡Máximo 6 vidas desde la primera compra!"
 
 #: src/data/Lang.hx:167
 msgid "Vous avez"
@@ -330,9 +329,8 @@ msgid "Nouvelle vie disponible !"
 msgstr "¡Tienes una vida nueva disponible!"
 
 #: src/data/Lang.hx:185
-#, fuzzy
 msgid "Il vous manque juste"
-msgstr "Todo lo que necesitabas era:"
+msgstr "Solo te falta:"
 
 #: src/data/Lang.hx:186
 msgid "Moi"
@@ -459,12 +457,10 @@ msgid "Cultivés"
 msgstr "Ratón de biblioteca"
 
 #: src/data/Lang.hx:227
-#, fuzzy
 msgid "Orientaux"
-msgstr "Orientals"
+msgstr "Orientales"
 
 #: src/data/Lang.hx:228
-#, fuzzy
 msgid "Fêtards"
 msgstr "Halloween"
 
