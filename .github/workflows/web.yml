@@ -46,6 +46,9 @@ jobs:
       - name: Test the level extraction
         run: mise run test:levels
 
+      - name: Test the web page's scripts
+        run: mise run test:web  # Node is preinstalled on GitHub's runners
+
       - name: Build the Flash client
         run: mise run build
 

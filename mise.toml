@@ -47,9 +47,13 @@ run = [
   "uv run test_build_levels.py",
 ]
 
+[tasks."test:web"]
+description = "Test the web page's scripts"
+run = "node --test web/"
+
 [tasks.test]
 description = "Run every test that needs no video"
-depends = ["check:protocol", "check:progress", "test:levels"]
+depends = ["check:protocol", "check:progress", "test:levels", "test:web"]
 
 [tasks.build]
 description = "Build the release Flash client"
