@@ -1,0 +1,20 @@
+web/index.html
+  s_370653b5630944::t_1d2d0627668800 39-40,42-43,55
+  s_370653b5630944::t_1b67e8f29e7668 41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "84117d0f4612ea193e58be4a1582cd7f4956bccc",
+  "prompts": {},
+  "sessions": {
+    "s_370653b5630944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84dac6f7-661b-436c-882e-6859503a1435",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
