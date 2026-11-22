@@ -1,0 +1,33 @@
+tools/H2dCheck.hx
+  s_da33d0161772b7::t_d8ab0271474661 70-71,742-761
+  s_da33d0161772b7::t_ecf463e9ae31d4 762
+html5/src/Main.hx
+  s_da33d0161772b7::t_bb642ad2eb51c6 26-49,51-62,64-74
+html5/src/hxd/System.hx
+  s_da33d0161772b7::t_2f17d49377687d 28-50
+html5/src/h3d/Engine.hx
+  s_da33d0161772b7::t_2f17d49377687d 1-76
+html5/src/hxd/Timer.hx
+  s_da33d0161772b7::t_2f17d49377687d 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "749080d91043bc4adc5a9896738a4e4f2d491563",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
