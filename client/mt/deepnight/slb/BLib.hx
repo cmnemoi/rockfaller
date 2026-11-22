@@ -2,7 +2,7 @@ package mt.deepnight.slb;
 
 import mt.MLib;
 
-#if !macro
+#if (flash && !macro)
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.geom.Point;
@@ -27,7 +27,9 @@ typedef FrameData = {
 	wid			: Int,
 	hei			: Int,
 	realFrame	: {x:Int, y:Int, realWid:Int, realHei:Int},
+	#if flash
 	rect		: Rectangle,
+	#end
 	?pX			: Float,
 	?pY			: Float,
 }
@@ -60,7 +62,9 @@ enum SLBError {
 
 class BLib {
 	#if !macro
+	#if flash
 	public var source			: BitmapData;
+	#end
 	/* TODO PERF
 	 * use something like
 	 * typedef StringMap<T> = #if flash
@@ -80,7 +84,9 @@ class BLib {
 	var children				: Array<SpriteInterface>;
 	var attachPoints			: Map<String, Map<Int, Map<Int, {dx:Float, dy:Float}>>>; // Usage: attachPoints.get(animId).get(frame).get(color).dx/dy
 
+	#if flash
 	var bdGroups				: Map<String, Array<BitmapData>>;
+	#end
 
 	#if h3d
 	public var tile				: h2d.Tile;
@@ -89,10 +95,15 @@ class BLib {
 	var id = 0;
 	#end
 
-	public function new(bd:BitmapData #if h3d, ?tile:h2d.Tile #end) {
+	// The JS build has no BitmapData: it always gives a tile, and bd stays null.
+	public function new(bd: #if flash BitmapData #else Dynamic #end #if h3d, ?tile:h2d.Tile #end) {
+		#if flash
 		source = bd;
+		#end
 		groups = new Map();
+		#if flash
 		bdGroups = new Map();
+		#end
 		frameRandDraw = new Map();
 		defaultCenterX = 0;
 		defaultCenterY = 0;
@@ -102,7 +113,7 @@ class BLib {
 		#if h3d
 		id =++GUID;
 		if( tile == null)
-			genTex();
+			#if flash genTex(); #else throw "BLib needs a tile in the JS build"; #end
 		else {
 			this.tile = tile;
 			texture = tile.getTexture();
@@ -111,6 +122,7 @@ class BLib {
 		#end
 	}
 
+	#if flash
 	public function initBdGroups() {
 		for( frames in bdGroups )
 			for( bd in frames ) {
@@ -137,8 +149,9 @@ class BLib {
 		else
 			throw "SLB: You must call initBdGroups()";
 	}
+	#end
 
-	#if h3d
+	#if (h3d && flash)
 	function genTex() {
 		if ( h3d.Engine.getCurrent() != null ) {
 			hxd.Profiler.begin("genTex");
@@ -155,6 +168,8 @@ class BLib {
 			hxd.Profiler.end("genTex");
 		}
 	}
+	#end
+	#if h3d
 
 	public function addBatchElement(sb:SpriteBatch, ?priority:Int=0, k:String, frame:Int, ?xr=0.0, ?yr=0.0) : Null<h2d.SpriteBatch.BatchElement> {
 		if (sb.tile.getTexture() != tile.getTexture())
@@ -234,22 +249,27 @@ class BLib {
 
 
 	public function destroy() {
+		#if flash
 		if( source!=null)
 			source.dispose();
 		source = null;
+		#end
 
 		attachPoints = null;
 
 		while( children.length>0 )
 			children[0].dispose();
 
+		#if flash
 		for(frames in bdGroups)
 			for(bd in frames)
 				bd.dispose();
 		bdGroups = null;
+		#end
 	}
 
 
+	#if flash
 	public inline function get(k:String, ?frame=0, ?xr=0.0, ?yr=0.0, ?p:flash.display.DisplayObjectContainer) : BSprite {
 		var s = new BSprite(this, k, frame);
 		s.setCenterRatio(xr,yr);
@@ -257,6 +277,7 @@ class BLib {
 			p.addChild(s);
 		return s;
 	}
+	#end
 
 	#if h3d
 	public inline function h_get(k:String, ?frame=0, ?xr=0., ?yr=0., ?filter:Null<Bool>, ?p:h2d.Sprite) : HSprite {
@@ -305,6 +326,7 @@ class BLib {
 	#end
 
 
+	#if flash
 	public function getAndPlay(k:String, ?plays=99999, ?killAfterPlay=false) : BSprite {
 		var s = new BSprite(this);
 		s.a.play(k, plays);
@@ -312,6 +334,7 @@ class BLib {
 			s.a.killAfterPlay();
 		return s;
 	}
+	#end
 
 	#if h3d
 	public inline function h_getAndPlay(k:String, ?plays=99999, ?killAfterPlay=false, ?p:h2d.Sprite) : HSprite {
@@ -333,9 +356,11 @@ class BLib {
 
 
 
+	#if flash
 	public inline function getRandom(k:String, ?rndFunc:Int->Int) : BSprite {
 		return get(k, getRandomFrame(k, rndFunc));
 	}
+	#end
 
 	#if h3d
 	public inline function h_getRandom(k, ?rndFunc, ?p:h2d.Sprite) : HSprite {
@@ -446,6 +471,7 @@ class BLib {
 	}
 
 
+	#if flash
 	public function getRectangle(k:String, ?frame=0) : Null<flash.geom.Rectangle> {
 		var g = getGroup(k);
 		if( g==null )
@@ -457,6 +483,7 @@ class BLib {
 
 		return new flash.geom.Rectangle(fr.x, fr.y, fr.wid, fr.hei);
 	}
+	#end
 
 	public inline function getFrameData(k:String, ?frame = 0) : Null<FrameData> {
 		var g = getGroup(k);
@@ -487,6 +514,7 @@ class BLib {
 		return getGroup(k).frames.length;
 	}
 
+	#if flash
 	public inline function getMovieClip(k:String, ?frame=0, ?centerX, ?centerY) : flash.display.MovieClip {
 		var mc = new flash.display.MovieClip();
 		drawIntoGraphics(mc.graphics, k, frame, centerX, centerY);
@@ -546,6 +574,7 @@ class BLib {
 		return all;
 	}
 	#end
+	#end
 
 
 
@@ -557,7 +586,7 @@ class BLib {
 		if( realFrame==null )
 			realFrame = {x:0, y:0, realWid:wid, realHei:hei}
 
-		g.frames[frame] = { x:x, y:y, wid:wid, hei:hei, realFrame:realFrame, rect:new Rectangle(x,y,wid,hei),pX:pX,pY:pY };
+		g.frames[frame] = { x:x, y:y, wid:wid, hei:hei, realFrame:realFrame, #if flash rect:new Rectangle(x,y,wid,hei), #end pX:pX,pY:pY };
 	}
 
 	public function slice(groupName:String, x:Int, y:Int, wid:Int, hei:Int, ?repeatX=1, ?repeatY=1) {
@@ -567,7 +596,7 @@ class BLib {
 		g.maxHei = MLib.max( g.maxHei, hei );
 		for(iy in 0...repeatY)
 			for(ix in 0...repeatX)
-				g.frames.push({ x : x+ix*wid, y : y+iy*hei, wid:wid, hei:hei, realFrame:{x:0,y:0,realWid:wid,realHei:hei}, rect:new Rectangle(x+ix*wid,y+iy*hei,wid,hei) });
+				g.frames.push({ x : x+ix*wid, y : y+iy*hei, wid:wid, hei:hei, realFrame:{x:0,y:0,realWid:wid,realHei:hei} #if flash , rect:new Rectangle(x+ix*wid,y+iy*hei,wid,hei) #end });
 	}
 
 	public function sliceGrid(groupName:String, gx:Int, gy:Int, ?repeatX=1, ?repeatY=1) {
@@ -577,7 +606,7 @@ class BLib {
 		g.maxHei = MLib.max( g.maxHei, gridY );
 		for(iy in 0...repeatY)
 			for(ix in 0...repeatX)
-				g.frames.push({ x : gridX*(gx+ix), y : gridY*(gy+iy), wid:gridX, hei:gridY, realFrame:{x:0,y:0,realWid:gridX,realHei:gridY}, rect:new Rectangle(gridX*(gx+ix), gridY*(gy+iy), gridX, gridY) });
+				g.frames.push({ x : gridX*(gx+ix), y : gridY*(gy+iy), wid:gridX, hei:gridY, realFrame:{x:0,y:0,realWid:gridX,realHei:gridY} #if flash , rect:new Rectangle(gridX*(gx+ix), gridY*(gy+iy), gridX, gridY) #end });
 	}
 
 	public function sliceAnim(groupName:String, frameDuration:Int, x:Int, y:Int, wid:Int, hei:Int, ?repeatX=1, ?repeatY=1) {
@@ -605,12 +634,14 @@ class BLib {
 				//g.frames.push({ x : x+ix*g.wid, y : y+iy*g.hei, wid:g.wid, hei:g.hei });
 	//}
 
+	#if flash
 	public function applyPermanentFilter(k:String, filter:flash.filters.BitmapFilter) {
 		for( frame in 0...countFrames(k) ) {
 			var fdata = getFrameData(k, frame);
 			source.applyFilter(source, fdata.rect, fdata.rect.topLeft, filter);
 		}
 	}
+	#end
 
 
 	public function multiplayAllAnimDurations(factor:Int) {
@@ -638,6 +669,7 @@ class BLib {
 
 
 
+	#if flash
 	public function parseAttachPoints(colors:Array<UInt>, dotSpriteSuffix:String) { // TODO classes plutôt qu'objets anonymes
 		attachPoints = new Map();
 		var dots = new BSprite(this);
@@ -684,6 +716,7 @@ class BLib {
 					//trace( k+" frame="+f+" color="+Color.intToHex(col)+" pt="+attachPoints.get(k).get(f).get(col) );
 				//}
 	}
+	#end
 
 	public function getAttachPoint(s:SpriteInterface, col:UInt) {
 		return attachPoints.get(s.groupName).get(s.frame).get(col);
