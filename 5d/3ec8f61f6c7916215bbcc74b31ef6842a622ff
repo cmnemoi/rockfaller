@@ -1,0 +1,42 @@
+html5/src/h2d/Scene.hx
+  s_da33d0161772b7::t_effb40b3287919 3-12,14-27,30-35,43-368
+tools/H2dCheck.hx
+  s_da33d0161772b7::t_7295f95713a136 545-547,549
+  s_da33d0161772b7::t_6a718ecf2f2b1d 10,55-63,530-544,548,550-662
+html5/src/hxd/Stage.hx
+  s_da33d0161772b7::t_b5d0ea1c9ce355 3-7,11-12,15-17,19-24,30-66
+html5/src/hxd/System.hx
+  s_da33d0161772b7::t_b5d0ea1c9ce355 5-13,18-19,27-40
+  s_da33d0161772b7::t_eaf763626d40ec 41
+html5/test/pixi-page.spec.mjs
+  s_da33d0161772b7::t_815357ab0d9212 110-171
+html5/src/Main.hx
+  s_da33d0161772b7::t_815357ab0d9212 25,30,47-54,64,71
+docs/specs/html5-h2d-layer.md
+  s_da33d0161772b7::t_b5a586e1a733d6 200-250
+html5/src/h2d/Interactive.hx
+  s_da33d0161772b7::t_35b595553d8250 1-274
+html5/src/h3d/mat/Texture.hx
+  s_da33d0161772b7::t_7eb27f7e336427 14-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d3ec8f61f6c7916215bbcc74b31ef6842a622ff",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
