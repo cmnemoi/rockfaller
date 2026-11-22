@@ -1,0 +1,44 @@
+client/client/src/ui/top/ModuleGoal.hx
+  s_da33d0161772b7::t_90bbd1fea29663 103,268,316
+client/client/src/data/DataManager.hx
+  s_da33d0161772b7::t_90bbd1fea29663 145,186-193
+client/client/src/manager/GoalManager.hx
+  s_da33d0161772b7::t_90bbd1fea29663 45
+client/client/src/manager/SpecialManager.hx
+  s_da33d0161772b7::t_90bbd1fea29663 179,227,260,264-265,444
+client/client/src/process/Game.hx
+  s_da33d0161772b7::t_90bbd1fea29663 216,608,634
+client/client/src/Rock.hx
+  s_da33d0161772b7::t_90bbd1fea29663 149,151,156,276,278-280,290-291,326,339,359,406,442-445,478,682,749,1108,1160,1217,1271,1273-1274,1276,1281,1296,1305,1340
+client/client/src/FX.hx
+  s_da33d0161772b7::t_90bbd1fea29663 88-91
+client/client/src/process/popup/GoalLevels.hx
+  s_da33d0161772b7::t_90bbd1fea29663 112-115
+client/client/src/manager/RegenManager.hx
+  s_da33d0161772b7::t_90bbd1fea29663 58,327,329-330,332,337,345
+client/client/src/manager/RockAssetManager.hx
+  s_da33d0161772b7::t_90bbd1fea29663 75,79,83,86-88,90
+client/client/src/manager/TutoManager.hx
+  s_da33d0161772b7::t_90bbd1fea29663 914
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a6134302e0fc817e394eff96aa85f7e88c7fadb5",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
