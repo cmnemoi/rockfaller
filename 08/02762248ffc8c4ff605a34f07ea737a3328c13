@@ -1,0 +1,54 @@
+tools/BootCheck.hx
+  s_da33d0161772b7::t_921a1ee6aceb24 1-95
+html5/game.hxml
+  s_da33d0161772b7::t_c04a94c2c640d8 1-17
+  s_da33d0161772b7::t_6af055b27f6fd0 18-26
+html5/src/Demo.hx
+  s_da33d0161772b7::t_2ed3968109b3a6 1-134
+html5/game.html
+  s_da33d0161772b7::t_4dd9637b014af2 1-19
+html5/build.hxml
+  s_da33d0161772b7::t_2ed3968109b3a6 2
+mise.toml
+  s_da33d0161772b7::t_4dd9637b014af2 77
+  s_da33d0161772b7::t_2ed3968109b3a6 125
+  s_da33d0161772b7::t_1a42f87e56893f 65,111-117
+client/mt/heaps/TileFont.hx
+  s_da33d0161772b7::t_6706c1732c8d83 20
+html5/test/game.spec.mjs
+  s_da33d0161772b7::t_b10249986c9ad4 1-16
+html5/install-deps.sh
+  s_da33d0161772b7::t_c04a94c2c640d8 12-14
+html5/src/AssetManifest.hx
+  s_da33d0161772b7::t_c9c6c1ee3500a1 12-21,58
+  s_da33d0161772b7::t_14330aab902531 1-11,22-57,59
+tools/build-web.sh
+  s_da33d0161772b7::t_4dd9637b014af2 40-45
+html5/src/GameMain.hx
+  s_da33d0161772b7::t_c04a94c2c640d8 1-105
+html5/src/h3d/Engine.hx
+  s_da33d0161772b7::t_c04a94c2c640d8 56-57
+html5/src/progress/LocalStorageProgressStore.hx
+  s_da33d0161772b7::t_a46d52b556f077 1-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0802762248ffc8c4ff605a34f07ea737a3328c13",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
