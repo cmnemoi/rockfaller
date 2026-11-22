@@ -100,7 +100,7 @@ class ModuleGoal extends h2d.Layers {
 					
 					newX += Std.int(Rock.SIZE_OFFSET * scaleMini * 1.2);
 				}
-			case TypeGoal.TGGelatin :
+			case TypeGoal.TGGelatin(_) :
 				symbolGoldMerc = Settings.SLB_UI.h_get("mudBack");
 				symbolGoldMerc.setCenterRatio(0.5, 0);
 				symbolGoldMerc.scaleX = symbolGoldMerc.scaleY = Settings.STAGE_SCALE * 0.5;
@@ -265,7 +265,7 @@ class ModuleGoal extends h2d.Layers {
 						}
 					}
 				}
-			case TypeGoal.TGGelatin :
+			case TypeGoal.TGGelatin(_) :
 				lblGoldMerc.text = Std.string(game.arGelatin.length);
 				lblGoldMerc.x = Std.int(symbolGoldMerc.x - lblGoldMerc.maxWidth * 0.5);
 			
@@ -313,7 +313,7 @@ class ModuleGoal extends h2d.Layers {
 						}
 					}					
 				}
-			case TypeGoal.TGGelatin :
+			case TypeGoal.TGGelatin(_) :
 				lblGoldMerc.text = Std.string(game.arGelatin.length);
 				lblGoldMerc.x = Std.int(symbolGoldMerc.x - lblGoldMerc.maxWidth * 0.5);
 			case TypeGoal.TGMercury(num, ar) :

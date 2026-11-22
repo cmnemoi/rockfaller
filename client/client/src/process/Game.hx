@@ -213,7 +213,7 @@ class Game extends HProcess implements ProcessManaged
 		
 		var b = false;
 		for (r in levelInfo.arManualRocks) {
-			if (r.tr.match(TypeRock.TRFreeze)) {
+			if (r.tr.match(TypeRock.TRFreeze(_))) {
 				b = true;
 				break;
 			}
@@ -605,7 +605,7 @@ class Game extends HProcess implements ProcessManaged
 				for (r in Rock.ALL) {
 					if (arBomb.length < 5 && !r.isDestroy) {
 						switch (r.type) {
-							case TypeRock.TRBonus :
+							case TypeRock.TRBonus(_) :
 								r.isAnimated = true;
 								arBomb.push(r);
 								presentBomb++;
@@ -631,7 +631,7 @@ class Game extends HProcess implements ProcessManaged
 								break;
 							}
 						}
-						if (r != null && !r.isDestroy && r.isRotable && !r.isBubble && r.freezeCounter == 0 && r.type.match(TypeRock.TRClassic)) {
+						if (r != null && !r.isDestroy && r.isRotable && !r.isBubble && r.freezeCounter == 0 && r.type.match(TypeRock.TRClassic(_))) {
 							delayer.addFrameBased(function () {
 								FX.GO_TO_ROCK(Settings.STAGE_WIDTH * 0.5, 30 * Settings.STAGE_SCALE, r, function() {
 									FX.FX_VANISH(r.cX, r.cY);

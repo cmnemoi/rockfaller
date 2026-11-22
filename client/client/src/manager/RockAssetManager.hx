@@ -72,22 +72,22 @@ class RockAssetManager
 		
 		slb = Settings.SLB_GRID;
 		switch (tr) {
-			case TypeRock.TRLoot :
+			case TypeRock.TRLoot(_) :
 				mainBE = slb.hbe_getAndPlay(game.bmRocks, typeID);
 				setIsLoot();
 				setSpecialHover();
-			case TypeRock.TRBonus :
+			case TypeRock.TRBonus(_) :
 				mainBE = slb.hbe_getAndPlay(game.bmRocks, typeID);
 				setIsBomb();
 				setSpecialHover();
-			case TypeRock.TRCog, TypeRock.TRBonus :
+			case TypeRock.TRCog(_), TypeRock.TRBonus(_) :
 				mainBE = slb.hbe_getAndPlay(game.bmRocks, typeID);
 				setIsLoot();
-			case TypeRock.TRClassic, TypeRock.TRMagma, TypeRock.TRBlockBreakable,
-					TypeRock.TRBubble, TypeRock.TRFreeze, TypeRock.TRBlock, 
-					TypeRock.TRBombCiv :
+			case TypeRock.TRClassic(_), TypeRock.TRMagma, TypeRock.TRBlockBreakable(_),
+					TypeRock.TRBubble, TypeRock.TRFreeze(_), TypeRock.TRBlock, 
+					TypeRock.TRBombCiv(_) :
 				mainBE = slb.hbe_getAndPlay(game.bmRocks, typeID);
-			case TypeRock.TRHole :
+			case TypeRock.TRHole(_) :
 				mainBE = slb.hbe_getAndPlay(game.bmHole, typeID);
 		}
 		

@@ -176,7 +176,7 @@ class SpecialManager
 		for (r in Rock.ALL) {
 			if (r != null && !r.isBubble && r.freezeCounter == 0) {
 				switch (r.type) {
-					case TypeRock.TRLoot :
+					case TypeRock.TRLoot(_) :
 						for (dr in arRockDeleted)
 							if (Rock.IS_NEIGHBOOR(dr, r)) {
 								Game.ME.grip.arRockToDo.push(r);
@@ -224,7 +224,7 @@ class SpecialManager
 									switch (tb) {
 										case TypeBonus.TBColor(_) :
 											switch (dr.type) {
-												case TypeRock.TRClassic :
+												case TypeRock.TRClassic(_) :
 													r.type = TypeRock.TRBonus(TypeBonus.TBColor(dr.type));
 												default :
 													r.type = TypeRock.TRBonus(TypeBonus.TBColor(TypeRock.TRClassic(Rock.GET_RANDOM_CLASSIC())));
@@ -257,12 +257,12 @@ class SpecialManager
 								r.destroy(true, false, true);
 							}
 						}
-					case TypeRock.TRLoot :
+					case TypeRock.TRLoot(_) :
 						for (dr in arRockDeleted)
 							if (b && Rock.IS_NEIGHBOOR(dr, r))
 								throw "TypeRock.TRLoot not possible here";
-					case TypeRock.TRBubble, TypeRock.TRClassic, TypeRock.TRFreeze,
-							TypeRock.TRCog, TypeRock.TRBlock, TypeRock.TRMagma, TypeRock.TRHole :
+					case TypeRock.TRBubble, TypeRock.TRClassic(_), TypeRock.TRFreeze(_),
+							TypeRock.TRCog(_), TypeRock.TRBlock, TypeRock.TRMagma, TypeRock.TRHole(_) :
 				}					
 			}
 		}
@@ -441,7 +441,7 @@ class SpecialManager
 	public static function CREATE_MERCURY(cX:Int, cY:Int) {
 		var r = Rock.GET_AT(cX, cY);
 		
-		if (IS_ON_MERCURY(cX, cY) || (r != null && r.type.match(TypeRock.TRHole)))
+		if (IS_ON_MERCURY(cX, cY) || (r != null && r.type.match(TypeRock.TRHole(_))))
 			return;
 		
 		var game = Game.ME;

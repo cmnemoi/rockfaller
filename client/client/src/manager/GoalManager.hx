@@ -42,7 +42,7 @@ class GoalManager
 				}
 				
 				return c == ar.length;
-			case TypeGoal.TGGelatin :
+			case TypeGoal.TGGelatin(_) :
 				return game.arGelatin.length == 0;
 			case TypeGoal.TGMercury(num, ar) :
 				return game.arMerc.length >= num;

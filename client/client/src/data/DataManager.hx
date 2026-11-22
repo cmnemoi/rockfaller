@@ -142,7 +142,7 @@ class DataManager
 			case ProtocolCom.SendUsePickaxe(canUse) :
 				Game.ME.uiTop.btnPickaxe.enablePickaxe(canUse);
 			
-			case ProtocolCom.SendValidMobileAPI :
+			case ProtocolCom.SendValidMobileAPI(_, _) :
 			
 			case ProtocolCom.PCDone :
 				
@@ -183,14 +183,14 @@ class DataManager
 				}
 				trace(stack);
 				
-			case ProtocolCom.DoGetLevelsForEditor, ProtocolCom.DoSaveLevel, ProtocolCom.DoTestLE,
-					ProtocolCom.DoTestLevel, ProtocolCom.DoGetUserData, ProtocolCom.DoSendGame,
-					ProtocolCom.DoLaunchGame, ProtocolCom.DoUpdateMusic, ProtocolCom.DoUpdateSFX,
-					ProtocolCom.DoUsePickaxe, ProtocolCom.DoBuyPickaxes, ProtocolCom.DoBuyMoves,
-					ProtocolCom.DoBuyLifes, ProtocolCom.SendDataBouiller, ProtocolCom.DoUpdateTuto,
-					ProtocolCom.DoMoveLevel, ProtocolCom.DoDeleteLevel, ProtocolCom.DoCheckTransaction, 
-					ProtocolCom.DoGetRequestsCount, ProtocolCom.DoGetInitData, ProtocolCom.DoMobileAPI,
-					ProtocolCom.DoCheckPickaxe, ProtocolCom.DoUpdateHint :
+			case ProtocolCom.DoGetLevelsForEditor, ProtocolCom.DoSaveLevel(_), ProtocolCom.DoTestLE(_),
+					ProtocolCom.DoTestLevel(_), ProtocolCom.DoGetUserData, ProtocolCom.DoSendGame(_),
+					ProtocolCom.DoLaunchGame(_), ProtocolCom.DoUpdateMusic(_), ProtocolCom.DoUpdateSFX(_),
+					ProtocolCom.DoUsePickaxe, ProtocolCom.DoBuyPickaxes(_), ProtocolCom.DoBuyMoves(_),
+					ProtocolCom.DoBuyLifes, ProtocolCom.SendDataBouiller, ProtocolCom.DoUpdateTuto(_),
+					ProtocolCom.DoMoveLevel(_, _), ProtocolCom.DoDeleteLevel(_), ProtocolCom.DoCheckTransaction, 
+					ProtocolCom.DoGetRequestsCount, ProtocolCom.DoGetInitData(_, _), ProtocolCom.DoMobileAPI(_, _),
+					ProtocolCom.DoCheckPickaxe, ProtocolCom.DoUpdateHint(_) :
 			trace("not handled : " + d);
 		}
 	}

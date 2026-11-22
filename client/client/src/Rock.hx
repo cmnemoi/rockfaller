@@ -146,14 +146,14 @@ class Rock
 				isRotable = false;
 				isDestroyableByBomb = false;
 				
-			case TypeRock.TRBombCiv :
+			case TypeRock.TRBombCiv(_) :
 				
-			case TypeRock.TRBlock, TypeRock.TRBlockBreakable, TypeRock.TRHole :
+			case TypeRock.TRBlock, TypeRock.TRBlockBreakable(_), TypeRock.TRHole(_) :
 				hasPhysix = false;
 				isRotable = false;
 				isDestroyableByBomb = false;
 				
-			case TypeRock.TRBonus :
+			case TypeRock.TRBonus(_) :
 				
 			case TypeRock.TRCog(v) :
 				isPickable = true;
@@ -273,11 +273,11 @@ class Rock
 		
 		if (freezeCounter == 0) {
 			switch (type) {
-				case TypeRock.TRLoot, TypeRock.TRCog :
+				case TypeRock.TRLoot(_), TypeRock.TRCog(_) :
 					isPickable = true;
-				case TypeRock.TRClassic, TypeRock.TRBubble, TypeRock.TRFreeze, 
-						TypeRock.TRBlock, TypeRock.TRBonus, TypeRock.TRMagma,
-						TypeRock.TRBlockBreakable, TypeRock.TRHole, TypeRock.TRBombCiv :
+				case TypeRock.TRClassic(_), TypeRock.TRBubble, TypeRock.TRFreeze(_), 
+						TypeRock.TRBlock, TypeRock.TRBonus(_), TypeRock.TRMagma,
+						TypeRock.TRBlockBreakable(_), TypeRock.TRHole(_), TypeRock.TRBombCiv(_) :
 			}
 		}
 		ram.setFreeze(freezeCounter);
@@ -287,8 +287,8 @@ class Rock
 		var arRockToDestroy = [];
 		if (type != null) { // TODO : Impossible normally
 			switch (type) {
-				case TypeRock.TRClassic, TypeRock.TRCog, TypeRock.TRBlock, TypeRock.TRHole, TypeRock.TRBubble,
-						TypeRock.TRMagma, TypeRock.TRLoot, TypeRock.TRFreeze, TypeRock.TRBlockBreakable, TypeRock.TRBombCiv :
+				case TypeRock.TRClassic(_), TypeRock.TRCog(_), TypeRock.TRBlock, TypeRock.TRHole(_), TypeRock.TRBubble,
+						TypeRock.TRMagma, TypeRock.TRLoot(_), TypeRock.TRFreeze(_), TypeRock.TRBlockBreakable(_), TypeRock.TRBombCiv(_) :
 				case TypeRock.TRBonus(tb) :
 					switch (tb) {
 						case TypeBonus.TBBombMini :
@@ -323,7 +323,7 @@ class Rock
 								else
 									game.goalManager.updateUnder(x, this.cY);
 							}
-							if (game.isEndGame && !tb.match(TypeBonus.TBColor))
+							if (game.isEndGame && !tb.match(TypeBonus.TBColor(_)))
 								FX.BOMB_END(tb, this);
 							else
 								FX.BOMB(tb, this, arRockToDestroy);
@@ -336,7 +336,7 @@ class Rock
 								else
 									game.goalManager.updateUnder(this.cX, y);
 							}
-							if (game.isEndGame && !tb.match(TypeBonus.TBColor))
+							if (game.isEndGame && !tb.match(TypeBonus.TBColor(_)))
 								FX.BOMB_END(tb, this);
 							else
 								FX.BOMB(tb, this, arRockToDestroy);
@@ -356,7 +356,7 @@ class Rock
 								else
 									game.goalManager.updateUnder(this.cX, y);
 							}
-							if (game.isEndGame && !tb.match(TypeBonus.TBColor))
+							if (game.isEndGame && !tb.match(TypeBonus.TBColor(_)))
 								FX.BOMB_END(tb, this);
 							else
 								FX.BOMB(tb, this, arRockToDestroy);
@@ -403,7 +403,7 @@ class Rock
 							}
 							FX.BOMB(tb, this, arRockToDestroy);
 					}
-					if (game.isEndGame && !tb.match(TypeBonus.TBColor))
+					if (game.isEndGame && !tb.match(TypeBonus.TBColor(_)))
 						FX.BOMB_END(tb, this);
 					else
 						FX.BOMB(tb, this, arRockToDestroy);
@@ -439,10 +439,10 @@ class Rock
 										r.type = TypeRock.TRBlockBreakable(v);
 										r.ram.setBE(r.type);										
 									}
-								case TypeRock.TRClassic, TypeRock.TRCog, TypeRock.TRHole,
-									TypeRock.TRBubble, TypeRock.TRLoot, TypeRock.TRFreeze, 
-									TypeRock.TRBlock, TypeRock.TRBonus, TypeRock.TRBlockBreakable,
-									TypeRock.TRBombCiv:
+								case TypeRock.TRClassic(_), TypeRock.TRCog(_), TypeRock.TRHole(_),
+									TypeRock.TRBubble, TypeRock.TRLoot(_), TypeRock.TRFreeze(_), 
+									TypeRock.TRBlock, TypeRock.TRBonus(_), TypeRock.TRBlockBreakable(_),
+									TypeRock.TRBombCiv(_):
 							}
 						}
 					}
@@ -475,7 +475,7 @@ class Rock
 			
 			if (fx) {
 				switch (type) {
-					case TypeRock.TRBonus :
+					case TypeRock.TRBonus(_) :
 						SoundManager.BOMB_EXPLODE_SFX();
 					default:
 				}
@@ -679,7 +679,7 @@ class Rock
 			return false;
 		
 		if (r1.ram.typeID == r2.ram.typeID
-		&& r1.type.match(TypeRock.TRClassic)
+		&& r1.type.match(TypeRock.TRClassic(_))
 		&&	IS_NEIGHBOOR(r1, r2))
 			return true;
 		else
@@ -746,7 +746,7 @@ class Rock
 					AR_SEL.push(Rock.GET_AT(checkCX, checkCY));
 					
 					for (r in AR_SEL)
-						if (!r.isRotable && !r.type.match(TypeRock.TRBlockBreakable)) {
+						if (!r.isRotable && !r.type.match(TypeRock.TRBlockBreakable(_))) {
 							AR_SEL = [];
 							return;
 						}
@@ -1105,7 +1105,7 @@ class Rock
 			return false;
 			
 		switch (tr) {
-			case TypeRock.TRBlock, TypeRock.TRBlockBreakable, TypeRock.TRBubble, TypeRock.TRMagma, TypeRock.TRHole :
+			case TypeRock.TRBlock, TypeRock.TRBlockBreakable(_), TypeRock.TRBubble, TypeRock.TRMagma, TypeRock.TRHole(_) :
 				return false;
 			default :
 				return true;
@@ -1157,7 +1157,7 @@ class Rock
 			d++;
 			if (r != null && IS_ROTABLE(r.cX, r.cY, r.type) && r.freezeCounter == 0) {
 				switch (r.type) {
-					case TypeRock.TRClassic :
+					case TypeRock.TRClassic(_) :
 						c++;
 						r.destroy(false, false, false);
 					default :
@@ -1214,7 +1214,7 @@ class Rock
 		}
 		
 		for (r in arSpin)
-			if (!r.isRotable || r.freezeCounter > 0 || !r.type.match(TypeRock.TRClassic) || SpecialManager.IS_ON_PATTERN(r.cX, r.cY)) {
+			if (!r.isRotable || r.freezeCounter > 0 || !r.type.match(TypeRock.TRClassic(_)) || SpecialManager.IS_ON_PATTERN(r.cX, r.cY)) {
 				end();
 				return;
 			}
@@ -1268,17 +1268,17 @@ class Rock
 			i = Game.ME.rndS.random(SpecialManager.POPRATE_ELEMENT.length);
 			tr = SpecialManager.POPRATE_ELEMENT[i];
 			switch (tr) {
-				case TypeRock.TRBlock, TypeRock.TRBonus, 
+				case TypeRock.TRBlock, TypeRock.TRBonus(_), 
 						TypeRock.TRMagma, TypeRock.TRBubble,
-						TypeRock.TRBlockBreakable, TypeRock.TRHole,
-						TypeRock.TRCog :
+						TypeRock.TRBlockBreakable(_), TypeRock.TRHole(_),
+						TypeRock.TRCog(_) :
 					throw "No " + tr + " can pop";
-				case TypeRock.TRLoot :
+				case TypeRock.TRLoot(_) :
 					if (SpecialManager.LOOT_SPAWNED >= Settings.MAX_LOOT_BY_GRID)
 						tr = null;
 					else
 						SpecialManager.LOOT_SPAWNED++;
-				case TypeRock.TRClassic, TypeRock.TRFreeze, TypeRock.TRBombCiv :
+				case TypeRock.TRClassic(_), TypeRock.TRFreeze(_), TypeRock.TRBombCiv(_) :
 			}
 		}
 		return i;
@@ -1293,7 +1293,7 @@ class Rock
 	public static function GET_AVAILABLE_CLASSIC():Array<String> {
 		var ar = [];
 		for (c in Game.ME.levelInfo.arDeck) {
-			if (c.t.match(TypeRock.TRClassic))
+			if (c.t.match(TypeRock.TRClassic(_)))
 				ar.push(c.t.getParameters()[0]);
 		}
 		
@@ -1302,7 +1302,7 @@ class Rock
 	
 	static function STILL_CLASSIC_IN_DECK():Bool {
 		for (e in SpecialManager.POPRATE_ELEMENT) {
-			if (e.match(TypeRock.TRClassic))
+			if (e.match(TypeRock.TRClassic(_)))
 				return true;
 		}
 		
@@ -1337,7 +1337,7 @@ class Rock
 			if (r != null) {
 				if (animDestroy) {
 					switch (r.type) {
-						case TypeRock.TRHole :
+						case TypeRock.TRHole(_) :
 						default :
 							Game.ME.delayer.addFrameBased(function() {
 								//r.destroy(false, false);

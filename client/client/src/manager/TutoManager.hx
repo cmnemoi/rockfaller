@@ -911,7 +911,7 @@ class TutoManager
 		else if (!GET(6, 1).done && ACTUAL_TUTO == null && !LevelDesign.TUTO_IS_DONE(6)) {
 			lootFocus = null;
 			for (r in Rock.ALL)
-				if (r != null && r.type.match(TypeRock.TRLoot))
+				if (r != null && r.type.match(TypeRock.TRLoot(_)))
 					lootFocus = r;
 			
 			if (lootFocus != null) {

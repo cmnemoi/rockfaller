@@ -55,7 +55,7 @@ class RegenManager
 			
 			for (m in arManualRocks) {
 				switch (m.tr) {
-					case TypeRock.TRFreeze, TypeRock.TRBubble :
+					case TypeRock.TRFreeze(_), TypeRock.TRBubble :
 					default :
 						var mr = { r:m, group:[m], freezeC:0, isRotable:Rock.IS_ROTABLE(m.x, m.y, m.tr), trClassic:{isClassic:false, id:""}};
 						arElement[m.x + m.y * Settings.GRID_WIDTH] = mr;
@@ -324,17 +324,17 @@ class RegenManager
 			i = Game.ME.rndS.random(arDeck.length);
 			tr = arDeck[i];
 			switch (tr) {
-				case TypeRock.TRBlock, TypeRock.TRBonus, 
+				case TypeRock.TRBlock, TypeRock.TRBonus(_), 
 						TypeRock.TRMagma, TypeRock.TRBubble,
-						TypeRock.TRBlockBreakable, TypeRock.TRHole,
-						TypeRock.TRCog :
+						TypeRock.TRBlockBreakable(_), TypeRock.TRHole(_),
+						TypeRock.TRCog(_) :
 					throw "No " + tr + " can pop";
-				case TypeRock.TRLoot :
+				case TypeRock.TRLoot(_) :
 					if (SpecialManager.LOOT_SPAWNED >= Settings.MAX_LOOT_BY_GRID)
 						tr = null;
 					else
 						SpecialManager.LOOT_SPAWNED++;
-				case TypeRock.TRClassic, TypeRock.TRFreeze, TypeRock.TRBombCiv :
+				case TypeRock.TRClassic(_), TypeRock.TRFreeze(_), TypeRock.TRBombCiv(_) :
 			}
 		}
 		return i;
@@ -342,7 +342,7 @@ class RegenManager
 	
 	function stillClassicInDeck():Bool {
 		for (e in arDeck)
-			if (e.match(TypeRock.TRClassic))
+			if (e.match(TypeRock.TRClassic(_)))
 				return true;
 		
 		return false;

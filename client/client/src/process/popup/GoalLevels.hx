@@ -109,10 +109,10 @@ class GoalLevels extends BasePopup
 		lblGoal.filter = true;
 		lblGoal.textColor = 0xBA6837;
 		switch (levelInfo.type) {
-			case TypeGoal.TGScoring	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalScore);
-			case TypeGoal.TGCollect	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalCollect);
-			case TypeGoal.TGGelatin	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalGelat);
-			case TypeGoal.TGMercury	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalMercure);
+			case TypeGoal.TGScoring(_)	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalScore);
+			case TypeGoal.TGCollect(_)	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalCollect);
+			case TypeGoal.TGGelatin(_)	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalGelat);
+			case TypeGoal.TGMercury(_, _)	: lblGoal.text = Lang.GET_VARIOUS(TypeVarious.TVGoalMercure);
 		}
 		lblGoal.text = mt.Utf8.lowercase( lblGoal.text );
 		lblGoal.maxWidth = Std.int(Settings.STAGE_WIDTH * 0.60);

@@ -85,10 +85,10 @@ class FX
 						part.moveAng(3.14 / 2, rnd(2, 4) * Settings.STAGE_SCALE);
 						part.gy = rnd(0.4, 0.8) * Settings.STAGE_SCALE;
 					}
-				case TypeRock.TRMagma, TypeRock.TRBubble, TypeRock.TRHole,
-						TypeRock.TRFreeze, TypeRock.TRLoot, TypeRock.TRCog, 
-						TypeRock.TRBlock, TypeRock.TRBonus, TypeRock.TRBlockBreakable, 
-						TypeRock.TRBombCiv :
+				case TypeRock.TRMagma, TypeRock.TRBubble, TypeRock.TRHole(_),
+						TypeRock.TRFreeze(_), TypeRock.TRLoot(_), TypeRock.TRCog(_), 
+						TypeRock.TRBlock, TypeRock.TRBonus(_), TypeRock.TRBlockBreakable(_), 
+						TypeRock.TRBombCiv(_) :
 			}
 		}
 	}
