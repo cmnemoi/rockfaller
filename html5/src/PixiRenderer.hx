@@ -10,12 +10,48 @@ import pixi.core.textures.Texture;
  * @spec html5.h2d::tile-drawn-at-its-place
  */
 class PixiRenderer {
+	// PixiJS has no SoftAdd nor SoftOverlay: they get ids of their own, past PixiJS's.
+	static inline var SOFT_ADD = 100;
+	static inline var SOFT_OVERLAY = 101;
+
 	public var root(default, null):Container;
 	var sprites:Array<Sprite>;
 
-	public function new() {
+	public function new(pixiRenderer:Dynamic) {
 		root = new Container();
 		sprites = [];
+		addBlendModesMissingFromPixi(pixiRenderer);
+	}
+
+	/**
+	 * @spec html5.h2d.color::blend-mode-like-fork: the fork's SoftAdd and SoftOverlay are GPU factor pairs, which PixiJS can take as they are.
+	 * PixiJS also looks every mode up in its premultiplied-alpha table, where a missing id would give no mode at all.
+	 */
+	static function addBlendModesMissingFromPixi(pixiRenderer:Dynamic) {
+		var gl = pixiRenderer.gl;
+		var factorsByMode:Array<Array<Int>> = pixiRenderer.state.blendModes;
+		factorsByMode[SOFT_ADD] = [gl.ONE_MINUS_DST_COLOR, gl.ONE];
+		factorsByMode[SOFT_OVERLAY] = [gl.DST_COLOR, gl.ONE];
+		var modeByAlphaMode:Array<Array<Int>> = untyped PIXI.utils.premultiplyBlendMode;
+		for (modes in modeByAlphaMode) {
+			modes[SOFT_ADD] = SOFT_ADD;
+			modes[SOFT_OVERLAY] = SOFT_OVERLAY;
+		}
+	}
+
+	/** The PixiJS mode with the fork's factor pair (Drawable.setupShader), for premultiplied textures. */
+	static function pixiBlendModeOf(mode:h2d.BlendMode):Int {
+		var pixiModes:Dynamic = untyped PIXI.BLEND_MODES;
+		return switch (mode) {
+			case null | Normal: pixiModes.NORMAL;
+			case Add: pixiModes.ADD;
+			case Multiply: pixiModes.MULTIPLY;
+			case None: pixiModes.NONE;
+			case Screen: pixiModes.SCREEN;
+			case Erase: pixiModes.ERASE;
+			case SoftAdd: SOFT_ADD;
+			case SoftOverlay: SOFT_OVERLAY;
+		}
 	}
 
 	public function show(commands:Array<DrawCommand>) {
@@ -43,6 +79,7 @@ class PixiRenderer {
 			sprite.texture.frame = new Rectangle(command.cutX, command.cutY, command.cutWidth, command.cutHeight);
 		sprite.transform.setFromMatrix(new Matrix(command.a, command.b, command.c, command.d, command.tx, command.ty));
 		sprite.alpha = command.alpha;
+		sprite.blendMode = cast pixiBlendModeOf(command.blendMode);
 		sprite.visible = true;
 	}
 }

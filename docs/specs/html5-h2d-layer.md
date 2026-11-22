@@ -84,3 +84,34 @@ Un `HSpriteBE` qui joue une animation dans un batch se dessine avec la découpe 
 
 - `hasRotationScale = false` : le jeu ne le met jamais.
 - La couleur des éléments (`BatchElement.color`) : elle va avec la couleur des `Drawable` (section suivante).
+
+## Couleur et modes de fusion
+
+### Règles
+
+#### Un mode de fusion donne les facteurs GPU du fork
+
+`{#html5.h2d.color::blend-mode-like-fork}`
+
+Chaque mode du fork est une paire de facteurs de mélange GPU (`Drawable.setupShader`). PixiJS utilise la même paire :
+
+| Mode du fork | Facteurs du fork | Mode PixiJS |
+|---|---|---|
+| `Normal` | `SrcAlpha` (ou `One` si prémultiplié), `OneMinusSrcAlpha` | `NORMAL` |
+| `Add` | `SrcAlpha` (ou `One`), `One` | `ADD` |
+| `Multiply` | `DstColor`, `OneMinusSrcAlpha` | `MULTIPLY` |
+| `None` | `One`, `Zero` | `NONE` |
+| `Screen` | `One`, `OneMinusSrcColor` | `SCREEN` |
+| `Erase` | `Zero`, `OneMinusSrcAlpha` | `ERASE` |
+| `SoftAdd` | `OneMinusDstColor`, `One` | mode ajouté (id 100) |
+| `SoftOverlay` | `DstColor`, `One` | mode ajouté (id 101) |
+
+Les éléments d'un batch prennent le mode du batch.
+
+À vérifier à la parité (étape 4) : PixiJS travaille en alpha prémultiplié. Pour `Multiply` et `SoftOverlay` avec un alpha plus petit que 1, le résultat peut différer du Flash.
+
+### Critères d'acceptation
+
+- (`--interp`) Étant donné un `Drawable` sans mode, quand la scène se dessine, alors il est dessiné en `Normal`. En `Add`, il est dessiné en `Add`.
+- (`--interp`) Étant donné un batch en `SoftOverlay`, quand la scène se dessine, alors ses éléments sont dessinés en `SoftOverlay`.
+- (Playwright) Étant donné le canard sur fond noir, quand il passe en `SoftOverlay`, alors le pixel de son centre devient noir (`noir × (1 + source) = noir`), alors qu'il était jaune en `Normal`. Ce test lit le pixel rendu par le GPU : il prouve que le mode ajouté est bien utilisé.

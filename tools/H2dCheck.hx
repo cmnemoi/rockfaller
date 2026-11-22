@@ -30,6 +30,8 @@ class H2dCheck {
 		aStaticBatchKeepsItsElementsUntilInvalidated();
 		aStaticBatchsElementsFollowTheBatch();
 		aBatchOfMoreThan4096ElementsDrawsNothing();
+		aDrawableIsDrawnWithItsBlendMode();
+		aBatchsElementsAreDrawnWithTheBatchsBlendMode();
 		trace("PASS");
 	}
 
@@ -228,6 +230,29 @@ class H2dCheck {
 			batch.alloc(atlasTile().sub(0, 0, 8, 8));
 
 		check(render(scene).length == 0, "a batch of 4097 elements draws nothing");
+	}
+
+	/** @spec html5.h2d.color::blend-mode-like-fork */
+	static function aDrawableIsDrawnWithItsBlendMode() {
+		var scene = new Scene();
+		var normal = new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		var added = new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		added.blendMode = h2d.BlendMode.Add;
+
+		var drawn = render(scene);
+
+		check(drawn[0].blendMode == h2d.BlendMode.Normal, "a drawable is drawn in Normal mode by default");
+		check(drawn[1].blendMode == h2d.BlendMode.Add, "a drawable in Add mode is drawn in Add mode");
+	}
+
+	/** @spec html5.h2d.color::blend-mode-like-fork */
+	static function aBatchsElementsAreDrawnWithTheBatchsBlendMode() {
+		var scene = new Scene();
+		var batch = new SpriteBatch(atlasTile(), scene);
+		batch.blendMode = h2d.BlendMode.SoftOverlay;
+		batch.alloc(atlasTile().sub(0, 0, 8, 8));
+
+		check(render(scene)[0].blendMode == h2d.BlendMode.SoftOverlay, "a batch's elements are drawn in the batch's mode");
 	}
 
 	static function near(value:Float, expected:Float) {

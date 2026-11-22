@@ -61,6 +61,33 @@ test('PixiJS shows a rotated, flipped, half-transparent sprite with its whole ma
   expectPixiToShowTheCommands(drawn);
 });
 
+/** The colour drawn at the duck's centre, read back from the GPU. */
+function duckCentrePixel(page) {
+  return page.evaluate(() => {
+    const { app, duck } = window.rockfallerDebug;
+    app.render();
+    const width = app.renderer.width;
+    const pixels = app.renderer.extract.pixels();
+    const index = (Math.round(duck.y) * width + Math.round(duck.x)) * 4;
+    return Array.from(pixels.slice(index, index + 3));
+  });
+}
+
+/** @spec html5.h2d.color::blend-mode-like-fork */
+test('a SoftOverlay sprite over black leaves black, as the DstColor + One factors of the fork do', async ({ page }) => {
+  const normal = await duckCentrePixel(page);
+
+  await page.evaluate(() => {
+    const { duck, BlendMode } = window.rockfallerDebug;
+    duck.blendMode = BlendMode.SoftOverlay;
+  });
+  await twoFrames(page);
+  const softOverlay = await duckCentrePixel(page);
+
+  expect(normal.some((channel) => channel > 100), `the duck shows in Normal mode (got ${normal})`).toBe(true);
+  expect(softOverlay).toEqual([0, 0, 0]);
+});
+
 /** @spec html5.slb::page-plays-grip-anim */
 test('PixiJS shows the grip animation frame the SpriteLib is on', async ({ page }) => {
   const caught = await page.waitForFunction((frameToCatch) => {

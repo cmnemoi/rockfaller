@@ -23,7 +23,7 @@ class Main {
 		var app = new Application({width: GAME_WIDTH, height: GAME_HEIGHT, backgroundColor: 0x000000});
 		Browser.document.body.appendChild(app.view);
 		var scene = new Scene();
-		var renderer = new PixiRenderer();
+		var renderer = new PixiRenderer(app.renderer);
 		app.stage.addChild(renderer.root);
 
 		Promise.all([loadLib("assets1", false), loadLib("taupinotron", true)]).then(function(libs:Array<BLib>) {
@@ -49,7 +49,7 @@ class Main {
 			});
 
 			#if debug
-			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck};
+			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, BlendMode: h2d.BlendMode};
 			#end
 		}).catchError(showError);
 	}

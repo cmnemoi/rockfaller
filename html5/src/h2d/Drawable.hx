@@ -7,7 +7,7 @@ class DrawableShader {
 
 /**
  * Replaces the fork's GPU Drawable: a sprite that draws tiles. Drawing records a command in the RenderContext.
- * Color, filter and blend modes are kept but not drawn yet (step 3).
+ * Color and filter are kept but not drawn yet (step 3).
  */
 class Drawable extends Sprite {
 	public var color:h3d.Vector;
@@ -15,11 +15,13 @@ class Drawable extends Sprite {
 	public var colorMatrix:h3d.Matrix;
 	public var filter:Bool;
 	public var alpha:Float;
+	public var blendMode:BlendMode;
 
 	function new(parent:Sprite, ?sh:DrawableShader) {
 		super(parent);
 		alpha = 1.0;
 		filter = false;
+		blendMode = Normal;
 	}
 
 	public override function clone<T>(?s:T):T {
@@ -32,6 +34,7 @@ class Drawable extends Sprite {
 		drawable.colorMatrix = colorMatrix;
 		drawable.filter = filter;
 		drawable.alpha = alpha;
+		drawable.blendMode = blendMode;
 		return cast drawable;
 	}
 

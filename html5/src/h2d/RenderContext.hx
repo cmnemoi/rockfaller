@@ -14,6 +14,7 @@ typedef DrawCommand = {
 	tx:Float,
 	ty:Float,
 	alpha:Float,
+	?blendMode:BlendMode,
 }
 
 /**
@@ -64,6 +65,7 @@ class RenderContext {
 			tx: drawable.absX + quad.tx * drawable.matA + quad.ty * drawable.matC,
 			ty: drawable.absY + quad.tx * drawable.matB + quad.ty * drawable.matD,
 			alpha: quad.alpha * drawable.alpha,
+			blendMode: drawable.blendMode,
 		});
 	}
 }
