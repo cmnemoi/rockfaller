@@ -37,6 +37,11 @@ class H2dCheck {
 		theColorizeMatrixOfTheGameGivesTheFlashColorizeFilter();
 		alphaIsAppliedBeforeTheColorMatrix();
 		aBatchElementsColorMultipliesItsPicture();
+		aHigherLayerIsDrawnOverALowerOneWhateverTheOrderOfAdding();
+		overPutsASpriteOnTopOfItsLayerOnly();
+		underPutsASpriteAtTheBottomOfItsLayer();
+		aLayerKeepsItsPlaceAfterAChildBelowIsRemoved();
+		ysortDrawsALayerFromTopToBottom();
 		trace("PASS");
 	}
 
@@ -328,6 +333,83 @@ class H2dCheck {
 		var matrix = render(scene)[0].colorMatrix;
 
 		check(matrix != null && matrix[0] == 0.5 && matrix[6] == 1, "an element colored (0.5, 1, 1) halves its red (got " + matrix + ")");
+	}
+
+	/** @spec html5.h2d.layers::drawn-by-layer */
+	static function aHigherLayerIsDrawnOverALowerOneWhateverTheOrderOfAdding() {
+		var scene = new Scene();
+		var layers = new h2d.Layers(scene);
+		layers.add(bitmapCutAt(16), 2);
+		layers.add(bitmapCutAt(0), 0);
+
+		check(cutsDrawn(scene) == "0,16", "layer 0 is drawn under layer 2, though added after it (got " + cutsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.layers::drawn-by-layer */
+	static function overPutsASpriteOnTopOfItsLayerOnly() {
+		var scene = new Scene();
+		var layers = new h2d.Layers(scene);
+		var first = bitmapCutAt(0);
+		layers.add(first, 0);
+		layers.add(bitmapCutAt(8), 0);
+		layers.add(bitmapCutAt(16), 1);
+
+		layers.over(first);
+
+		check(cutsDrawn(scene) == "8,0,16", "over() puts a sprite on top of its layer, still under layer 1 (got " + cutsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.layers::drawn-by-layer */
+	static function underPutsASpriteAtTheBottomOfItsLayer() {
+		var scene = new Scene();
+		var layers = new h2d.Layers(scene);
+		layers.add(bitmapCutAt(0), 0);
+		layers.add(bitmapCutAt(8), 1);
+		var last = bitmapCutAt(16);
+		layers.add(last, 1);
+
+		layers.under(last);
+
+		check(cutsDrawn(scene) == "0,16,8", "under() puts a sprite at the bottom of its layer, still over layer 0 (got " + cutsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.layers::drawn-by-layer */
+	static function aLayerKeepsItsPlaceAfterAChildBelowIsRemoved() {
+		var scene = new Scene();
+		var layers = new h2d.Layers(scene);
+		var removed = bitmapCutAt(0);
+		layers.add(removed, 0);
+		layers.add(bitmapCutAt(8), 0);
+		layers.add(bitmapCutAt(16), 1);
+
+		removed.remove();
+		layers.add(bitmapCutAt(24), 0);
+
+		check(cutsDrawn(scene) == "8,24,16", "a child added to layer 0 after a removal still goes under layer 1 (got " + cutsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.layers::drawn-by-layer */
+	static function ysortDrawsALayerFromTopToBottom() {
+		var scene = new Scene();
+		var layers = new h2d.Layers(scene);
+		var low = bitmapCutAt(0);
+		low.y = 50;
+		var high = bitmapCutAt(8);
+		high.y = 10;
+		layers.add(low, 0);
+		layers.add(high, 0);
+
+		layers.ysort(0);
+
+		check(cutsDrawn(scene) == "8,0", "ysort draws the sprite higher on screen first (got " + cutsDrawn(scene) + ")");
+	}
+
+	static function bitmapCutAt(cutX:Int):Bitmap {
+		return new Bitmap(atlasTile().sub(cutX, 0, 8, 8));
+	}
+
+	static function cutsDrawn(scene:Scene):String {
+		return [for (command in render(scene)) command.cutX].join(",");
 	}
 
 	static function sameMatrix(matrix:Array<Float>, expected:Array<Float>) {

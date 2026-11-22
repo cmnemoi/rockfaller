@@ -131,3 +131,23 @@ Piège connu (Kadokadeo) : le premier filtre utilisé compile un shader et fige 
 - (`--interp`) Étant donné un élément de batch de couleur (0,5 ; 1 ; 1), quand la scène se dessine, alors son rouge est divisé par deux.
 - (Playwright) Étant donné le canard en noir avec du rouge pur ajouté, quand il est dessiné, alors le pixel de son centre vaut exactement (255, 0, 0). Des décalages lus de 0 à 255 donneraient presque du noir.
 - (Playwright) Étant donné le canard sur fond noir, quand il passe en `SoftOverlay`, alors le pixel de son centre devient noir (`noir × (1 + source) = noir`), alors qu'il était jaune en `Normal`. Ce test lit le pixel rendu par le GPU : il prouve que le mode ajouté est bien utilisé.
+
+## `Layers`
+
+La `h2d.Layers` du fork ne touche pas au GPU : elle range ses enfants par calque dans la liste de `Sprite`. Le build JS l'utilise telle quelle, par le chemin de sources. Ses tests fixent l'ordre de dessin réel, à travers la scène de la couche.
+
+### Règle
+
+#### Les enfants se dessinent par calque
+
+`{#html5.h2d.layers::drawn-by-layer}`
+
+Un calque plus haut se dessine par-dessus un calque plus bas, quel que soit l'ordre d'ajout. `over` et `under` déplacent un enfant en haut ou en bas de son calque, sans le faire changer de calque. `ysort` dessine un calque du haut vers le bas de l'écran. Retirer un enfant garde les calques à leur place.
+
+### Critères d'acceptation (`--interp`)
+
+- Étant donné un enfant au calque 2 puis un enfant au calque 0, quand la scène se dessine, alors le calque 0 est dessiné d'abord.
+- Étant donné deux enfants au calque 0 et un au calque 1, quand le premier passe `over`, alors il est dessiné après l'autre enfant du calque 0, mais avant le calque 1.
+- Étant donné un enfant au calque 0 et deux au calque 1, quand le dernier passe `under`, alors il est dessiné avant l'autre enfant du calque 1, mais après le calque 0.
+- Étant donné un enfant retiré du calque 0, quand un nouvel enfant y est ajouté, alors il est encore dessiné sous le calque 1.
+- Étant donné deux enfants d'un calque en y = 50 puis y = 10, quand on appelle `ysort`, alors celui en y = 10 est dessiné d'abord.
