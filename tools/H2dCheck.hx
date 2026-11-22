@@ -7,6 +7,7 @@ import h2d.Scene;
 import h2d.Sprite;
 import h2d.SpriteBatch;
 import h2d.Tile;
+import hxd.Event.EventKind;
 
 /**
  * Checks the h2d layer of the JS build: what the scene asks to draw, without PixiJS.
@@ -51,6 +52,15 @@ class H2dCheck {
 		anAccentedLetterIsDrawnWithItsGlyph();
 		theTextColorColorsTheGlyphs();
 		theTextAlphaFadesTheGlyphs();
+		aClickOnAnInteractiveGivesItsLocalPosition();
+		movingInThenOutGivesOverThenOut();
+		leavingAfterThePushCancelsTheClick();
+		theTopmostInteractiveTakesTheClick();
+		propagatingEventsReachTheInteractiveBelow();
+		anInteractiveUnderAnInvisibleParentGetsNoEvent();
+		anInteractiveFlippedOnOneAxisNeverGetsTheClick();
+		aRotatedInteractiveIsClickedThroughItsRotation();
+		aBackgroundColorIsDrawnAsAColoredRectangle();
 		trace("PASS");
 	}
 
@@ -515,6 +525,139 @@ class H2dCheck {
 		var drawn = render(scene)[0];
 
 		check(drawn.alpha == 0.5 || (drawn.colorMatrix != null && drawn.colorMatrix[18] == 0.5), "a text at alpha 0.5 draws its glyphs at alpha 0.5 (got alpha " + drawn.alpha + ", " + drawn.colorMatrix + ")");
+	}
+
+	/** An interactive of 50 x 30 px at (100, 100), and what it was told. */
+	static function interactiveIn(parent:Sprite, ?x = 100.0, ?y = 100.0):{interactive:h2d.Interactive, heard:Array<String>} {
+		var interactive = new h2d.Interactive(50, 30, parent);
+		interactive.setPos(x, y);
+		var heard = [];
+		interactive.onPush = function(e) heard.push("push");
+		interactive.onRelease = function(e) heard.push("release");
+		interactive.onClick = function(e) heard.push("click@" + Math.round(e.relX) + "," + Math.round(e.relY));
+		interactive.onOver = function(e) heard.push("over");
+		interactive.onOut = function(e) heard.push("out");
+		return {interactive: interactive, heard: heard};
+	}
+
+	/** Sends pointer events to the scene as the stage would, then lets the scene dispatch them, as Process.updateAll does. */
+	static function pointer(scene:Scene, kind:hxd.Event.EventKind, x:Float, y:Float) {
+		// A frame of the game loop first: like the fork, the scene only queues events once checkEvents has run.
+		render(scene);
+		scene.checkEvents();
+		@:privateAccess scene.onEvent(new hxd.Event(kind, x, y));
+		scene.checkEvents();
+	}
+
+	static function click(scene:Scene, x:Float, y:Float) {
+		pointer(scene, EPush, x, y);
+		pointer(scene, ERelease, x, y);
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork */
+	static function aClickOnAnInteractiveGivesItsLocalPosition() {
+		var scene = new Scene();
+		var button = interactiveIn(scene);
+
+		click(scene, 110, 120);
+
+		check(button.heard.join(" ") == "push release click@10,20", "a click at (110, 120) reaches the interactive at (10, 20) (got " + button.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork */
+	static function movingInThenOutGivesOverThenOut() {
+		var scene = new Scene();
+		var button = interactiveIn(scene);
+
+		pointer(scene, EMove, 0, 0);
+		pointer(scene, EMove, 110, 110);
+		pointer(scene, EMove, 300, 300);
+
+		check(button.heard.join(" ") == "over out", "moving in then out gives over then out (got " + button.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork */
+	static function leavingAfterThePushCancelsTheClick() {
+		var scene = new Scene();
+		var button = interactiveIn(scene);
+
+		pointer(scene, EMove, 110, 110);
+		pointer(scene, EPush, 110, 110);
+		pointer(scene, EMove, 300, 300);
+		pointer(scene, ERelease, 300, 300);
+
+		check(button.heard.join(" ") == "over push out release", "pushing, leaving, then releasing outside does not click (got " + button.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork */
+	static function theTopmostInteractiveTakesTheClick() {
+		var scene = new Scene();
+		var below = interactiveIn(scene);
+		var above = interactiveIn(scene);
+
+		click(scene, 110, 110);
+
+		check(below.heard.length == 0 && above.heard.join(" ") == "push release click@10,10", "the interactive added last, on top, takes the click (got below " + below.heard + ", above " + above.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork */
+	static function propagatingEventsReachTheInteractiveBelow() {
+		var scene = new Scene();
+		var below = interactiveIn(scene);
+		var above = interactiveIn(scene);
+		above.interactive.propagateEvents = true;
+
+		click(scene, 110, 110);
+
+		check(above.heard.indexOf("click@10,10") >= 0 && below.heard.indexOf("click@10,10") >= 0, "with propagateEvents, the click also reaches the interactive below (got below " + below.heard + ", above " + above.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork */
+	static function anInteractiveUnderAnInvisibleParentGetsNoEvent() {
+		var scene = new Scene();
+		var hidden = new Sprite(scene);
+		var button = interactiveIn(hidden);
+		hidden.visible = false;
+
+		click(scene, 110, 110);
+
+		check(button.heard.length == 0, "an interactive under an invisible parent gets no event (got " + button.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork: a quirk of the fork, kept */
+	static function anInteractiveFlippedOnOneAxisNeverGetsTheClick() {
+		var scene = new Scene();
+		var button = interactiveIn(scene);
+		button.interactive.scaleX = -1;
+
+		click(scene, 90, 110);
+
+		check(button.heard.length == 0, "the fork's hit test rejects a matrix flipped on one axis: no click (got " + button.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::events-like-fork */
+	static function aRotatedInteractiveIsClickedThroughItsRotation() {
+		var scene = new Scene();
+		var button = interactiveIn(scene);
+		button.interactive.rotation = Math.PI / 2;
+
+		click(scene, 90, 110);
+
+		check(button.heard.join(" ") == "push release click@10,10", "turned a quarter, the interactive's (10, 10) is at (90, 110) (got " + button.heard + ")");
+	}
+
+	/** @spec html5.h2d.interactive::background-color */
+	static function aBackgroundColorIsDrawnAsAColoredRectangle() {
+		var scene = new Scene();
+		var button = interactiveIn(scene);
+		button.interactive.backgroundColor = 0x80FF0000;
+
+		var drawn = render(scene);
+
+		check(drawn.length == 1 && drawn[0].a == 50 && drawn[0].d == 30 && drawn[0].tx == 100 && drawn[0].ty == 100,
+			"a background of 50 x 30 is drawn at (100, 100) (got " + drawn.length + " commands)");
+		var matrix = drawn[0].colorMatrix;
+		check(matrix != null && near(matrix[0], 1) && near(matrix[6], 0) && near(matrix[18], 0x80 / 255), "it is red at alpha 0x80 (got " + matrix + ")");
 	}
 
 	static function bitmapCutAt(cutX:Int):Bitmap {

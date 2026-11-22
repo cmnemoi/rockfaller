@@ -11,6 +11,20 @@ class Texture {
 	public var pixiTexture(default, null):pixi.core.textures.BaseTexture;
 	#end
 
+	static var whiteTexture:Texture;
+
+	/** A white texture, for tiles of one color: the fork's Tile.fromColor. */
+	public static function white():Texture {
+		if (whiteTexture == null) {
+			#if pixijs
+			whiteTexture = fromPixi(pixi.core.textures.Texture.WHITE.baseTexture);
+			#else
+			whiteTexture = new Texture(1, 1);
+			#end
+		}
+		return whiteTexture;
+	}
+
 	public function new(width:Int, height:Int) {
 		this.width = width;
 		this.height = height;

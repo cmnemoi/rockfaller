@@ -107,6 +107,68 @@ test('a black duck with pure red added shows pure red: PixiJS reads the added co
   expect(await duckCentrePixel(page)).toEqual([255, 0, 0]);
 });
 
+/** Where the duck's centre is on the page, in CSS pixels, whatever size the canvas is shown at. */
+async function duckOnPage(page) {
+  return page.evaluate(() => {
+    const { app, duck } = window.rockfallerDebug;
+    const box = app.view.getBoundingClientRect();
+    return { x: box.left + duck.x * box.width / app.renderer.width, y: box.top + duck.y * box.height / app.renderer.height };
+  });
+}
+
+const duckClicks = (page) => page.evaluate(() => window.rockfallerDebug.duckClicks());
+
+/** @spec html5.h2d.interactive::pointer-from-canvas */
+test('a mouse click on the duck reaches its Interactive', async ({ page }) => {
+  const { x, y } = await duckOnPage(page);
+
+  await page.mouse.click(x, y);
+
+  await expect.poll(() => duckClicks(page)).toBe(1);
+});
+
+/** @spec html5.h2d.interactive::pointer-from-canvas */
+test('a click beside the duck does not reach it', async ({ page }) => {
+  const { x, y } = await duckOnPage(page);
+
+  await page.mouse.click(x + 80, y);
+  await twoFrames(page);
+
+  expect(await duckClicks(page)).toBe(0);
+});
+
+/** @spec html5.h2d.interactive::pointer-from-canvas */
+test('a click still reaches the duck when the page shows the canvas at half size', async ({ page }) => {
+  await page.evaluate(() => { window.rockfallerDebug.app.view.style.width = '320px'; });
+  const { x, y } = await duckOnPage(page);
+
+  await page.mouse.click(x, y);
+
+  await expect.poll(() => duckClicks(page)).toBe(1);
+});
+
+/** @spec html5.h2d.interactive::pointer-from-canvas */
+test('the cursor becomes a hand over the duck', async ({ page }) => {
+  const { x, y } = await duckOnPage(page);
+
+  await page.mouse.move(x, y);
+
+  await expect.poll(() => page.evaluate(() => window.rockfallerDebug.app.view.style.cursor)).toBe('pointer');
+});
+
+test.describe('on a touch screen', () => {
+  test.use({ hasTouch: true });
+
+  /** @spec html5.h2d.interactive::pointer-from-canvas */
+  test('a tap on the duck reaches its Interactive', async ({ page }) => {
+    const { x, y } = await duckOnPage(page);
+
+    await page.touchscreen.tap(x, y);
+
+    await expect.poll(() => duckClicks(page)).toBe(1);
+  });
+});
+
 /** @spec html5.slb::page-plays-grip-anim */
 test('PixiJS shows the grip animation frame the SpriteLib is on', async ({ page }) => {
   const caught = await page.waitForFunction((frameToCatch) => {

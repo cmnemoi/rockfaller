@@ -197,3 +197,54 @@ Les métriques de Canvas 2D peuvent différer d'un pixel de celles de Flash. La 
 - Étant donné une police jamais chargée, quand on la construit, alors l'erreur contient son nom.
 
 Note sur les tests de pixels : depuis l'écran, `extract.pixels()` de PixiJS 6 rend l'image retournée verticalement. Les tests lisent l'écran avec `extract.canvas()`. Le premier test de pixel (le canard, au milieu de l'écran) passait par chance.
+
+## `Interactive`
+
+Le jeu utilise `onClick` (15 fois), `onRelease` (7), `onOut` (8), `onOver` (6), `onPush` (6), `backgroundColor` (4), `cursor` et `propagateEvents` (1 fois chacun). Il appelle lui-même `checkEvents()` sur sa scène, dans `Process.updateAll`.
+
+### Règles
+
+#### Les événements suivent la scène du fork
+
+`{#html5.h2d.interactive::events-like-fork}`
+
+Le code d'événements de la `Scene` et de l'`Interactive` du fork est repris tel quel : file d'événements vidée par `checkEvents()`, interactive du dessus servi d'abord, `propagateEvents`, entrée et sortie, appui et relâchement, parents invisibles ignorés.
+
+La scène du fork met tout l'arbre dans l'espace normalisé du GPU (−1 à 1, y vers le haut), et son test de clic y travaille, avec une correction d'aspect. La couche reste en pixels : le test de clic convertit les matrices vers cet espace avant le calcul du fork. Une comparaison sur 40 000 cas tirés au hasard montre que les deux calculs coïncident sans rotation, avec une rotation à échelle uniforme, et avec les deux axes retournés. Ils diffèrent dans deux cas, qui sont des quirks du fork, gardés :
+
+- un `Interactive` retourné sur un seul axe ne reçoit jamais de clic (son test d'orientation rejette les matrices de déterminant négatif) ;
+- un `Interactive` tourné et mis à l'échelle de façon non uniforme a une zone de clic déformée.
+
+Comme dans le fork, un événement arrivé avant le premier `checkEvents()` est ignoré. Un appui, une sortie, puis un relâchement dehors ne font pas de clic.
+
+#### Le fond d'un `Interactive` est un rectangle de sa couleur
+
+`{#html5.h2d.interactive::background-color}`
+
+Avec `backgroundColor`, l'`Interactive` dessine un rectangle de sa taille, de cette couleur et de cet alpha (`0xAARRGGBB`).
+
+#### Le pointeur vient du canevas
+
+`{#html5.h2d.interactive::pointer-from-canvas}`
+
+`hxd.Stage` écoute les événements « pointer » du canevas : souris et toucher passent par le même chemin. Les positions sont en pixels du jeu, même quand la page affiche le canevas à une autre taille. Le curseur suit celui de l'`Interactive` survolé.
+
+### Critères d'acceptation
+
+Compilés en JS, lancés par Node :
+
+- Étant donné un `Interactive` de 50 × 30 en (100, 100), quand on clique en (110, 120), alors il reçoit `push`, `release`, puis `click` en (10, 20).
+- Étant donné le pointeur qui entre puis sort, alors il reçoit `over` puis `out`.
+- Étant donné un appui, une sortie, puis un relâchement dehors, alors il n'y a pas de clic.
+- Étant donné deux `Interactive` superposés, quand on clique, alors seul celui du dessus reçoit le clic. Avec `propagateEvents` sur celui du dessus, celui du dessous le reçoit aussi.
+- Étant donné un parent invisible, quand on clique, alors l'`Interactive` ne reçoit rien.
+- Étant donné un `Interactive` retourné sur un axe (`scaleX = -1`), quand on clique dans sa zone, alors il ne reçoit rien (quirk du fork).
+- Étant donné un `Interactive` tourné d'un quart de tour, quand on clique en (90, 110), alors il reçoit le clic en (10, 10).
+- Étant donné `backgroundColor = 0x80FF0000`, quand la scène se dessine, alors un rectangle rouge de 50 × 30, à l'alpha 0x80, est dessiné en (100, 100).
+
+Playwright :
+
+- Étant donné la page, quand on clique sur le canard avec la souris, alors son `Interactive` reçoit le clic. Un clic à côté ne le touche pas.
+- Étant donné le canevas affiché à la moitié de sa taille, quand on clique sur le canard, alors le clic l'atteint.
+- Étant donné la souris sur le canard, alors le curseur devient une main.
+- Étant donné un écran tactile, quand on touche le canard, alors son `Interactive` reçoit le clic.

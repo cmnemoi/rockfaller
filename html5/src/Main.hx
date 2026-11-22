@@ -22,10 +22,12 @@ class Main {
 	static inline var TITLE_FONT = "BenchNine";
 	static inline var TITLE_FONT_URL = "../font/BenchNine-Regular.ttf";
 	static inline var TITLE_SIZE = 44;
+	static inline var DUCK_FRAME = 98;
 
 	static function main() {
 		var app = new Application({width: GAME_WIDTH, height: GAME_HEIGHT, backgroundColor: 0x000000});
 		Browser.document.body.appendChild(app.view);
+		hxd.Stage.getInstance().attachTo(app.view);
 		var scene = new Scene();
 		var renderer = new PixiRenderer(app.renderer);
 		app.stage.addChild(renderer.root);
@@ -42,6 +44,14 @@ class Main {
 			var title = new h2d.Text(FontBuilder.getFont(TITLE_FONT, TITLE_SIZE, {antiAliasing: false}), scene);
 			title.text = "Rockfaller Journey : \u00E9t\u00E9";
 			title.setPos(20, 40);
+			// Clicking the duck turns it: the Interactive covers its 98 x 98 frame, centred on it.
+			var duckButton = new h2d.Interactive(DUCK_FRAME, DUCK_FRAME, scene);
+			duckButton.setPos(duck.x - DUCK_FRAME / 2, duck.y - DUCK_FRAME / 2);
+			var duckClicks = 0;
+			duckButton.onClick = function(_) {
+				duckClicks++;
+				duck.rotation += Math.PI / 8;
+			};
 
 			var context = new RenderContext();
 			var elapsedMs = 0.0;
@@ -51,13 +61,14 @@ class Main {
 				while (elapsedMs >= 1000 / UPDATES_PER_SECOND) {
 					elapsedMs -= 1000 / UPDATES_PER_SECOND;
 					taupinotron.updateChildren();
+					scene.checkEvents(); // what the game's Process.updateAll does
 				}
 				scene.render(context);
 				renderer.show(context.drawn);
 			});
 
 			#if debug
-			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, title: title, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder};
+			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder};
 			#end
 		}).catchError(showError);
 	}
