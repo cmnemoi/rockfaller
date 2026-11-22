@@ -79,17 +79,21 @@ Vérification dans Chrome, en local (`mise run serve`), puis sur le site déploy
 
 ## Étapes suivantes (lots)
 
-### Étape 2 : mesure, puis grille d'un niveau
+### Étape 2 : mesure, puis la SpriteLib sur PixiJS
 
-- Essai d'une demi-journée : compiler `client/client/src` en Haxe 4 vers JS. On note les erreurs, groupées par cause, dans `docs/specs/html5-inventory.md`. On jette le code de l'essai et on commite seulement l'inventaire.
-- `h2d.Tile`, `h2d.Bitmap`, `h2d.Sprite` dans `html5/src/h2d/`, avec les mêmes signatures que celles que le jeu appelle dans le fork `h3d`.
-- La page affiche la grille du niveau 1 de `data/levels.json`.
-- Premier script de captures de parité (`html5::parity`) : Chrome sans affichage ouvre `/` et `/pixi/`, et compare les images d'un écran fixe. On calibre le seuil N sur l'écran d'accueil.
+Spec : [`html5-spritelib-on-pixi.md`](html5-spritelib-on-pixi.md). Inventaire : [`html5-inventory.md`](html5-inventory.md) (fait).
+
+Méthode Mikado : le but est que la page joue `gripAnim` avec les vrais `BLib` et `HSprite`. Le compilateur Haxe 4 vers JS donne les prérequis un par un. Chaque prérequis devient un commit, dans l'ordre des feuilles vers le but.
+
+1. Parallel Change de `BLib` : sa partie Flash passe sous `#if flash`. Le SWF doit rester identique.
+2. Couche `h2d`, une classe à la fois, chacune avec ses tests `--interp` : `h3d.mat.Texture`, `h2d.Tile`, `h2d.Sprite`, `h2d.Drawable` et `h2d.Bitmap`, la scène et son rendu. Puis les petites dépendances que le compilateur demande (`hxd`, `h3d.Vector`…).
+3. Tests de la SpriteLib avec `--interp` : groupes, erreurs, suite des images de `gripAnim`, pivot.
+4. La page joue `gripAnim`. Test en Chrome sans affichage (Node 22), ajouté à la CI.
 
 ### Étape 3 : reste de la couche `h2d`
 
-- Une classe par commit, dans l'ordre de l'inventaire. Liste attendue : `HSprite` et `HSpriteBE`, `Font`, `Text`, `Interactive`, `Layers`, `SpriteBatch`, `Graphics`, `BlendMode`.
-- L'inventaire dit ce que le jeu utilise de `SpriteBatch`, de `BlendMode` et des filtres. Ce sont les seuls points qui peuvent nous faire passer à l'option A.
+- Une classe par commit, dans l'ordre de l'inventaire : `Text` et `Font`, `Interactive`, `Layers`, `SpriteBatch` et `HSpriteBE`, `Graphics`, `BlendMode`, puis le reste.
+- Questions à trancher : `Drawable.color` plus grand que 1, et le lissage par sprite (voir la spec de l'étape 2).
 
 ### Étape 4 : le vrai client en Haxe 4
 
@@ -98,6 +102,7 @@ Vérification dans Chrome, en local (`mise run serve`), puis sur le site déploy
 - Pour chaque usage de `flash.*` : Parallel Change (étendre, migrer, contracter).
 - Son : il démarre au premier clic (`html5::sound-starts-on-first-click`).
 - Chargement : barre de progression simple (`html5::simple-loading-screen`).
+- Premier écran réel (l'accueil) : script de captures de parité, et calibrage du seuil N (`html5::parity`).
 
 ### Étape 5 : parité, puis bascule
 

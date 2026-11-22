@@ -64,7 +64,7 @@ La version PixiJS remplace la version Ruffle quand ces trois conditions sont vra
 
 - **Chaque niveau se charge et se termine.** Un raccourci de debug « gagner le niveau » fait défiler les 180 niveaux dans la version PixiJS. Il n'existe que dans les builds de debug.
 - **Le jeu se joue.** Des parties réelles, à la main, sur un échantillon : au moins un niveau par monde et par mécanique (gélatine, grappin, etc.).
-- **L'affichage est le même.** Sur une liste d'écrans fixes (accueil, carte, début du niveau 1, menus), un script prend une capture PixiJS et une capture Ruffle dans Chrome sans affichage. Au plus N % des pixels diffèrent. N est calibré sur l'écran d'accueil à l'étape 2, car Ruffle et PixiJS ne lissent pas les bords de la même façon. Le script garde les images de différence pour les regarder. Les écrans qui dépendent du hasard (fin de partie) se vérifient à la main.
+- **L'affichage est le même.** Sur une liste d'écrans fixes (accueil, carte, début du niveau 1, menus), un script prend une capture PixiJS et une capture Ruffle dans Chrome sans affichage. Au plus N % des pixels diffèrent. N est calibré sur l'écran d'accueil, dès qu'il tourne en JS (étape 4), car Ruffle et PixiJS ne lissent pas les bords de la même façon. Le script garde les images de différence pour les regarder. Les écrans qui dépendent du hasard (fin de partie) se vérifient à la main.
 - **Le toucher marche.** Le jeu se joue sur un téléphone, ou dans le mode mobile de Chrome. Un toucher agit comme un clic.
 
 ### La progression des joueurs ne se perd pas
@@ -112,12 +112,11 @@ Un sprite pris dans un atlas n'affiche aucun pixel de ses voisins, même réduit
 Chaque étape est publiable seule. Chaque étape a sa propre spec quand elle commence.
 
 1. **Page PixiJS minimale** — [`html5-first-pixi-page.md`](html5-first-pixi-page.md).
-2. **Mesure, puis grille d'un niveau.**
-   - Un essai d'une demi-journée compile le client en Haxe 4 vers JS. On note les erreurs dans `docs/specs/html5-inventory.md`, puis on jette l'essai. Cet inventaire remplace les estimations de cette spec.
-   - La couche `h2d` commence (`html5/src/h2d`) : `h2d.Tile`, `h2d.Bitmap` et `h2d.Sprite` sur PixiJS. La page affiche la grille d'un niveau de `data/levels.json`.
-   - Le script de captures de parité commence.
+2. **Mesure, puis la SpriteLib sur PixiJS** — [`html5-spritelib-on-pixi.md`](html5-spritelib-on-pixi.md).
+   - L'essai de compilation a produit [`html5-inventory.md`](html5-inventory.md). Cet inventaire remplace les estimations de cette spec.
+   - La couche `h2d` commence (`html5/src/h2d`). La page joue l'animation `gripAnim` avec les vrais `BLib` et `HSprite`. La grille d'un niveau demandait presque tout le jeu : elle n'est plus la cible.
 3. **Reste de la couche `h2d`.** Les classes de l'inventaire, une par commit, chacune avec un test.
-4. **Le vrai client en Haxe 4.** Un fichier à la fois. Chaque usage de `flash.*` suit un Parallel Change (son, stockage, événements, préchargeur).
+4. **Le vrai client en Haxe 4.** Un fichier à la fois. Chaque usage de `flash.*` et d'`openfl.*` suit un Parallel Change (son, stockage, événements, préchargeur). Le script de captures de parité commence avec le premier écran réel, l'accueil.
 5. **Parité, puis bascule.**
    - Migration de la progression (`html5::progress-survives-migration`).
    - Parité vérifiée (`html5::parity`).
