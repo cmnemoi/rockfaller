@@ -283,3 +283,16 @@ En JS, `TutoManager` dessine le masque sur un Canvas 2D. Le `BlurFilter(16, 16)`
 
 - (Node) Étant donné un voile avec un masque, quand la scène se dessine, alors la commande porte la texture du masque et sa découpe.
 - (Playwright) Étant donné un voile à 0,75 avec un masque blanc, alors le canard est assombri. Avec un carré noir du masque sur le canard, le canard reste tel qu'il était.
+
+## Position de la souris dans un sprite
+
+`{#html5.h2d::mouse-in-sprite-space}`
+
+Le jeu trouve la pierre visée avec `cRocks.mouseX` et `mouseY`, et le tutoriel place ses bulles avec `localToGlobal`. Dans le fork, `localToGlobal` et `globalToLocal` passent par l'espace normalisé du GPU, où la scène du fork met tout l'arbre. La couche garde l'arbre en pixels : elle prend une copie du `h2d.Sprite` du fork où ces deux fonctions ne font plus cette conversion.
+
+Bug trouvé en jouant : un clic sur les pierres ne les faisait pas tourner, et le projecteur du tutoriel ne s'affichait pas. La souris en (120, 70) tombait en (−50,3 ; −24,6) dans un sprite en (100, 50) d'échelle 2, au lieu de (10, 10).
+
+### Critères d'acceptation (Node)
+
+- Étant donné un sprite en (100, 50) d'échelle 2 et la souris en (120, 70), alors `mouseX` et `mouseY` valent (10, 10).
+- Étant donné le même sprite, alors `localToGlobal` donne (120, 70) pour le point (10, 10).

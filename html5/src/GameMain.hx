@@ -33,6 +33,13 @@ class GameMain {
 			loading.remove();
 			Protocol.useProgressStore(new progress.LocalStorageProgressStore());
 			new Main();
+			#if debug
+			untyped Browser.window.rockfallerGame = {
+				scene: function() return mt.deepnight.deprecated.HProcess.GLOBAL_SCENE,
+				stage: hxd.Stage.getInstance(),
+				engine: h3d.Engine.getCurrent(),
+			};
+			#end
 		}).catchError(function(error) loading.fail(error));
 	}
 

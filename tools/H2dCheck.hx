@@ -70,6 +70,8 @@ class H2dCheck {
 		at60HzTheTimerSettlesOnHalfAFlashFrame();
 		aFrameLongerThanHalfASecondDoesNotJumpTheTimer();
 		anAlphaMapIsDrawnOverItsDrawablesTile();
+		aSpritesMouseIsThePointerInTheSpritesOwnSpace();
+		localToGlobalGivesThePointOnTheScreen();
 		trace("PASS");
 	}
 
@@ -772,6 +774,32 @@ class H2dCheck {
 
 		check(drawn.alphaMap != null && drawn.alphaMap.texture == mask.getTexture(), "the veil is drawn with its mask's texture");
 		check(drawn.alphaMap.cutWidth == 640 && drawn.alphaMap.cutHeight == 768, "the mask covers the veil's 640 x 768");
+	}
+
+	/** @spec html5.h2d::mouse-in-sprite-space: the game finds the rock under the pointer with cRocks.mouseX */
+	static function aSpritesMouseIsThePointerInTheSpritesOwnSpace() {
+		var scene = new Scene();
+		var rocks = new Sprite(scene);
+		rocks.setPos(100, 50);
+		rocks.setScale(2);
+		render(scene);
+
+		hxd.Stage.getInstance().event(new hxd.Event(EMove, 120, 70));
+
+		check(rocks.mouseX == 10 && rocks.mouseY == 10, "the pointer at (120, 70) is at (10, 10) in a sprite at (100, 50) of scale 2 (got " + rocks.mouseX + ", " + rocks.mouseY + ")");
+	}
+
+	/** @spec html5.h2d::mouse-in-sprite-space: the tutorial places its bubbles with localToGlobal */
+	static function localToGlobalGivesThePointOnTheScreen() {
+		var scene = new Scene();
+		var rocks = new Sprite(scene);
+		rocks.setPos(100, 50);
+		rocks.setScale(2);
+		render(scene);
+
+		var onScreen = rocks.localToGlobal(new h2d.col.Point(10, 10));
+
+		check(onScreen.x == 120 && onScreen.y == 70, "(10, 10) in that sprite is (120, 70) on the screen (got " + onScreen.x + ", " + onScreen.y + ")");
 	}
 
 	static function bitmapCutAt(cutX:Int):Bitmap {
