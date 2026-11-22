@@ -1,0 +1,30 @@
+client/client/src/manager/GoalManager.hx
+  s_da33d0161772b7::t_d16ccfa194ddec 171
+client/client/src/manager/SpecialManager.hx
+  s_da33d0161772b7::t_d16ccfa194ddec 225
+src/com/Common.hx
+  s_da33d0161772b7::t_d16ccfa194ddec 232
+client/client/src/FX.hx
+  s_da33d0161772b7::t_d16ccfa194ddec 532
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7f619d6ab8e6aab5a9c4eb3af638e7abf5643dc6",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
