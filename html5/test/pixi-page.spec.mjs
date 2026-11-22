@@ -92,8 +92,9 @@ test('a SoftOverlay sprite over black leaves black, as the DstColor + One factor
 test('a black duck with pure red added shows pure red: PixiJS reads the added color in 0..1, like the fork', async ({ page }) => {
   await page.evaluate(() => {
     const { duck, Vector } = window.rockfallerDebug;
-    duck.color = new Vector(0, 0, 0, 1);
-    duck.colorAdd = new Vector(1, 0, 0, 0);
+    // color and colorAdd are Haxe properties: their setters store them in the drawable's shader.
+    duck.set_color(new Vector(0, 0, 0, 1));
+    duck.set_colorAdd(new Vector(1, 0, 0, 0));
   });
   await twoFrames(page);
 
