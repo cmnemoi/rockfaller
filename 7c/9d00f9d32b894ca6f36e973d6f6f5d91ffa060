@@ -1,0 +1,35 @@
+html5/mise.toml
+  s_da33d0161772b7::t_a2491f7e3f3fa5 1,4-6,20,24-25
+  s_da33d0161772b7::t_2b7f2f3a9f9444 2-3,7-19,21-23
+html5/build.hxml
+  s_da33d0161772b7::t_c8e38c456a9133 1-6
+.github/workflows/web.yml
+  s_da33d0161772b7::t_1ecd20deb89187 38-50,60,79
+  s_da33d0161772b7::t_0687541ad12d16 61-62,77-78
+html5/install-deps.sh
+  s_da33d0161772b7::t_b8449aab07cec2 1-7,10-11
+  s_da33d0161772b7::t_c8e38c456a9133 8-9
+html5/src/Main.hx
+  s_da33d0161772b7::t_c8e38c456a9133 1-7
+mise.toml
+  s_da33d0161772b7::t_579773a809e47d 75-87
+  s_da33d0161772b7::t_1ecd20deb89187 60
+docs/specs/html5-plan.md
+  s_da33d0161772b7::t_bcafc55ef24625 52-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7c9d00f9d32b894ca6f36e973d6f6f5d91ffa060",
+  "prompts": {},
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
