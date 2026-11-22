@@ -27,6 +27,8 @@ class Drawable extends Sprite {
 	public var blendMode:BlendMode;
 	/** The fork batches quads when emit is set; the PixiJS layer draws every tile the same way. */
 	public var emit:Bool;
+	/** @spec html5.h2d.color::alpha-map: like the fork's shader, the drawn alpha is multiplied by this tile's red, laid over the drawn tile. */
+	public var alphaMap:Tile;
 
 	function new(parent:Sprite, ?sh:DrawableShader) {
 		super(parent);
@@ -56,6 +58,7 @@ class Drawable extends Sprite {
 		drawable.filter = filter;
 		drawable.alpha = alpha;
 		drawable.blendMode = blendMode;
+		drawable.alphaMap = alphaMap;
 		return cast drawable;
 	}
 

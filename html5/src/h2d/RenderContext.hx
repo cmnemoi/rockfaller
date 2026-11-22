@@ -19,6 +19,8 @@ typedef DrawCommand = {
 	?vertexColor:h3d.Vector,
 	/** PixiJS's 5 x 4 color matrix (straight colors, offsets in 0..1), or null when the picture is drawn as it is. */
 	?colorMatrix:Array<Float>,
+	/** The mask whose red multiplies the drawn alpha, cut and laid out like the drawn tile (the fork's alphaMap). */
+	?alphaMap:{texture:h3d.mat.Texture, cutX:Int, cutY:Int, cutWidth:Int, cutHeight:Int},
 }
 
 /**
@@ -73,6 +75,13 @@ class RenderContext {
 			alpha: colorMatrix == null ? alpha : 1.0,
 			blendMode: drawable.blendMode,
 			colorMatrix: colorMatrix,
+			alphaMap: drawable.alphaMap == null ? null : {
+				texture: drawable.alphaMap.getTexture(),
+				cutX: drawable.alphaMap.x,
+				cutY: drawable.alphaMap.y,
+				cutWidth: drawable.alphaMap.width,
+				cutHeight: drawable.alphaMap.height,
+			},
 		});
 	}
 

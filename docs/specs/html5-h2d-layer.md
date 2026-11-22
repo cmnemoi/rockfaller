@@ -270,3 +270,16 @@ Les lignes, les cercles et les polygones du fork ne sont pas portés : un appel 
 - Étant donné un remplissage rouge puis un remplissage bleu à l'alpha 0,5, alors chaque rectangle garde sa couleur.
 - Étant donné un `drawRect` sans `beginFill`, alors rien n'est dessiné.
 - Étant donné `clear()`, alors rien n'est dessiné.
+
+## `alphaMap`
+
+`{#html5.h2d.color::alpha-map}`
+
+Le projecteur du tutoriel (`TutoManager`) pose un voile noir à l'alpha 0,75, avec un masque (`alphaMap`) blanc partout et noir et flou sur les cases à montrer. Comme dans le shader du fork, l'alpha dessiné est multiplié par le rouge du masque, étiré sur la tuile dessinée. Un masque de sprite PixiJS multiplie par rouge × alpha de son image : pour un masque opaque, c'est le rouge du fork.
+
+En JS, `TutoManager` dessine le masque sur un Canvas 2D. Le `BlurFilter(16, 16)` de Flash est un flou en boîte de 16 px, d'écart-type 16 / √12 ≈ 4,6 px : le canevas utilise `blur(4.6px)`. La parité par captures (étape 4) mesurera l'écart.
+
+### Critères d'acceptation
+
+- (Node) Étant donné un voile avec un masque, quand la scène se dessine, alors la commande porte la texture du masque et sa découpe.
+- (Playwright) Étant donné un voile à 0,75 avec un masque blanc, alors le canard est assombri. Avec un carré noir du masque sur le canard, le canard reste tel qu'il était.

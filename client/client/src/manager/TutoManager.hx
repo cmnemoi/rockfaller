@@ -1035,6 +1035,7 @@ class TutoManager
 		
 		var width = Rock.SIZE_OFFSET * 1.25;
 		
+		#if flash
 		var bd = new openfl.display.BitmapData(Std.int(bmpHL.width), Std.int(bmpHL.height), true, 0xFFFFFFFF);
 		
 		function doCircle(cX:Int, cY:Int) {
@@ -1068,6 +1069,38 @@ class TutoManager
 		bd = null;
 		
 		bmpHL.alphaMap = tileCache;
+		#else
+		// The JS build draws the same mask on a canvas: white, with blurred black squares on the cells to show.
+		// Flash's BlurFilter(16, 16) is a 16 px box blur, of standard deviation 16 / sqrt(12) = 4.6 px.
+		var canvas = js.Browser.document.createCanvasElement();
+		canvas.width = Std.int(bmpHL.width);
+		canvas.height = Std.int(bmpHL.height);
+		var context = canvas.getContext2d();
+		context.fillStyle = "#FFFFFF";
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		context.fillStyle = "#000000";
+		context.filter = "blur(4.6px)";
+
+		function doCircle(cX:Int, cY:Int) {
+			x = Std.int(game.cRocks.x + Rock.GET_POS(cX) - width * 0.5);
+			y = Std.int(game.cRocks.y + Rock.GET_POS(cY) - width * 0.5);
+			context.fillRect(x, y, width, width);
+		}
+
+		if (coordFocus != null) {
+			for (i in coordFocus.x...coordFocus.x + 2) {
+				for (j in coordFocus.y...coordFocus.y + 2) {
+					doCircle(i, j);
+				}
+			}
+
+			for (p in coordFocus.pack) {
+				doCircle(p.cX, p.cY);
+			}
+		}
+
+		bmpHL.alphaMap = h2d.Tile.fromTexture(h3d.mat.Texture.fromCanvas(canvas));
+		#end
 		
 		if (!instant) {
 			bmpHL.alpha = 0;

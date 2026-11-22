@@ -58,6 +58,33 @@ class PixiRenderer {
 		if (sprite.filters == null) sprite.filters = [filter];
 	}
 
+	/**
+	 * @spec html5.h2d.color::alpha-map: a PixiJS sprite mask multiplies by its picture's red times its alpha,
+	 * which is the fork's red for an opaque mask. The mask sprite lies exactly over the drawn sprite.
+	 */
+	function showAlphaMap(sprite:Sprite, command:DrawCommand) {
+		var mask:Sprite = untyped sprite.__alphaMap;
+		if (command.alphaMap == null) {
+			if (sprite.mask != null) sprite.mask = null;
+			if (mask != null) mask.visible = false;
+			return;
+		}
+		if (mask == null) {
+			mask = new Sprite(Texture.EMPTY);
+			untyped sprite.__alphaMap = mask;
+			root.addChild(mask);
+		}
+		var map = command.alphaMap;
+		if (mask.texture.baseTexture != map.texture.pixiTexture)
+			mask.texture = new Texture(map.texture.pixiTexture);
+		mask.texture.frame = new Rectangle(map.cutX, map.cutY, map.cutWidth, map.cutHeight);
+		// The mask's picture is stretched over the drawn cut, like the fork's alphaMap UVs.
+		mask.transform.setFromMatrix(new Matrix(command.a * command.cutWidth / map.cutWidth, command.b * command.cutWidth / map.cutWidth,
+			command.c * command.cutHeight / map.cutHeight, command.d * command.cutHeight / map.cutHeight, command.tx, command.ty));
+		mask.visible = true;
+		sprite.mask = mask;
+	}
+
 	/** The PixiJS mode with the fork's factor pair (Drawable.setupShader), for premultiplied textures. */
 	static function pixiBlendModeOf(mode:h2d.BlendMode):Int {
 		var pixiModes:Dynamic = untyped PIXI.BLEND_MODES;
@@ -89,7 +116,7 @@ class PixiRenderer {
 		return sprites[index];
 	}
 
-	static function showCommand(sprite:Sprite, command:DrawCommand) {
+	function showCommand(sprite:Sprite, command:DrawCommand) {
 		var pixiTexture = command.texture.pixiTexture;
 		if (sprite.texture.baseTexture != pixiTexture)
 			sprite.texture = new Texture(pixiTexture);
@@ -100,6 +127,7 @@ class PixiRenderer {
 		sprite.alpha = command.alpha;
 		sprite.blendMode = cast pixiBlendModeOf(command.blendMode);
 		showColor(sprite, command.colorMatrix);
+		showAlphaMap(sprite, command);
 		sprite.visible = true;
 	}
 }

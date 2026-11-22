@@ -67,7 +67,23 @@ class Main {
 					renderer: engine.pixiRenderer,
 					render: function() engine.render(scene),
 				};
-				untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
+				// The tutorial's spotlight, for the browser checks: a veil at 0.75, its mask white but for a black square over the duck.
+				var spotlight = function(holeOverDuck:Bool) {
+					var veil = new h2d.Bitmap(h2d.Tile.fromColor(0xFF000000, GAME_WIDTH, GAME_HEIGHT), scene);
+					veil.alpha = 0.75;
+					var canvas = Browser.document.createCanvasElement();
+					canvas.width = GAME_WIDTH;
+					canvas.height = GAME_HEIGHT;
+					var context = canvas.getContext2d();
+					context.fillStyle = "#FFFFFF";
+					context.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+					if (holeOverDuck) {
+						context.fillStyle = "#000000";
+						context.fillRect(duck.x - DUCK_FRAME / 2, duck.y - DUCK_FRAME / 2, DUCK_FRAME, DUCK_FRAME);
+					}
+					veil.alphaMap = h2d.Tile.fromTexture(h3d.mat.Texture.fromCanvas(canvas));
+				};
+				untyped Browser.window.rockfallerDebug = {spotlight: spotlight, app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
 				#end
 			}).catchError(showError);
 		};

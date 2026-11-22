@@ -69,6 +69,7 @@ class H2dCheck {
 		particleBoundsContainLikeFlash();
 		at60HzTheTimerSettlesOnHalfAFlashFrame();
 		aFrameLongerThanHalfASecondDoesNotJumpTheTimer();
+		anAlphaMapIsDrawnOverItsDrawablesTile();
 		trace("PASS");
 	}
 
@@ -758,6 +759,19 @@ class H2dCheck {
 		hxd.Timer.update();
 
 		check(hxd.Timer.tmod == 1 && Math.abs(hxd.Timer.deltaT - 1 / 30) < 1e-9, "a 2 s frame keeps tmod at 1 and counts 1/30 s (got " + hxd.Timer.tmod + ", " + hxd.Timer.deltaT + ")");
+	}
+
+	/** @spec html5.h2d.color::alpha-map: the tutorial's spotlight, a black veil whose alpha follows a mask's red. */
+	static function anAlphaMapIsDrawnOverItsDrawablesTile() {
+		var scene = new Scene();
+		var veil = new Bitmap(Tile.fromColor(0xFF000000, 640, 768), scene);
+		var mask = Tile.fromColor(0xFFFFFFFF, 640, 768);
+		veil.alphaMap = mask;
+
+		var drawn = render(scene)[0];
+
+		check(drawn.alphaMap != null && drawn.alphaMap.texture == mask.getTexture(), "the veil is drawn with its mask's texture");
+		check(drawn.alphaMap.cutWidth == 640 && drawn.alphaMap.cutHeight == 768, "the mask covers the veil's 640 x 768");
 	}
 
 	static function bitmapCutAt(cutX:Int):Bitmap {

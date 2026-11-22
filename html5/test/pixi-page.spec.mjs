@@ -201,6 +201,28 @@ test.describe('on a touch screen', () => {
   });
 });
 
+/** @spec html5.h2d.color::alpha-map */
+test('a veil at 0.75 with a white mask darkens the duck', async ({ page }) => {
+  const before = await duckCentrePixel(page);
+
+  await page.evaluate(() => window.rockfallerDebug.spotlight(false));
+  await twoFrames(page);
+
+  const veiled = await duckCentrePixel(page);
+  expect(veiled[0], `a quarter of the duck's red is left (${before} became ${veiled})`).toBeLessThan(before[0] * 0.35);
+});
+
+/** @spec html5.h2d.color::alpha-map */
+test('where the mask is black, the veil leaves the duck as it was', async ({ page }) => {
+  const before = await duckCentrePixel(page);
+
+  await page.evaluate(() => window.rockfallerDebug.spotlight(true));
+  await twoFrames(page);
+
+  const spotlit = await duckCentrePixel(page);
+  spotlit.forEach((channel, index) => expect(Math.abs(channel - before[index]), `channel ${index}: ${before} became ${spotlit}`).toBeLessThanOrEqual(2));
+});
+
 /** @spec html5.slb::page-plays-grip-anim */
 test('PixiJS shows the grip animation frame the SpriteLib is on', async ({ page }) => {
   const caught = await page.waitForFunction((frameToCatch) => {

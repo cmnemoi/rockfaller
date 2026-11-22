@@ -80,6 +80,13 @@ class Texture {
 	}
 
 	#if pixijs
+	/** A picture drawn on a canvas at run time (the tutorial's spotlight mask). */
+	public static function fromCanvas(canvas:js.html.CanvasElement):Texture {
+		var pixiTexture = pixi.core.textures.BaseTexture.from(canvas);
+		pixiTexture.mipmap = pixi.core.Pixi.MipmapModes.OFF;
+		return fromPixi(pixiTexture);
+	}
+
 	/** A downloaded image (a friend's avatar), without mipmaps like the atlases. */
 	public static function fromImage(image:js.html.Image):Texture {
 		var pixiTexture = pixi.core.textures.BaseTexture.from(image);
