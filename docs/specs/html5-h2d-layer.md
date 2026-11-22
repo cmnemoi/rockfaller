@@ -151,3 +151,30 @@ Un calque plus haut se dessine par-dessus un calque plus bas, quel que soit l'or
 - Étant donné un enfant au calque 0 et deux au calque 1, quand le dernier passe `under`, alors il est dessiné avant l'autre enfant du calque 1, mais après le calque 0.
 - Étant donné un enfant retiré du calque 0, quand un nouvel enfant y est ajouté, alors il est encore dessiné sous le calque 1.
 - Étant donné deux enfants d'un calque en y = 50 puis y = 10, quand on appelle `ysort`, alors celui en y = 10 est dessiné d'abord.
+
+## `Font` et `Text`
+
+`h2d.Font` et la mise en page de `h2d.Text` (`_initGlyphs`) ne touchent pas au GPU : le build JS les prend dans le fork, tels quels. La couche remplace `TileGroup`, qui dessine les glyphes, et donne à `Drawable` l'état que le fork garde dans son shader (alpha, `color`, `colorAdd`, `colorMatrix`).
+
+Le jeu utilise `textColor` (65 fois), `maxWidth` (55), `textAlign` (32), `letterSpacing` (9) et `lineSpacing` (3). Il n'utilise ni `dropShadow` ni `rangeMin` / `rangeMax`.
+
+### Règle
+
+#### Un texte se met en page comme dans le fork
+
+`{#html5.h2d.text::layout-like-fork}`
+
+Les glyphes se suivent de leur largeur plus l'espacement des lettres. Un retour à la ligne descend d'une hauteur de ligne plus l'interligne, et ne dessine rien. Un mot qui dépasse `maxWidth` passe à la ligne suivante, et l'espace qui le précède disparaît. L'alignement à droite ou centré se calcule dans `maxWidth`. `textColor` colore les glyphes. Le texte partage son shader avec ses glyphes, comme dans le fork : changer l'alpha du texte change celui des glyphes.
+
+### Critères d'acceptation (compilés en JS, lancés par Node)
+
+Police de test : A fait 6 px de large, B 7, l'espace 3, é 6. Les lignes font 10 px.
+
+- Étant donné « AB », quand la scène se dessine, alors B est à x = 7 (6 px de A, plus 1 px d'espacement).
+- Étant donné « A\nB », quand la scène se dessine, alors B est en (0, 10), et le retour à la ligne ne dessine rien.
+- Étant donné « AB » aligné à droite dans 30 px, quand la scène se dessine, alors A est à x = 15.
+- Étant donné « AB » centré dans 30 px, quand la scène se dessine, alors A est à x = 7 (`(30 − 15) >> 1`).
+- Étant donné « A AB » dans 12 px, quand la scène se dessine, alors « AB » passe à la ligne, et l'espace disparaît.
+- Étant donné « é », quand la scène se dessine, alors il est dessiné avec son propre glyphe.
+- Étant donné un texte rouge, quand la scène se dessine, alors ses glyphes ne gardent que le rouge.
+- Étant donné un texte à l'alpha 0,5, quand la scène se dessine, alors ses glyphes sont dessinés à l'alpha 0,5.

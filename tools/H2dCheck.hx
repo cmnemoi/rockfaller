@@ -10,10 +10,11 @@ import h2d.Tile;
 
 /**
  * Checks the h2d layer of the JS build: what the scene asks to draw, without PixiJS.
- * Run: mise run html5:check:h2d
+ * Run: mise run html5:check:h2d (compiled to JS: an Int left unset is null there, as in the browser)
  */
 class H2dCheck {
 	static function main() {
+		aFieldLeftUnsetHasFlashsDefaultValue();
 		aClonedTileChangesIndependently();
 		aChildIsDrawnThroughItsParentsPositionAndScale();
 		aFlippedBitmapIsMirroredAroundItsPivot();
@@ -42,6 +43,14 @@ class H2dCheck {
 		underPutsASpriteAtTheBottomOfItsLayer();
 		aLayerKeepsItsPlaceAfterAChildBelowIsRemoved();
 		ysortDrawsALayerFromTopToBottom();
+		glyphsFollowEachOtherWithTheirWidthAndTheLetterSpacing();
+		aNewLineStartsALineHeightLower();
+		rightAlignedTextEndsAtItsMaxWidth();
+		centeredTextIsCenteredInItsMaxWidth();
+		aWordThatPassesTheMaxWidthGoesToTheNextLine();
+		anAccentedLetterIsDrawnWithItsGlyph();
+		theTextColorColorsTheGlyphs();
+		theTextAlphaFadesTheGlyphs();
 		trace("PASS");
 	}
 
@@ -404,6 +413,110 @@ class H2dCheck {
 		check(cutsDrawn(scene) == "8,0", "ysort draws the sprite higher on screen first (got " + cutsDrawn(scene) + ")");
 	}
 
+	/** @spec html5::flash-default-values */
+	static function aFieldLeftUnsetHasFlashsDefaultValue() {
+		var unset = new FieldsLeftUnset();
+
+		check(unset.count == 0 && unset.ratio == 0 && unset.shown == false && unset.name == null, "unset Int, Float and Bool fields are 0, 0 and false, a String stays null");
+		check(10 + unset.count == 10, "10 + an unset Int is 10, not NaN");
+	}
+
+	/** A font drawn by hand: A is 6 px wide, B 7, the space 3, é 6; lines are 10 px high. */
+	static function testFont():h2d.Font {
+		var font = @:privateAccess new h2d.Font("test", 10);
+		@:privateAccess font.lineHeight = 10;
+		@:privateAccess font.tile = atlasTile();
+		var glyphs:Map<Int, h2d.Font.FontChar> = @:privateAccess font.glyphs;
+		glyphs.set("A".code, new h2d.Font.FontChar(atlasTile().sub(0, 0, 5, 8), 6));
+		glyphs.set("B".code, new h2d.Font.FontChar(atlasTile().sub(8, 0, 6, 8), 7));
+		glyphs.set(" ".code, new h2d.Font.FontChar(atlasTile().sub(16, 0, 2, 8), 3));
+		glyphs.set(0xE9, new h2d.Font.FontChar(atlasTile().sub(24, 0, 5, 8), 6));
+		return font;
+	}
+
+	static function textIn(scene:Scene, text:String):h2d.Text {
+		var shown = new h2d.Text(testFont(), scene);
+		shown.text = text;
+		return shown;
+	}
+
+	static function glyphsDrawn(scene:Scene):String {
+		return [for (command in render(scene)) command.cutX + "@" + command.tx + "," + command.ty].join(" ");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork */
+	static function glyphsFollowEachOtherWithTheirWidthAndTheLetterSpacing() {
+		var scene = new Scene();
+		textIn(scene, "AB");
+
+		check(glyphsDrawn(scene) == "0@0,0 8@7,0", "B starts after A's 6 px and 1 px of letter spacing (got " + glyphsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork */
+	static function aNewLineStartsALineHeightLower() {
+		var scene = new Scene();
+		textIn(scene, "A\nB");
+
+		check(glyphsDrawn(scene) == "0@0,0 8@0,10", "B starts a 10 px line lower, and the new line draws nothing (got " + glyphsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork */
+	static function rightAlignedTextEndsAtItsMaxWidth() {
+		var scene = new Scene();
+		var text = textIn(scene, "AB");
+		text.maxWidth = 30;
+		text.textAlign = h2d.Text.Align.Right;
+
+		check(glyphsDrawn(scene) == "0@15,0 8@22,0", "AB (15 px with its spacing) ends at 30 px (got " + glyphsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork */
+	static function centeredTextIsCenteredInItsMaxWidth() {
+		var scene = new Scene();
+		var text = textIn(scene, "AB");
+		text.maxWidth = 30;
+		text.textAlign = h2d.Text.Align.Center;
+
+		check(glyphsDrawn(scene) == "0@7,0 8@14,0", "AB starts at (30 - 15) >> 1 = 7 px (got " + glyphsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork */
+	static function aWordThatPassesTheMaxWidthGoesToTheNextLine() {
+		var scene = new Scene();
+		var text = textIn(scene, "A AB");
+		text.maxWidth = 12;
+
+		check(glyphsDrawn(scene) == "0@0,0 0@0,10 8@7,10", "AB does not fit in 12 px after \"A \": it starts the next line, and the space is dropped (got " + glyphsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork */
+	static function anAccentedLetterIsDrawnWithItsGlyph() {
+		var scene = new Scene();
+		textIn(scene, "\u00E9");
+
+		check(glyphsDrawn(scene) == "24@0,0", "é is drawn with its own glyph (got " + glyphsDrawn(scene) + ")");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork */
+	static function theTextColorColorsTheGlyphs() {
+		var scene = new Scene();
+		textIn(scene, "A").textColor = 0xFF0000;
+
+		var matrix = render(scene)[0].colorMatrix;
+
+		check(matrix != null && matrix[0] == 1 && matrix[6] == 0 && matrix[12] == 0, "a red text keeps only the red of its glyphs (got " + matrix + ")");
+	}
+
+	/** @spec html5.h2d.text::layout-like-fork: the text shares its shader with its glyphs, like the fork */
+	static function theTextAlphaFadesTheGlyphs() {
+		var scene = new Scene();
+		textIn(scene, "A").alpha = 0.5;
+
+		var drawn = render(scene)[0];
+
+		check(drawn.alpha == 0.5 || (drawn.colorMatrix != null && drawn.colorMatrix[18] == 0.5), "a text at alpha 0.5 draws its glyphs at alpha 0.5 (got alpha " + drawn.alpha + ", " + drawn.colorMatrix + ")");
+	}
+
 	static function bitmapCutAt(cutX:Int):Bitmap {
 		return new Bitmap(atlasTile().sub(cutX, 0, 8, 8));
 	}
@@ -437,4 +550,13 @@ class H2dCheck {
 		if (!condition)
 			throw "FAILED: " + expectation;
 	}
+}
+
+private class FieldsLeftUnset {
+	public var count:Int;
+	public var ratio:Float;
+	public var shown:Bool;
+	public var name:String;
+
+	public function new() {}
 }

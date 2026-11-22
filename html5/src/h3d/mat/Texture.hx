@@ -7,7 +7,7 @@ package h3d.mat;
 class Texture {
 	public var width(default, null):Int;
 	public var height(default, null):Int;
-	#if js
+	#if pixijs
 	public var pixiTexture(default, null):pixi.core.textures.BaseTexture;
 	#end
 
@@ -16,7 +16,7 @@ class Texture {
 		this.height = height;
 	}
 
-	#if js
+	#if pixijs
 	public static function fromPixi(pixiTexture:pixi.core.textures.BaseTexture):Texture {
 		var texture = new Texture(Std.int(pixiTexture.width), Std.int(pixiTexture.height));
 		texture.pixiTexture = pixiTexture;

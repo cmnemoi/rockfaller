@@ -59,6 +59,20 @@ class Tile {
 		this.height = h;
 	}
 
+	public function scaleToSize(w, h) {
+		//there are information lost here...
+		dx = Math.round(dx * w / width);
+		dy = Math.round(dy * h / height);
+
+		this.width = w;
+		this.height = h;
+	}
+
+	/** The fork frees the GPU texture; here the tile only lets it go. */
+	public function dispose() {
+		innerTex = null;
+	}
+
 	public inline function clone() {
 		return new Tile(innerTex, x, y, width, height, dx, dy);
 	}

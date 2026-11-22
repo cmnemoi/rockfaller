@@ -1,7 +1,15 @@
 package h2d;
 
-/** The fork passes shaders to its drawables; the PixiJS layer has none yet, but keeps the type. */
+/**
+ * What the fork keeps in a drawable's shader: its alpha and colors.
+ * Drawables can share one, like a Text and its glyphs: setting one's alpha sets the other's.
+ */
 class DrawableShader {
+	public var alpha:Float = 1.0;
+	public var colorMul:h3d.Vector;
+	public var colorAdd:h3d.Vector;
+	public var colorMatrix:h3d.Matrix;
+
 	public function new() {}
 }
 
@@ -10,19 +18,30 @@ class DrawableShader {
  * Color and filter are kept but not drawn yet (step 3).
  */
 class Drawable extends Sprite {
-	public var color:h3d.Vector;
-	public var colorAdd:h3d.Vector;
-	public var colorMatrix:h3d.Matrix;
+	public var shader(default, null):DrawableShader;
+	public var color(get, set):h3d.Vector;
+	public var colorAdd(get, set):h3d.Vector;
+	public var colorMatrix(get, set):h3d.Matrix;
+	public var alpha(get, set):Float;
 	public var filter:Bool;
-	public var alpha:Float;
 	public var blendMode:BlendMode;
 
 	function new(parent:Sprite, ?sh:DrawableShader) {
 		super(parent);
-		alpha = 1.0;
-		filter = false;
 		blendMode = Normal;
+		shader = (sh == null) ? new DrawableShader() : sh;
+		shader.alpha = 1.0;
+		filter = false;
 	}
+
+	function get_alpha():Float return shader.alpha;
+	function set_alpha(v:Float):Float return shader.alpha = v;
+	function get_color():h3d.Vector return shader.colorMul;
+	function set_color(v:h3d.Vector):h3d.Vector return shader.colorMul = v;
+	function get_colorAdd():h3d.Vector return shader.colorAdd;
+	function set_colorAdd(v:h3d.Vector):h3d.Vector return shader.colorAdd = v;
+	function get_colorMatrix():h3d.Matrix return shader.colorMatrix;
+	function set_colorMatrix(v:h3d.Matrix):h3d.Matrix return shader.colorMatrix = v;
 
 	public override function clone<T>(?s:T):T {
 		if (s == null)

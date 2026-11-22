@@ -101,6 +101,14 @@ Le chargement affiche une barre de progression faite avec `loader.png` et `loade
 
 Pour une même scène, la version PixiJS affiche la même image que la version Ruffle : mêmes positions, mêmes tailles, mêmes couleurs, même ordre d'affichage. On le vérifie avec des captures côte à côte.
 
+### Un champ non initialisé vaut ce qu'il vaut en Flash
+
+`{#html5::flash-default-values}`
+
+En Flash, un champ `Int`, `UInt`, `Float` ou `Bool` sans valeur de départ vaut 0, 0,0 ou `false`. En JS, il vaut `undefined` : `10 + undefined` donne `NaN`, et `undefined == 0` est faux. Le build JS donne à ces champs les valeurs de Flash, avec une macro de build (`html5/src/FlashDefaults.hx`) appliquée à tout le code sauf la bibliothèque standard. Exception connue : `Type.createEmptyInstance` saute les constructeurs, donc ces valeurs aussi.
+
+Trouvé par le test du texte multiligne : le `lineSpacing` de `h2d.Text` n'est jamais initialisé, et la deuxième ligne partait en `NaN`.
+
 ### Les atlas ne bavent pas
 
 `{#html5::atlas-no-bleeding}`
