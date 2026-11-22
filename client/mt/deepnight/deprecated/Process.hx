@@ -3,10 +3,10 @@ package mt.deepnight.deprecated;
 #if (flash || openfl)
 import flash.display.Sprite;
 import flash.display.DisplayObjectContainer;
+#end
 import mt.Cooldown;
 import mt.Delayer;
 import mt.Metrics;
-#end
 
 class Process {
 	public static var GLOBALS : Array<Process> = [];
@@ -93,12 +93,17 @@ class Process {
 		flash.Lib.current.stage.addEventListener( flash.events.Event.RESIZE, _onResize );
 		flash.Lib.current.stage.addEventListener( flash.events.Event.ACTIVATE, _onActivate);
 		flash.Lib.current.stage.addEventListener( flash.events.Event.DEACTIVATE, _onDeactivate);
+		#elseif js
+		// The window's resize, focus and blur stand for the Flash stage's RESIZE, ACTIVATE and DEACTIVATE.
+		js.Browser.window.addEventListener("resize", _onResize);
+		js.Browser.window.addEventListener("focus", _onActivate);
+		js.Browser.window.addEventListener("blur", _onDeactivate);
 		#end
 	}
 
 
 	// Misc useful functions (Note: do not INLINE to allow inheritance)
-	#if (flash || openfl)
+	#if (flash || openfl || js)
 	public function w() return Metrics.w();
 	public function h() return Metrics.h();
 	public inline function wcm() return Metrics.px2cm( w() );
@@ -118,7 +123,7 @@ class Process {
 	}
 
 
-	#if (flash || openfl)
+	#if (flash || openfl || js)
 	inline function _onResize(_) onResize();
 	function onResize() {}
 
@@ -197,6 +202,10 @@ class Process {
 			flash.Lib.current.stage.removeEventListener( flash.events.Event.DEACTIVATE, _onDeactivate );
 			flash.Lib.current.stage.removeEventListener( flash.events.Event.RESIZE, _onResize );
 		}
+		#elseif js
+		js.Browser.window.removeEventListener("resize", _onResize);
+		js.Browser.window.removeEventListener("focus", _onActivate);
+		js.Browser.window.removeEventListener("blur", _onDeactivate);
 		#end
 
 		for(p in tinyProcesses)

@@ -11,6 +11,9 @@ class Texture {
 	public var color(default, null):Null<Int>;
 	/** The image's pixels, kept when the game reads them back (mt.Assets.getTile(path, true)). */
 	public var bmp:TexturePixels;
+	/** The fork's CPU copy of the pixels; the game only sets it to null to free it. */
+	public var pixels:Dynamic;
+	var disposed = false;
 	#if pixijs
 	public var pixiTexture(default, null):pixi.core.textures.BaseTexture;
 	#end
@@ -43,6 +46,25 @@ class Texture {
 		texture.pixiTexture = pixi.core.textures.BaseTexture.from(canvas);
 		#end
 		return texture;
+	}
+
+	/**
+	 * Like the fork, the game frees textures it does not show (SubLoader) and reallocates them when they come back.
+	 * PixiJS frees the GPU copy, and uploads it again by itself at the next use.
+	 */
+	public function dispose() {
+		disposed = true;
+		#if pixijs
+		if (pixiTexture != null) pixiTexture.dispose();
+		#end
+	}
+
+	public function isDisposed():Bool {
+		return disposed;
+	}
+
+	public function realloc() {
+		disposed = false;
 	}
 
 	public function new(width:Int, height:Int) {

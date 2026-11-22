@@ -42,6 +42,11 @@ class FontBuilder {
 		return font;
 	}
 
+	/** Registers a font made elsewhere (mt.heaps.TileFont), like the fork. */
+	public static function addFont(name:String, font:h2d.Font) {
+		FONTS.set(name, font);
+	}
+
 	public static function addFontAlias(name:String, realName:String) {
 		FONT_ALIASES.set(name, realName);
 	}

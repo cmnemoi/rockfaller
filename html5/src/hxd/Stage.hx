@@ -23,6 +23,11 @@ class Stage {
 		height = System.height;
 	}
 
+	/** The Flash stage's frame rate: the game runs at 30 frames per second. */
+	public function getFrameRate():Float {
+		return Timer.GAME_FPS;
+	}
+
 	public static function getInstance():Stage {
 		if (instance == null) instance = new Stage();
 		return instance;
