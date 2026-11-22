@@ -28,6 +28,11 @@ class Tile {
 		return new Tile(tex, 0, 0, tex.width, tex.height);
 	}
 
+	/** @spec html5.assets::color-tile */
+	public static function fromColor(color:Int, ?width = 4, ?height = 4):Tile {
+		return fromTexture(h3d.mat.Texture.fromColor(color, width, height));
+	}
+
 	public function getTexture():h3d.mat.Texture {
 		return innerTex;
 	}
