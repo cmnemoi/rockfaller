@@ -1,42 +1,66 @@
+import h2d.RenderContext;
+import h2d.Scene;
 import js.Browser;
 import js.html.Image;
 import js.lib.Promise;
-import mt.deepnight.slb.assets.TexturePackerXml;
-import mt.deepnight.slb.assets.TexturePackerXml.TexturePackerSlice;
+import mt.deepnight.slb.BLib;
+import mt.deepnight.slb.assets.TexturePacker;
 import pixi.core.Application;
 import pixi.core.Pixi.MipmapModes;
-import pixi.core.math.shapes.Rectangle;
-import pixi.core.sprites.Sprite;
 import pixi.core.textures.BaseTexture;
-import pixi.core.textures.Texture;
 
 /**
- * Entry point of the PixiJS page (/pixi/): shows one sprite of an atlas, to prove the whole chain works.
- * @spec html5.pixi-page::shows-atlas-sprite
+ * Entry point of the PixiJS page (/pixi/): the game's own SpriteLib, drawn by the h2d layer on PixiJS.
+ * @spec html5.slb::page-plays-grip-anim
  */
 class Main {
 	static inline var GAME_WIDTH = 640;
 	static inline var GAME_HEIGHT = 768;
-	static inline var ATLAS_XML = "assets1.xml";
-	static inline var ATLAS_PICTURE = "assets1.png";
-	static inline var SPRITE = "animalDuck";
+	static inline var UPDATES_PER_SECOND = 30;
+	static inline var MAX_FRAME_MS = 100;
 
 	static function main() {
 		var app = new Application({width: GAME_WIDTH, height: GAME_HEIGHT, backgroundColor: 0x000000});
 		Browser.document.body.appendChild(app.view);
-		#if debug
-		untyped Browser.window.pixiApp = app; // lets browser checks reach the stage
-		#end
+		var scene = new Scene();
+		var renderer = new PixiRenderer();
+		app.stage.addChild(renderer.root);
 
-		loadText(ATLAS_XML).then(function(xml) {
-			return loadPicture(ATLAS_PICTURE).then(function(picture) {
-				var atlas = TexturePackerXml.read(xml, false);
-				var sprite = new Sprite(textureOf(atlasTexture(picture), atlas.find(SPRITE)));
-				sprite.x = (GAME_WIDTH - sprite.width) / 2;
-				sprite.y = (GAME_HEIGHT - sprite.height) / 2;
-				app.stage.addChild(sprite);
+		Promise.all([loadLib("assets1", false), loadLib("taupinotron", true)]).then(function(libs:Array<BLib>) {
+			var items = libs[0];
+			var taupinotron = libs[1];
+			var duck = items.h_get("animalDuck", 0.5, 0.5, scene);
+			duck.setPos(GAME_WIDTH / 4, GAME_HEIGHT / 2);
+			var grip = taupinotron.h_get("gripAnim", 0.5, 0.5, scene);
+			grip.setPos(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+			grip.a.playAndLoop("gripAnim");
+
+			var context = new RenderContext();
+			var elapsedMs = 0.0;
+			app.ticker.add(function(_) {
+				// Like PixiJS's deltaMS (missing from the externs): a frame counts for 100 ms at most, so a hidden tab does not fast-forward.
+				elapsedMs += Math.min(app.ticker.elapsedMS, MAX_FRAME_MS);
+				while (elapsedMs >= 1000 / UPDATES_PER_SECOND) {
+					elapsedMs -= 1000 / UPDATES_PER_SECOND;
+					taupinotron.updateChildren();
+				}
+				scene.render(context);
+				renderer.show(context.drawn);
 			});
+
+			#if debug
+			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck};
+			#end
 		}).catchError(showError);
+	}
+
+	static function loadLib(atlas:String, treatFoldersAsPrefixes:Bool):Promise<BLib> {
+		return loadText(atlas + ".xml").then(function(xml) {
+			return loadPicture(atlas + ".png").then(function(picture) {
+				var tile = h2d.Tile.fromTexture(h3d.mat.Texture.fromPixi(atlasTexture(picture)));
+				return TexturePacker.parseXml(xml, null, treatFoldersAsPrefixes, tile);
+			});
+		});
 	}
 
 	/** @spec html5::atlas-no-bleeding: PixiJS 6 gives a 2048 px texture mipmaps, which bleed into the neighbours. */
@@ -44,14 +68,6 @@ class Main {
 		var texture = BaseTexture.from(picture);
 		texture.mipmap = MipmapModes.OFF;
 		return texture;
-	}
-
-	/** @spec html5.atlas::trimmed-sprite-keeps-frame */
-	static function textureOf(atlasTexture:BaseTexture, slice:TexturePackerSlice):Texture {
-		var cut = new Rectangle(slice.x, slice.y, slice.wid, slice.hei);
-		var frame = new Rectangle(0, 0, slice.fwid, slice.fhei);
-		var placeInFrame = new Rectangle(-slice.offX, -slice.offY, slice.wid, slice.hei);
-		return new Texture(atlasTexture, cut, frame, placeInFrame);
 	}
 
 	static function loadText(url:String):Promise<String> {

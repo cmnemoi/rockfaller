@@ -1,0 +1,8 @@
+# Options shared by the JS builds: run in html5/ through mise (Haxe 4.3.7).
+# The delahee/h3d fork comes first and src last: src's h2d classes replace the fork's GPU ones.
+-cp ../client
+-cp ../.haxelib/h3d/git
+-cp src
+-lib pixijs
+-D h3d
+-main Main

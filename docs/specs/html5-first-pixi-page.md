@@ -52,6 +52,8 @@ Si on demande un nom qui n'existe pas dans l'atlas, la recherche échoue avec un
 
 La page `/pixi/` affiche le sprite `animalDuck` de `assets1` dans un canevas de 640 × 768 px, la taille du jeu Flash. Le sprite est dessiné à sa place dans son cadre de 98 × 98 px, sans déformation.
 
+Depuis l'étape 2, le canard passe par la SpriteLib (`HSprite`) et la couche `h2d` : voir [`html5-spritelib-on-pixi.md`](html5-spritelib-on-pixi.md).
+
 ### Un atlas qui ne charge pas donne une erreur visible
 
 `{#html5.pixi-page::atlas-load-error-visible}`

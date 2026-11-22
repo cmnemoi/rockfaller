@@ -93,3 +93,10 @@ run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git
 [tasks."html5:build"]
 description = "Build the JS client into dist/web/pixi (after tools/build-web.sh, which empties dist/web)"
 run = "mise -C html5 exec -- haxe build.hxml"
+
+[tasks."html5:test:browser"]
+description = "Check the /pixi/ page in headless Chrome (needs the site in dist/web)"
+run = [
+  "mise -C html5 exec -- haxe common.hxml -debug -js ../dist/html5-test/main.js",
+  "node --test 'html5/test/*.test.mjs'",
+]

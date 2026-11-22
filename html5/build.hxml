@@ -1,6 +1,2 @@
-# The JS build: run in html5/ through mise (Haxe 4.3.7).
--cp src
--cp ../client
--lib pixijs
--main Main
+common.hxml
 -js ../dist/web/pixi/main.js

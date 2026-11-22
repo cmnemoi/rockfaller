@@ -67,7 +67,7 @@ Avec `scaleX = -1`, le sprite se dessine en miroir autour de sa position : la d�
 
 `{#html5.slb::page-plays-grip-anim}`
 
-La page `/pixi/` joue en boucle l'animation `gripAnim` de `taupinotron` (dossiers en préfixe), centrée dans le canevas, à 30 mises à jour par seconde comme le jeu.
+La page `/pixi/` joue en boucle l'animation `gripAnim` de `taupinotron` (dossiers en préfixe), centrée dans le canevas, à 30 mises à jour par seconde comme le jeu. Elle montre aussi `animalDuck` avec `HSprite`, centré par son pivot, à gauche du grappin. Une image compte pour 100 ms au plus : un onglet caché ne fait pas avancer l'animation en accéléré au retour.
 
 ## Critères d'acceptation
 
@@ -79,13 +79,14 @@ Tests `--interp` en Haxe 4.3.7, avec la couche `h2d` (le build Flash est protég
 - Étant donné `animalDuck` centré en (100, 100), quand on demande sa tuile, alors `dx = -29` et `dy = -33`.
 - Étant donné une tuile, quand on la clone puis qu'on change la copie, alors l'originale ne change pas.
 
-Tests en Chrome sans affichage (Node 22, page de debug) :
+Tests en Chrome sans affichage (Node 22, build de debug de la page) :
 
-- Étant donné la page chargée, quand on lit l'objet PixiJS du `HSprite`, alors sa découpe dans la texture et sa position (pivot compris) sont celles de la tuile de `BLib`.
-- Étant donné la page, quand l'animation a tourné jusqu'à l'image k, alors la découpe affichée par PixiJS est celle de l'image k.
-- Étant donné un parent en (10, 20) avec une échelle de 2 et un enfant en (5, 5), quand on lit la position de l'enfant à l'écran, alors elle vaut (20, 30).
-- Étant donné un sprite avec `scaleX = -1`, quand on lit sa boîte à l'écran, alors elle est de l'autre côté de son pivot.
-- Étant donné un enfant retiré, quand la scène se dessine, alors PixiJS ne l'affiche plus.
+- Étant donné la page chargée, quand on compare chaque commande de dessin au sprite PixiJS qui la montre, alors la découpe, la matrice et l'alpha sont les mêmes, dans le même ordre.
+- Étant donné le canard tourné, retourné (`scaleX = -1.5`) et à moitié transparent, quand on fait la même comparaison, alors elle tient encore. Sans rotation, les axes `b` et `c` valent 0 et une inversion passerait inaperçue.
+- Étant donné la page, quand l'animation est sur l'image k, alors PixiJS montre la découpe de l'image k.
+- Étant donné le grappin retiré de la scène, quand la scène se redessine, alors PixiJS ne montre plus que le canard.
+
+La composition des positions (parent, échelle, retournement) est vérifiée sur les commandes, avec `--interp`. Le test Chrome vérifie que PixiJS recopie les commandes sans erreur.
 
 Vérification du build Flash :
 

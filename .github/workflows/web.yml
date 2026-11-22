@@ -82,6 +82,9 @@ jobs:
       - name: Build the JS client
         run: mise run html5:build  # after build-web.sh, which empties dist/web
 
+      - name: Check the PixiJS page in headless Chrome
+        run: mise run html5:test:browser  # Chrome is preinstalled on GitHub's runners
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/web
