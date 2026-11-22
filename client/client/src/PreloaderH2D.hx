@@ -161,7 +161,12 @@ class PreloaderH2D extends mt.deepnight.deprecated.HProcess
 			Settings.INIT_CLIENT = d;
 
 		#if standalone
+			#if flash
 			var l = flash.Lib.current.stage.loaderInfo.parameters.lang;
+			#else
+			// The JS build takes the language from the page's address, like Flash from the page's parameters.
+			var l = new js.html.URLSearchParams(js.Browser.location.search).get("lang");
+			#end
 		#else
 			var l = App.current.lang;
 		#end

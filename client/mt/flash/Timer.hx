@@ -4,7 +4,7 @@ class Timer {
 
 	public static var wantedFPS = 32;
 	public static var maxDeltaTime = 0.5;
-	public static var oldTime = flash.Lib.getTimer();
+	public static var oldTime = #if flash flash.Lib.getTimer() #else Std.int(haxe.Timer.stamp() * 1000) #end;
 	public static var tmod_factor = 0.95;
 	public static var calc_tmod : Float = 1;
 	public static var tmod : Float = 1;
@@ -15,7 +15,7 @@ class Timer {
 	public inline static function update() {
 		if( !paused ) {
 			frameCount++;
-			var newTime = flash.Lib.getTimer();
+			var newTime = #if flash flash.Lib.getTimer() #else Std.int(haxe.Timer.stamp() * 1000) #end;
 			deltaT = (newTime - oldTime) / 1000.0;
 			oldTime = newTime;
 			if( deltaT < maxDeltaTime )
@@ -36,7 +36,7 @@ class Timer {
 	
 	public inline static function resume() {
 		paused = false;
-		oldTime = flash.Lib.getTimer();
+		oldTime = #if flash flash.Lib.getTimer() #else Std.int(haxe.Timer.stamp() * 1000) #end;
 	}
 	
 

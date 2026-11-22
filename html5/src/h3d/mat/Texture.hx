@@ -13,6 +13,8 @@ class Texture {
 	public var bmp:TexturePixels;
 	/** The fork's CPU copy of the pixels; the game only sets it to null to free it. */
 	public var pixels:Dynamic;
+	/** The fork's texture flags: the game marks some textures NoGC, never to be freed. */
+	public var flags:haxe.EnumFlags<h3d.mat.Data.TextureFlags>;
 	var disposed = false;
 	#if pixijs
 	public var pixiTexture(default, null):pixi.core.textures.BaseTexture;
@@ -75,6 +77,7 @@ class Texture {
 	}
 
 	public function new(width:Int, height:Int) {
+		flags = new haxe.EnumFlags();
 		this.width = width;
 		this.height = height;
 	}
