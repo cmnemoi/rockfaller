@@ -27,63 +27,31 @@ jobs:
 
       - uses: jdx/mise-action@v2
 
+      - uses: astral-sh/setup-uv@v6
+
       - uses: actions/cache@v4
         with:
           path: .haxelib
           key: haxelib-${{ runner.os }}-${{ hashFiles('tools/install-deps.sh') }}
-
-      - name: Install haxelibs
-        run: mise run install
-
-      - name: Install Haxe 4 and Neko 2.4 for the JS build
-        run: |
-          mise trust html5/mise.toml
-          mise -C html5 install
 
       - uses: actions/cache@v4
         with:
           path: html5/.haxelib
           key: haxelib-html5-${{ runner.os }}-${{ hashFiles('html5/install-deps.sh') }}
 
-      - name: Install the JS build's haxelibs
-        run: mise run html5:install
-
-      - name: Check the offline server and the 180 levels
-        run: mise run check:protocol
-
-      - name: Check the player's progress
-        run: mise run check:progress
-
-      - name: Check how atlases are read
-        run: mise run check:atlas
-
-      - name: Check how atlases are read, with Haxe 4
-        run: mise run html5:check:atlas
-
-      - name: Check the h2d layer and the SpriteLib on it
+      - name: Install
         run: |
-          mise run html5:check:h2d
-          mise run html5:check:spritelib
+          mise trust html5/mise.toml
+          mise run install
 
-      - uses: astral-sh/setup-uv@v6
+      - name: Test
+        run: mise run test
 
-      - name: Test the level extraction
-        run: mise run test:levels
+      - name: Build the site
+        run: mise run web
 
-      - name: Test the web page's scripts
-        run: mise run test:web  # Node is preinstalled on GitHub's runners
-
-      - name: Build the Flash client
-        run: mise run build
-
-      - name: Assemble the web version
-        run: bash tools/build-web.sh  # not `mise run web`: the client is already built
-
-      - name: Build the JS client
-        run: mise run html5:build  # after build-web.sh, which empties dist/web
-
-      - name: Check the PixiJS page in headless Chrome
-        run: mise run html5:test:browser  # Chrome is preinstalled on GitHub's runners
+      - name: Test the built site
+        run: mise run test:site  # Chrome is preinstalled on GitHub's runners
 
       - uses: actions/upload-pages-artifact@v3
         with:

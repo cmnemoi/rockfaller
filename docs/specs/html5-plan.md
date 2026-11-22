@@ -88,7 +88,7 @@ Méthode Mikado : le but est que la page joue `gripAnim` avec les vrais `BLib` e
 1. Parallel Change de `BLib` : sa partie Flash passe sous `#if flash`. Le SWF doit rester identique.
 2. Couche `h2d`, une classe à la fois, chacune avec ses tests `--interp` : `h3d.mat.Texture`, `h2d.Tile`, `h2d.Sprite`, `h2d.Drawable` et `h2d.Bitmap`, la scène et son rendu. Puis les petites dépendances que le compilateur demande (`hxd`, `h3d.Vector`…).
 3. Tests de la SpriteLib avec `--interp` : groupes, erreurs, suite des images de `gripAnim`, pivot.
-4. La page joue `gripAnim`. Test en Chrome sans affichage (Node 22), ajouté à la CI.
+4. La page joue `gripAnim`. Test Playwright dans le Chrome installé (`mise run test:site`, après `mise run web`).
 
 ### Étape 3 : reste de la couche `h2d`
 

@@ -6,3 +6,6 @@ bin/
 .vscode/
 client/client/lang/client-translated.pot
 dist/
+node_modules/
+test-results/
+playwright-report/

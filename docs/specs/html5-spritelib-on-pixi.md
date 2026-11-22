@@ -79,7 +79,7 @@ Tests `--interp` en Haxe 4.3.7, avec la couche `h2d` (le build Flash est protég
 - Étant donné `animalDuck` centré en (100, 100), quand on demande sa tuile, alors `dx = -29` et `dy = -33`.
 - Étant donné une tuile, quand on la clone puis qu'on change la copie, alors l'originale ne change pas.
 
-Tests en Chrome sans affichage (Node 22, build de debug de la page) :
+Tests Playwright dans le Chrome installé (`mise run test:site`, build de debug de la page) :
 
 - Étant donné la page chargée, quand on compare chaque commande de dessin au sprite PixiJS qui la montre, alors la découpe, la matrice et l'alpha sont les mêmes, dans le même ordre.
 - Étant donné le canard tourné, retourné (`scaleX = -1.5`) et à moitié transparent, quand on fait la même comparaison, alors elle tient encore. Sans rotation, les axes `b` et `c` valent 0 et une inversion passerait inaperçue.

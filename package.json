@@ -1,0 +1,8 @@
+{
+  "name": "rockfaller",
+  "private": true,
+  "description": "Test tools only: the game itself has no npm dependency.",
+  "devDependencies": {
+    "@playwright/test": "1.65.0"
+  }
+}

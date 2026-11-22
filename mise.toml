@@ -27,8 +27,13 @@ HAXELIB_PATH = "{{config_root}}/.haxelib"
 
 # Run `mise tasks` to list them, `mise run <task>` to run one.
 [tasks.install]
-description = "Install the haxelibs at their pinned versions, in .haxelib/"
-run = "bash tools/install-deps.sh"
+description = "Install the haxelibs of both builds, Haxe 4 for the JS build (html5/mise.toml), and the npm test tools"
+run = [
+  "bash tools/install-deps.sh",
+  "mise -C html5 install",
+  "mise -C html5 exec -- bash install-deps.sh",
+  "npm ci --no-audit --no-fund",
+]
 
 [tasks."check:protocol"]
 description = "Check the offline server and the 180 levels"
@@ -64,9 +69,12 @@ description = "Build the release Flash client"
 run = "bash tools/build-flash.sh client release"
 
 [tasks.web]
-description = "Assemble the web version in dist/web"
+description = "Assemble the web version in dist/web: the Flash page at /, the PixiJS page at /pixi/"
 depends = ["build"]
-run = "bash tools/build-web.sh"
+run = [
+  "bash tools/build-web.sh",
+  "mise -C html5 exec -- haxe build.hxml",
+]
 
 [tasks.serve]
 description = "Serve the web version on http://localhost:8000"
@@ -74,10 +82,6 @@ depends = ["web"]
 run = "python3 -m http.server 8000 --directory dist/web"
 
 # The JS build (PixiJS) runs in html5/, with Haxe 4.3.7 from html5/mise.toml.
-[tasks."html5:install"]
-description = "Install the haxelibs of the JS build, in html5/.haxelib/"
-run = "mise -C html5 exec -- bash install-deps.sh"
-
 [tasks."html5:check:atlas"]
 description = "Check how TexturePacker atlases are read, with Haxe 4"
 run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -main tools.AtlasCheck --interp"
@@ -90,13 +94,9 @@ run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git
 description = "Check the SpriteLib (BLib, HSprite, AnimManager) on the h2d layer, with Haxe 4"
 run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git -cp html5/src -D h3d -main tools.SpriteLibCheck --interp"
 
-[tasks."html5:build"]
-description = "Build the JS client into dist/web/pixi (after tools/build-web.sh, which empties dist/web)"
-run = "mise -C html5 exec -- haxe build.hxml"
-
-[tasks."html5:test:browser"]
-description = "Check the /pixi/ page in headless Chrome (needs the site in dist/web)"
+[tasks."test:site"]
+description = "Check the built site in headless Chrome: run `mise run web` first"
 run = [
   "mise -C html5 exec -- haxe common.hxml -debug -js ../dist/html5-test/main.js",
-  "node --test 'html5/test/*.test.mjs'",
+  "npx playwright test",
 ]
