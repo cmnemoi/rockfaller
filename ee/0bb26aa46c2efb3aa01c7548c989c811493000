@@ -1,0 +1,21 @@
+tools/build-web.sh
+  s_da33d0161772b7::t_786de23bb27dc6 9-11,35-38
+  s_da33d0161772b7::t_d7c67d805ed99a 3
+  s_da33d0161772b7::t_b35a27b1e8e232 39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ee0bb26aa46c2efb3aa01c7548c989c811493000",
+  "prompts": {},
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
