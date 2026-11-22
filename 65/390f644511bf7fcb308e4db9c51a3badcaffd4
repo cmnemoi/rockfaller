@@ -1,0 +1,35 @@
+html5/src/Main.hx
+  s_da33d0161772b7::t_c165afb80912a1 8,22-24,33-34,42-44,60
+html5/src/hxd/res/FontBuilder.hx
+  s_da33d0161772b7::t_4868396a4b2425 1-62,65-120,124-130,141-153
+  s_da33d0161772b7::t_eb7031c824802d 63-64,131-140
+  s_da33d0161772b7::t_c165afb80912a1 121-123
+html5/test/pixi-page.spec.mjs
+  s_da33d0161772b7::t_dd9dffdc870dee 65-71,73-79,155,165-167,169-170,172
+  s_da33d0161772b7::t_c8afa0e9b9bde8 12-13,126-127,132-154,156-164,168,171,173-185,187
+html5/src/h2d/Tile.hx
+  s_da33d0161772b7::t_4868396a4b2425 35-38
+docs/specs/html5-h2d-layer.md
+  s_da33d0161772b7::t_c504900eefe959 181-199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "65390f644511bf7fcb308e4db9c51a3badcaffd4",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
