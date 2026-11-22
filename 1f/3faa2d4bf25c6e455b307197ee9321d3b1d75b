@@ -1,0 +1,27 @@
+tools/H2dCheck.hx
+  s_da33d0161772b7::t_b61d23fdb66e2a 40-44,338-413
+  s_da33d0161772b7::t_fb6151ddf059cb 414
+docs/specs/html5-h2d-layer.md
+  s_da33d0161772b7::t_e398e0f78c0f79 134-153
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1f3faa2d4bf25c6e455b307197ee9321d3b1d75b",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
