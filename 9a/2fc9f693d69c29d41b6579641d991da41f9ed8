@@ -1,0 +1,24 @@
+client/client/src/Input.hx
+  s_da33d0161772b7::t_8d05868648549c 3,7,15-31,50,53-56,104,107-110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9a2fc9f693d69c29d41b6579641d991da41f9ed8",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
