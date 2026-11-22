@@ -62,9 +62,10 @@ La version Ruffle reste à l'adresse actuelle. La version PixiJS est publiée so
 
 La version PixiJS remplace la version Ruffle quand ces trois conditions sont vraies :
 
-- Les 180 niveaux se terminent dans la version PixiJS.
-- Sur une liste d'écrans fixes (accueil, carte, début du niveau 1, menus), une capture PixiJS et une capture Ruffle sont identiques. Un script les prend dans Chrome sans affichage. Les écrans qui dépendent du hasard (fin de partie) se vérifient à la main.
-- Le jeu se joue au toucher sur un téléphone, ou dans le mode mobile de Chrome. Un toucher agit comme un clic.
+- **Chaque niveau se charge et se termine.** Un raccourci de debug « gagner le niveau » fait défiler les 180 niveaux dans la version PixiJS. Il n'existe que dans les builds de debug.
+- **Le jeu se joue.** Des parties réelles, à la main, sur un échantillon : au moins un niveau par monde et par mécanique (gélatine, grappin, etc.).
+- **L'affichage est le même.** Sur une liste d'écrans fixes (accueil, carte, début du niveau 1, menus), un script prend une capture PixiJS et une capture Ruffle dans Chrome sans affichage. Au plus N % des pixels diffèrent. N est calibré sur l'écran d'accueil à l'étape 2, car Ruffle et PixiJS ne lissent pas les bords de la même façon. Le script garde les images de différence pour les regarder. Les écrans qui dépendent du hasard (fin de partie) se vérifient à la main.
+- **Le toucher marche.** Le jeu se joue sur un téléphone, ou dans le mode mobile de Chrome. Un toucher agit comme un clic.
 
 ### La progression des joueurs ne se perd pas
 
@@ -73,6 +74,14 @@ La version PixiJS remplace la version Ruffle quand ces trois conditions sont vra
 Un joueur qui passe de la version Ruffle à la version PixiJS garde ses niveaux débloqués et ses meilleurs scores, dans le même navigateur.
 
 Ruffle garde les `SharedObject` dans le `localStorage`, encodés en AMF (format binaire de Flash). `/pixi/` a la même origine, donc la page peut les lire. Au premier lancement, la version PixiJS lit cette sauvegarde une fois et l'écrit dans son propre format. Le décodeur AMF ne lit que les types que le jeu écrit. On le fait juste avant la bascule.
+
+Cas décidés :
+
+- Pas de sauvegarde Ruffle : le jeu démarre à zéro, sans erreur.
+- Sauvegarde Ruffle illisible : le jeu démarre à zéro, la sauvegarde Ruffle reste intacte, et la console affiche un avertissement.
+- Une sauvegarde PixiJS existe déjà : elle gagne, et le jeu ne relit plus jamais la sauvegarde Ruffle.
+
+À vérifier à l'étape 5 : la clé que Ruffle utilise dans `localStorage` dépend peut-être du chemin du SWF.
 
 ### Le son démarre au premier clic
 
@@ -132,6 +141,7 @@ On ne reprend pas les skills `mt-to-haxe` (notre code est déjà en Haxe), `scal
 
 - L'éditeur de niveaux (`client/levelEditor`).
 - Une version mobile native, et le mode portrait plein écran sur téléphone.
+- Les écrans haute densité (`devicePixelRatio` > 1) jusqu'à la bascule : le canevas garde la taille du jeu, avec le même flou que Ruffle, pour que les captures restent comparables. On décidera après la bascule.
 - Une haxelib séparée pour la couche `h2d` : on l'extraira si un deuxième jeu en a besoin.
 - Des parties automatiques complètes dans Chrome sans affichage : le hasard du jeu n'est pas fixé, et le jeu n'a pas de replays.
 - PixiJS 7 ou 8 : il n'existe pas d'externs Haxe maintenus pour ces versions. On changera de version seulement si PixiJS 6 bloque.
