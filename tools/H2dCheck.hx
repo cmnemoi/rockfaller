@@ -66,6 +66,7 @@ class H2dCheck {
 		eachFillKeepsItsOwnColor();
 		aRectangleOutsideAFillDrawsNothing();
 		clearRemovesTheRectangles();
+		particleBoundsContainLikeFlash();
 		trace("PASS");
 	}
 
@@ -726,6 +727,14 @@ class H2dCheck {
 		blackScreenIn(scene).clear();
 
 		check(render(scene).length == 0, "clear() removes the rectangles");
+	}
+
+	/** flash.geom.Rectangle.contains: the left and top edges are in, the right and bottom edges are out. */
+	static function particleBoundsContainLikeFlash() {
+		var bounds = new mt.deepnight.HParticle.HParticleBounds(10, 20, 30, 40);
+
+		check(bounds.contains(10, 20) && bounds.contains(39.9, 59.9), "the top-left corner and the inside are in");
+		check(!bounds.contains(40, 30) && !bounds.contains(20, 60) && !bounds.contains(9.9, 30), "the right and bottom edges, and what is left of x, are out");
 	}
 
 	static function bitmapCutAt(cutX:Int):Bitmap {

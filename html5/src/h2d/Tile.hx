@@ -50,6 +50,9 @@ class Tile {
 		return sub(0, 0, width, height, -Std.int(px * width), -Std.int(py * height));
 	}
 
+	public inline function setCenter(?dx:Int, ?dy:Int):Void
+		copy(center(dx, dy));
+
 	public inline function setCenterRatio(?px:Float = 0.5, ?py:Float = 0.5):Void
 		copy(centerRatio(px, py));
 

@@ -8,8 +8,31 @@ import mt.MLib;
 import h2d.Tile;
 import h2d.SpriteBatch;
 
+#if flash
+typedef HParticleBounds = flash.geom.Rectangle;
+#else
+/** The JS build has no flash.geom: a rectangle with Flash's contains (left and top edges in, right and bottom out). */
+class HParticleBounds {
+	public var x : Float;
+	public var y : Float;
+	public var width : Float;
+	public var height : Float;
+
+	public function new(x = 0., y = 0., width = 0., height = 0.) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+
+	public function contains(px:Float, py:Float) : Bool {
+		return px >= x && px < x + width && py >= y && py < y + height;
+	}
+}
+#end
+
 class HParticle extends BatchElement implements ParticleInterface {
-	public static var DEFAULT_BOUNDS : flash.geom.Rectangle = null;
+	public static var DEFAULT_BOUNDS : HParticleBounds = null;
 
 	var stamp					: Float;
 	public var dx				: Float;
@@ -29,7 +52,7 @@ class HParticle extends BatchElement implements ParticleInterface {
 	public var life(never,set)	: Float;
 	var rlife					: Float;
 	var maxLife					: Float;
-	public var bounds			: Null<flash.geom.Rectangle>;
+	public var bounds			: Null<HParticleBounds>;
 	public var groundY			: Null<Float>;
 	public var groupId			: Null<String>;
 	public var fadeOutSpeed		: Float;
