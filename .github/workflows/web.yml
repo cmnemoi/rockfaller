@@ -60,6 +60,11 @@ jobs:
       - name: Check how atlases are read, with Haxe 4
         run: mise run html5:check:atlas
 
+      - name: Check the h2d layer and the SpriteLib on it
+        run: |
+          mise run html5:check:h2d
+          mise run html5:check:spritelib
+
       - uses: astral-sh/setup-uv@v6
 
       - name: Test the level extraction

@@ -57,7 +57,7 @@ run = "node --test 'web/*.test.mjs'"
 
 [tasks.test]
 description = "Run every test that needs no video"
-depends = ["check:protocol", "check:progress", "check:atlas", "html5:check:atlas", "test:levels", "test:web"]
+depends = ["check:protocol", "check:progress", "check:atlas", "html5:check:atlas", "html5:check:h2d", "html5:check:spritelib", "test:levels", "test:web"]
 
 [tasks.build]
 description = "Build the release Flash client"
@@ -81,6 +81,14 @@ run = "mise -C html5 exec -- bash install-deps.sh"
 [tasks."html5:check:atlas"]
 description = "Check how TexturePacker atlases are read, with Haxe 4"
 run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -main tools.AtlasCheck --interp"
+
+[tasks."html5:check:h2d"]
+description = "Check the h2d layer of the JS build (what it draws), with Haxe 4"
+run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git -cp html5/src -D h3d -main tools.H2dCheck --interp"
+
+[tasks."html5:check:spritelib"]
+description = "Check the SpriteLib (BLib, HSprite, AnimManager) on the h2d layer, with Haxe 4"
+run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git -cp html5/src -D h3d -main tools.SpriteLibCheck --interp"
 
 [tasks."html5:build"]
 description = "Build the JS client into dist/web/pixi (after tools/build-web.sh, which empties dist/web)"
