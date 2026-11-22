@@ -321,6 +321,8 @@ class PreloaderH2D extends mt.deepnight.deprecated.HProcess
 	}
 	#end
 
+	// Never called; downloadXml loads through flash.display, so the JS build leaves them out.
+	#if flash
 	var tryLang	: Int = 0;
 	function getSLBLang() {
 		if (tryLang < 5) {
@@ -345,6 +347,8 @@ class PreloaderH2D extends mt.deepnight.deprecated.HProcess
 			}, function() { haxe.Timer.delay(getSLBTaupi, 500); } );
 		}
 	}
+
+	#end
 
 	#if standalone
 	function getInitData() {

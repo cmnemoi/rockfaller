@@ -38,7 +38,7 @@ class Error extends BasePopup
 		lblError.y = Std.int(heiBG * 0.4);
 		
 		btnReload = new Button("btRed", Lang.GET_BUTTON(TypeButton.TBReload), function () {
-			openfl.Lib.getURL(new flash.net.URLRequest("/"), "_self");
+			openfl.Lib.getURL(new #if flash flash.net.URLRequest #else openfl.net.URLRequest #end ("/"), "_self");
 		});
 		
 		btnReload.resize();

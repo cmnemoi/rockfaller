@@ -3,14 +3,14 @@ package mt.gx;
 class Dice
 {
 	public static inline function roll(
-	#if (flash||openfl||neko)
+	#if (flash||openfl||neko||js)
 	?mr:mt.Rand,
 	#end
 	min :Int,max:Int  ) : Int
 	{
 		var v = Std.random( max - min +1 ) + min;
 		
-		#if (flash||openfl||neko)
+		#if (flash||openfl||neko||js)
 		if ( mr != null) v = mr.random( max - min +1 ) + min;
 		#end
 		
@@ -21,7 +21,7 @@ class Dice
 	 * percent are treated as integers
 	 */
 	public static inline function percent(
-	#if (flash||openfl||neko)
+	#if (flash||openfl||neko||js)
 	?rd:mt.Rand,
 	#end
 	thresh : Float) : Bool
@@ -32,7 +32,7 @@ class Dice
 		}
 		else
 		{
-			var r = roll( #if (flash||openfl||neko) rd,#end 1, 100);
+			var r = roll( #if (flash||openfl||neko||js) rd,#end 1, 100);
 			
 			return(r <= thresh);
 		}
@@ -42,20 +42,20 @@ class Dice
 	 * percent are treated as floats... this induces a per-100ths fraction too much chance
 	 */
 	public static inline function percentF(
-	#if (flash||openfl||neko)
+	#if (flash||openfl||neko||js)
 	?rd:mt.Rand,
 	#end
 	thresh : Float) : Bool
 	{
-		var r = rollF( #if (flash||openfl||neko) rd,#end 0, 100);
+		var r = rollF( #if (flash||openfl||neko||js) rd,#end 0, 100);
 		return (r <= thresh);
 	}
 	
 	public static inline function toss(
-	#if (flash||openfl||neko) ?mr:mt.Rand #end
+	#if (flash||openfl||neko||js) ?mr:mt.Rand #end
 	)
 	{
-		return Dice.roll( #if (flash||openfl||neko) mr,#end 0, 1) == 0;
+		return Dice.roll( #if (flash||openfl||neko||js) mr,#end 0, 1) == 0;
 	}
 	
 	public static inline function rollF2( min:Float, max:Float) {
@@ -65,14 +65,14 @@ class Dice
 	public static 
 	inline 
 	function rollF( 
-	#if (flash||openfl||neko)
+	#if (flash||openfl||neko||js)
 	?rd:mt.Rand,
 	#end
 	min : Float = 0.0,max:Float = 1.0) : Float
 	{
 		var f = Math.random() * (max - min) + min;
 		
-		#if (flash||openfl||neko)
+		#if (flash||openfl||neko||js)
 		if ( rd != null)
 			f = rd.rand()* (max - min) + min;
 		#end
@@ -84,7 +84,7 @@ class Dice
 	public static inline function angle() 				return rollF(0, Math.PI * 2.0 );
 	public static inline function sign() 				return toss()?1.0: -1.0;
 	public static inline function interval(
-	#if (flash||openfl||neko)
+	#if (flash||openfl||neko||js)
 	?mtr:mt.Rand,
 	#end
 	v:Float)		return rollF( mtr, -v, v);
@@ -94,14 +94,14 @@ class Dice
 	 * @return a quasi well distributed vector on the sphere's surface
 	 */
 	public static inline function vector(  
-	#if (flash||openfl||neko)
+	#if (flash||openfl||neko||js)
 	?mtr:mt.Rand,
 	#end
 	?out:h3d.Vector) {
 	
 		inline function rd() {
 			return 
-			#if (flash||openfl||neko)
+			#if (flash||openfl||neko||js)
 			if ( mtr != null )
 				mtr.rand();
 			else 
