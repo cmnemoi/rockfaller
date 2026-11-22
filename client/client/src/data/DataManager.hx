@@ -338,6 +338,7 @@ class DataManager
 			WAIT++;
 			CACHE_AVATAR.set( url, null );
 
+			#if flash
 			var l = new flash.display.Loader();
 	
 			var ctx = new flash.system.LoaderContext(true);
@@ -376,6 +377,32 @@ class DataManager
 				WAIT--;
 				QPOP();
 			});
+			#else
+			// The JS build loads the avatar with an image, with the same cache, error and queue handling.
+			var image = new js.html.Image();
+			image.crossOrigin = "anonymous";
+			image.onerror = function(_) {
+				CACHE_AVATAR.remove( url );
+				WAIT--;
+				QPOP();
+			};
+			image.onload = function() {
+				GC_AVATAR_CACHE();
+				try {
+					t = h2d.Tile.fromTexture(h3d.mat.Texture.fromImage(image));
+					CACHE_AVATAR.set( url, t );
+
+					if( !process.destroyAsked )
+						onLoad(t);
+				}
+				catch (e:Dynamic) {
+
+				}
+				WAIT--;
+				QPOP();
+			};
+			image.src = url;
+			#end
 		}else{
 			QUEUE.push( {process: process, url: url, onLoad: onLoad} );
 		}

@@ -25,6 +25,8 @@ class Drawable extends Sprite {
 	public var alpha(get, set):Float;
 	public var filter:Bool;
 	public var blendMode:BlendMode;
+	/** The fork batches quads when emit is set; the PixiJS layer draws every tile the same way. */
+	public var emit:Bool;
 
 	function new(parent:Sprite, ?sh:DrawableShader) {
 		super(parent);

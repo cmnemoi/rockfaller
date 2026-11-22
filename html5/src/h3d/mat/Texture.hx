@@ -59,6 +59,13 @@ class Texture {
 		#end
 	}
 
+	/** Frees the texture for good (the game's avatar cache): the GPU copy, and the CPU pixels kept for reading. */
+	public function destroy(?alsoCpuCopy:Bool) {
+		dispose();
+		bmp = null;
+		pixels = null;
+	}
+
 	public function isDisposed():Bool {
 		return disposed;
 	}
@@ -73,6 +80,13 @@ class Texture {
 	}
 
 	#if pixijs
+	/** A downloaded image (a friend's avatar), without mipmaps like the atlases. */
+	public static function fromImage(image:js.html.Image):Texture {
+		var pixiTexture = pixi.core.textures.BaseTexture.from(image);
+		pixiTexture.mipmap = pixi.core.Pixi.MipmapModes.OFF;
+		return fromPixi(pixiTexture);
+	}
+
 	public static function fromPixi(pixiTexture:pixi.core.textures.BaseTexture):Texture {
 		var texture = new Texture(Std.int(pixiTexture.width), Std.int(pixiTexture.height));
 		texture.pixiTexture = pixiTexture;
