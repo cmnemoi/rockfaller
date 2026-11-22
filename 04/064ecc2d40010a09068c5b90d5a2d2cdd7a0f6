@@ -1,0 +1,31 @@
+html5/test/pixi-page.spec.mjs
+  s_da33d0161772b7::t_6540b274cb09ae 9-17,168-189
+  s_da33d0161772b7::t_57a14b447420f8 190
+html5/src/Main.hx
+  s_da33d0161772b7::t_6540b274cb09ae 26,32,37,56,74
+html5/src/mt/audio/WebAudioBackend.hx
+  s_da33d0161772b7::t_54fb35b99539b8 1-91
+tools/build-web.sh
+  s_da33d0161772b7::t_6540b274cb09ae 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "04064ecc2d40010a09068c5b90d5a2d2cdd7a0f6",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
