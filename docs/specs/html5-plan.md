@@ -49,8 +49,8 @@ Vérification : la CI est verte, et le site déployé ne change pas.
 
 Risques :
 - `mise-action` installe-t-il les deux versions de Haxe ? Si non, on ajoute une étape `mise install` dans `html5/`.
-- `haxelib` de Haxe 4.3.7 a peut-être besoin d'une version de Neko plus récente que 2.1.
-- `haxe.xml.Fast` est obsolète en Haxe 4 (`haxe.xml.Access`). S'il donne un avertissement bloquant, on utilise `#if (haxe_ver >= 4)`.
+- `haxelib` de Haxe 4.3.7 a besoin d'une Neko compilée pour la machine : Neko 2.1 n'existe pas pour arm64. Confirmé : `html5/mise.toml` fixe Neko 2.4.1.
+- `haxe.xml.Fast` est obsolète en Haxe 4. Résolu au commit 1.1 : `TexturePackerXml` utilise l'API `Xml` de base, qui existe dans les deux versions.
 
 ### Commit 1.3 : PixiJS dans le site
 

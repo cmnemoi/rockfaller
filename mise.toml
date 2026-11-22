@@ -57,7 +57,7 @@ run = "node --test 'web/*.test.mjs'"
 
 [tasks.test]
 description = "Run every test that needs no video"
-depends = ["check:protocol", "check:progress", "check:atlas", "test:levels", "test:web"]
+depends = ["check:protocol", "check:progress", "check:atlas", "html5:check:atlas", "test:levels", "test:web"]
 
 [tasks.build]
 description = "Build the release Flash client"
@@ -72,3 +72,16 @@ run = "bash tools/build-web.sh"
 description = "Serve the web version on http://localhost:8000"
 depends = ["web"]
 run = "python3 -m http.server 8000 --directory dist/web"
+
+# The JS build (PixiJS) runs in html5/, with Haxe 4.3.7 from html5/mise.toml.
+[tasks."html5:install"]
+description = "Install the haxelibs of the JS build, in html5/.haxelib/"
+run = "mise -C html5 exec -- bash install-deps.sh"
+
+[tasks."html5:check:atlas"]
+description = "Check how TexturePacker atlases are read, with Haxe 4"
+run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -main tools.AtlasCheck --interp"
+
+[tasks."html5:build"]
+description = "Build the JS client into dist/web/pixi (after tools/build-web.sh, which empties dist/web)"
+run = "mise -C html5 exec -- haxe build.hxml"

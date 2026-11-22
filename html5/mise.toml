@@ -1,0 +1,25 @@
+# The JS build (PixiJS) uses Haxe 4, the Flash build at the root keeps Haxe 3.2.1.
+# This file overrides, in html5/, the versions and the variables the root sets:
+# Haxe 4's haxelib needs a Neko built for this machine, which Neko 2.1 is not on arm64.
+[tools.haxe]
+version = "4.3.7"
+
+[tools.haxe.platforms]
+linux-x64 = { asset_pattern = "haxe-4.3.7-linux64.tar.gz" }
+macos-x64 = { asset_pattern = "haxe-4.3.7-osx.tar.gz" }
+macos-arm64 = { asset_pattern = "haxe-4.3.7-osx.tar.gz" }
+
+[tools.neko]
+version = "2-4-1"
+
+[tools.neko.platforms]
+linux-x64 = { asset_pattern = "neko-2.4.1-linux64.tar.gz" }
+macos-x64 = { asset_pattern = "neko-2.4.1-osx-universal.tar.gz" }
+macos-arm64 = { asset_pattern = "neko-2.4.1-osx-universal.tar.gz" }
+
+[env]
+DYLD_LIBRARY_PATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-4-1"
+LD_LIBRARY_PATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-4-1"
+NEKOPATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-4-1"
+HAXE_STD_PATH = "{{env.HOME}}/.local/share/mise/installs/haxe/4.3.7/std"
+HAXELIB_PATH = "{{config_root}}/.haxelib"

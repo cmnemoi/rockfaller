@@ -35,6 +35,19 @@ jobs:
       - name: Install haxelibs
         run: mise run install
 
+      - name: Install Haxe 4 and Neko 2.4 for the JS build
+        run: |
+          mise trust html5/mise.toml
+          mise -C html5 install
+
+      - uses: actions/cache@v4
+        with:
+          path: html5/.haxelib
+          key: haxelib-html5-${{ runner.os }}-${{ hashFiles('html5/install-deps.sh') }}
+
+      - name: Install the JS build's haxelibs
+        run: mise run html5:install
+
       - name: Check the offline server and the 180 levels
         run: mise run check:protocol
 
@@ -43,6 +56,9 @@ jobs:
 
       - name: Check how atlases are read
         run: mise run check:atlas
+
+      - name: Check how atlases are read, with Haxe 4
+        run: mise run html5:check:atlas
 
       - uses: astral-sh/setup-uv@v6
 
@@ -57,6 +73,9 @@ jobs:
 
       - name: Assemble the web version
         run: bash tools/build-web.sh  # not `mise run web`: the client is already built
+
+      - name: Build the JS client
+        run: mise run html5:build  # after build-web.sh, which empties dist/web
 
       - uses: actions/upload-pages-artifact@v3
         with:
