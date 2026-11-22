@@ -36,5 +36,6 @@ mkdir -p "$site/pixi"
 curl -sSLf -o "$archive" "https://registry.npmjs.org/pixi.js/-/pixi.js-$pixi_version.tgz"
 echo "$pixi_sha256  $archive" | shasum -a 256 -c - >/dev/null
 tar xzf "$archive" -O package/dist/browser/pixi.min.js > "$site/pixi/pixi.min.js"
+cp html5/index.html client/client/assetsWeb/assets1.png client/client/assetsWeb/assets1.xml "$site/pixi/"
 
 echo "web version in $site"
