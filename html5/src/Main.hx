@@ -49,7 +49,7 @@ class Main {
 			});
 
 			#if debug
-			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, BlendMode: h2d.BlendMode};
+			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, BlendMode: h2d.BlendMode, Vector: h3d.Vector};
 			#end
 		}).catchError(showError);
 	}

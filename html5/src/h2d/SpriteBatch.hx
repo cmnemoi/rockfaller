@@ -222,6 +222,7 @@ class SpriteBatch extends Drawable {
 			tx: tmpMatrix.transformX(t.dx, t.dy),
 			ty: tmpMatrix.transformY(t.dx, t.dy),
 			alpha: e.alpha,
+			vertexColor: e.color == null ? null : e.color.clone(),
 		};
 	}
 

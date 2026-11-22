@@ -32,6 +32,11 @@ class H2dCheck {
 		aBatchOfMoreThan4096ElementsDrawsNothing();
 		aDrawableIsDrawnWithItsBlendMode();
 		aBatchsElementsAreDrawnWithTheBatchsBlendMode();
+		aDrawableWithoutColorIsDrawnWithoutColorMatrix();
+		aBlackColorWithAnAddedColorDrawsASilhouette();
+		theColorizeMatrixOfTheGameGivesTheFlashColorizeFilter();
+		alphaIsAppliedBeforeTheColorMatrix();
+		aBatchElementsColorMultipliesItsPicture();
 		trace("PASS");
 	}
 
@@ -253,6 +258,83 @@ class H2dCheck {
 		batch.alloc(atlasTile().sub(0, 0, 8, 8));
 
 		check(render(scene)[0].blendMode == h2d.BlendMode.SoftOverlay, "a batch's elements are drawn in the batch's mode");
+	}
+
+	/** @spec html5.h2d.color::color-like-fork-shader */
+	static function aDrawableWithoutColorIsDrawnWithoutColorMatrix() {
+		var scene = new Scene();
+		var bitmap = new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		bitmap.alpha = 0.5;
+
+		var drawn = render(scene)[0];
+
+		check(drawn.colorMatrix == null && drawn.alpha == 0.5, "a drawable without color is drawn with its alpha only, no color matrix");
+	}
+
+	/** @spec html5.h2d.color::color-like-fork-shader: the loot silhouettes of Collection */
+	static function aBlackColorWithAnAddedColorDrawsASilhouette() {
+		var scene = new Scene();
+		var bitmap = new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		bitmap.color = new h3d.Vector();
+		bitmap.colorAdd = h3d.Vector.fromColor(0x00483929);
+
+		var matrix = render(scene)[0].colorMatrix;
+
+		check(sameMatrix(matrix, [
+			0, 0, 0, 0, 0x48 / 255,
+			0, 0, 0, 0, 0x39 / 255,
+			0, 0, 0, 0, 0x29 / 255,
+			0, 0, 0, 1, 0,
+		]), "black plus 0x483929 draws a brown silhouette that keeps the picture's alpha (got " + matrix + ")");
+	}
+
+	/** @spec html5.h2d.color::color-like-fork-shader: the world rollover of ButtonWorld */
+	static function theColorizeMatrixOfTheGameGivesTheFlashColorizeFilter() {
+		var scene = new Scene();
+		var bitmap = new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		bitmap.colorMatrix = mt.deepnight.Color.getColorizeMatrixH2d(0xECB96C, 0.5, 0.5);
+
+		var matrix = render(scene)[0].colorMatrix;
+
+		// The rows of mt.deepnight.Color.getColorizeFilter(0xECB96C, 0.5, 0.5), the Flash version of the same effect.
+		var r = 0.5 * 0xEC / 255, g = 0.5 * 0xB9 / 255, b = 0.5 * 0x6C / 255;
+		check(sameMatrix(matrix, [
+			0.5 + r, r, r, 0, 0,
+			g, 0.5 + g, g, 0, 0,
+			b, b, 0.5 + b, 0, 0,
+			0, 0, 0, 1, 0,
+		]), "the colorize matrix gives the rows of the Flash colorize filter (got " + matrix + ")");
+	}
+
+	/** @spec html5.h2d.color::color-like-fork-shader */
+	static function alphaIsAppliedBeforeTheColorMatrix() {
+		var scene = new Scene();
+		var bitmap = new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		bitmap.alpha = 0.5;
+		bitmap.colorAdd = new h3d.Vector(0, 0, 0, 0.25);
+
+		var drawn = render(scene)[0];
+
+		check(drawn.alpha == 1 && drawn.colorMatrix[18] == 0.5 && drawn.colorMatrix[19] == 0.25,
+			"alpha 0.5 goes into the matrix before the added 0.25: a' = 0.5 a + 0.25 (got alpha " + drawn.alpha + ", " + drawn.colorMatrix + ")");
+	}
+
+	/** @spec html5.h2d.color::color-like-fork-shader */
+	static function aBatchElementsColorMultipliesItsPicture() {
+		var scene = new Scene();
+		var batch = new SpriteBatch(atlasTile(), scene);
+		batch.alloc(atlasTile().sub(0, 0, 8, 8)).color = new h3d.Vector(0.5, 1, 1, 1);
+
+		var matrix = render(scene)[0].colorMatrix;
+
+		check(matrix != null && matrix[0] == 0.5 && matrix[6] == 1, "an element colored (0.5, 1, 1) halves its red (got " + matrix + ")");
+	}
+
+	static function sameMatrix(matrix:Array<Float>, expected:Array<Float>) {
+		if (matrix == null || matrix.length != expected.length) return false;
+		for (index in 0...expected.length)
+			if (!near(matrix[index], expected[index])) return false;
+		return true;
 	}
 
 	static function near(value:Float, expected:Float) {

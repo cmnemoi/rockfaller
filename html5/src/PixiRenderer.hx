@@ -4,6 +4,7 @@ import pixi.core.math.Matrix;
 import pixi.core.math.shapes.Rectangle;
 import pixi.core.sprites.Sprite;
 import pixi.core.textures.Texture;
+import pixi.filters.colormatrix.ColorMatrixFilter;
 
 /**
  * Shows the h2d layer's draw commands with PixiJS: one PixiJS sprite per command, in drawing order.
@@ -37,6 +38,24 @@ class PixiRenderer {
 			modes[SOFT_ADD] = SOFT_ADD;
 			modes[SOFT_OVERLAY] = SOFT_OVERLAY;
 		}
+	}
+
+	/**
+	 * @spec html5.h2d.color::color-like-fork-shader: PixiJS's ColorMatrixFilter works on straight colors, like the fork's shader.
+	 * A sprite keeps its filter, so turning a color on and off does not compile a new one each time.
+	 */
+	static function showColor(sprite:Sprite, colorMatrix:Array<Float>) {
+		if (colorMatrix == null) {
+			if (sprite.filters != null) sprite.filters = null;
+			return;
+		}
+		var filter:ColorMatrixFilter = untyped sprite.__colorFilter;
+		if (filter == null) {
+			filter = new ColorMatrixFilter();
+			untyped sprite.__colorFilter = filter;
+		}
+		filter.matrix = colorMatrix;
+		if (sprite.filters == null) sprite.filters = [filter];
 	}
 
 	/** The PixiJS mode with the fork's factor pair (Drawable.setupShader), for premultiplied textures. */
@@ -80,6 +99,7 @@ class PixiRenderer {
 		sprite.transform.setFromMatrix(new Matrix(command.a, command.b, command.c, command.d, command.tx, command.ty));
 		sprite.alpha = command.alpha;
 		sprite.blendMode = cast pixiBlendModeOf(command.blendMode);
+		showColor(sprite, command.colorMatrix);
 		sprite.visible = true;
 	}
 }

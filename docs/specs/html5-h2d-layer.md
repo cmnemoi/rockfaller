@@ -110,8 +110,24 @@ Les éléments d'un batch prennent le mode du batch.
 
 À vérifier à la parité (étape 4) : PixiJS travaille en alpha prémultiplié. Pour `Multiply` et `SoftOverlay` avec un alpha plus petit que 1, le résultat peut différer du Flash.
 
+#### La couleur suit le shader du fork
+
+`{#html5.h2d.color::color-like-fork-shader}`
+
+Le shader du fork transforme la couleur d'un pixel dans cet ordre : couleur de l'élément (batch), alpha, `colorMatrix` (vecteur ligne : `sortie_j = Σ entrée_i × M_ij`, comme `h3d.Vector.transform`), `color`, puis `colorAdd`. Tout est linéaire : la couche en fait une seule matrice 5 × 4, appliquée par le `ColorMatrixFilter` de PixiJS, qui travaille comme le fork sur des couleurs non prémultipliées, avec des décalages de 0 à 1.
+
+Sans couleur, la commande n'a pas de matrice : le sprite n'a pas de filtre, et l'alpha passe par `sprite.alpha`.
+
+Piège connu (Kadokadeo) : le premier filtre utilisé compile un shader et fige le jeu de 10 à 80 ms. À traiter quand les écrans du jeu tourneront (étape 4) : préparer les filtres au démarrage.
+
 ### Critères d'acceptation
 
 - (`--interp`) Étant donné un `Drawable` sans mode, quand la scène se dessine, alors il est dessiné en `Normal`. En `Add`, il est dessiné en `Add`.
 - (`--interp`) Étant donné un batch en `SoftOverlay`, quand la scène se dessine, alors ses éléments sont dessinés en `SoftOverlay`.
+- (`--interp`) Étant donné un `Drawable` sans couleur, quand la scène se dessine, alors la commande n'a pas de matrice, et garde son alpha.
+- (`--interp`) Étant donné `color = new Vector()` (noir) et `colorAdd = fromColor(0x00483929)` (silhouettes de `Collection`), quand la scène se dessine, alors la matrice donne le brun 0x483929 et garde l'alpha de l'image.
+- (`--interp`) Étant donné `getColorizeMatrixH2d(0xECB96C, 0.5, 0.5)` (survol de `ButtonWorld`), quand la scène se dessine, alors la matrice a les lignes du filtre Flash `getColorizeFilter(0xECB96C, 0.5, 0.5)`.
+- (`--interp`) Étant donné un alpha de 0,5 et `colorAdd` d'alpha 0,25, quand la scène se dessine, alors l'alpha sorti vaut `0,5 a + 0,25` : l'alpha passe avant l'ajout.
+- (`--interp`) Étant donné un élément de batch de couleur (0,5 ; 1 ; 1), quand la scène se dessine, alors son rouge est divisé par deux.
+- (Playwright) Étant donné le canard en noir avec du rouge pur ajouté, quand il est dessiné, alors le pixel de son centre vaut exactement (255, 0, 0). Des décalages lus de 0 à 255 donneraient presque du noir.
 - (Playwright) Étant donné le canard sur fond noir, quand il passe en `SoftOverlay`, alors le pixel de son centre devient noir (`noir × (1 + source) = noir`), alors qu'il était jaune en `Normal`. Ce test lit le pixel rendu par le GPU : il prouve que le mode ajouté est bien utilisé.

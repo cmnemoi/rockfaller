@@ -88,6 +88,18 @@ test('a SoftOverlay sprite over black leaves black, as the DstColor + One factor
   expect(softOverlay).toEqual([0, 0, 0]);
 });
 
+/** @spec html5.h2d.color::color-like-fork-shader */
+test('a black duck with pure red added shows pure red: PixiJS reads the added color in 0..1, like the fork', async ({ page }) => {
+  await page.evaluate(() => {
+    const { duck, Vector } = window.rockfallerDebug;
+    duck.color = new Vector(0, 0, 0, 1);
+    duck.colorAdd = new Vector(1, 0, 0, 0);
+  });
+  await twoFrames(page);
+
+  expect(await duckCentrePixel(page)).toEqual([255, 0, 0]);
+});
+
 /** @spec html5.slb::page-plays-grip-anim */
 test('PixiJS shows the grip animation frame the SpriteLib is on', async ({ page }) => {
   const caught = await page.waitForFunction((frameToCatch) => {
