@@ -23,6 +23,7 @@ class SpriteLibCheck {
 		anAnimationPlaysItsFramesInOrderThenLoops();
 		aCenteredTrimmedSpriteHasItsFrameCenterOnItsPosition();
 		aCenteredTrimmedSpriteIsDrawnWithItsCutAtThePivotOffset();
+		anAnimatedBatchSpriteIsDrawnWithItsCurrentFrame();
 		trace("PASS");
 	}
 
@@ -107,6 +108,23 @@ class SpriteLibCheck {
 		check(drawn.length == 1, "the scene draws the duck once (got " + drawn.length + ")");
 		check(drawn[0].tx == 71 && drawn[0].ty == 67, "the duck's cut starts at (71, 67) (got " + drawn[0].tx + ", " + drawn[0].ty + ")");
 		check(drawn[0].cutX == 418 && drawn[0].cutY == 1821 && drawn[0].cutWidth == 61 && drawn[0].cutHeight == 67, "the duck is cut at (418, 1821, 61 x 67)");
+	}
+
+	/** @spec html5.slb::batch-sprite-shows-its-frame */
+	static function anAnimatedBatchSpriteIsDrawnWithItsCurrentFrame() {
+		var lib = readLib("taupinotron.xml", true);
+		var scene = new h2d.Scene();
+		var batch = new h2d.SpriteBatch(lib.tile, scene);
+		var grip = lib.hbe_get(batch, "gripAnim");
+		grip.a.playAndLoop("gripAnim");
+
+		for (update in 0...4)
+			lib.updateChildren();
+		var drawn = render(scene)[0];
+
+		var frame = lib.getFrameData("gripAnim", grip.frame);
+		check(grip.frame == lib.getAnim("gripAnim")[3], "after 4 updates, the batch sprite is on gripAnim's fourth frame");
+		check(drawn.cutX == frame.x && drawn.cutY == frame.y && drawn.cutWidth == frame.wid && drawn.cutHeight == frame.hei, "the batch sprite is drawn with its current frame's cut");
 	}
 
 	static function render(scene:h2d.Scene):Array<DrawCommand> {

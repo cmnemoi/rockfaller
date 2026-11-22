@@ -1,7 +1,6 @@
 package h2d;
 
 // BatchElement and the element list are the fork's (delahee/h3d, BSD), unchanged.
-// Drawing a SpriteBatch on PixiJS arrives in step 3: until then it fails loudly.
 
 private class ElementsIterator {
 	var e : BatchElement;
@@ -118,13 +117,19 @@ class BatchElement {
 
 }
 
-/** The fork's SpriteBatch without its GPU buffers: the sorted element list only, for now. */
+/** The fork's SpriteBatch without its GPU buffers: its elements become quads in the RenderContext. */
 class SpriteBatch extends Drawable {
+	static inline var MAX_ELEMENTS = 4096;
+
 	public var tile : Tile;
 	public var length(default, null) : Int = 0;
 
 	var first : BatchElement;
 	var last : BatchElement;
+	var optimized = false;
+	var computed = false;
+	var quads : Array<RenderContext.DrawCommand> = [];
+	var tmpMatrix = new Matrix();
 
 	public function new(masterTile:h2d.Tile, ?parent : h2d.Sprite) {
 		super(parent);
@@ -137,6 +142,8 @@ class SpriteBatch extends Drawable {
 		tile = t;
 	}
 
+	public inline function nbQuad() return length;
+
 	public override function dispose() {
 		super.dispose();
 		removeAllElements();
@@ -145,21 +152,77 @@ class SpriteBatch extends Drawable {
 		last = null;
 	}
 
+	/** @spec html5.h2d.batch::static-until-invalidate: a static batch keeps its quads until invalidate(). */
+	public function optimizeForStatic(onOff) {
+		invalidate();
+		optimized = onOff;
+	}
+
 	public function removeAllElements() {
 		for( e in getElements() )
 			e.remove();
 	}
 
-	public inline function invalidate() {}
+	public inline function invalidate() {
+		computed = false;
+	}
 
 	public inline function getElements() {
 		return new ElementsIterator(first);
 	}
 
+	/** @spec html5.h2d.batch::elements-in-list-order */
 	override function draw( ctx : RenderContext ) {
-		// ponytail: no SpriteBatch drawing before step 3; it throws so a screen using it cannot look right by accident
-		if ( first != null )
-			throw "SpriteBatch drawing is not on PixiJS yet (step 3)";
+		if ( first == null ) return;
+		if ( !computed || !optimized ) {
+			quads = computeQuads();
+			computed = true;
+		}
+		// @spec html5.h2d.batch::too-many-elements-draws-nothing
+		if ( nbQuad() > MAX_ELEMENTS ) {
+			#if debug
+			throw "SpriteBatch asssertion : too many elements..." + nbQuad() + " is too much";
+			#else
+			return;
+			#end
+		}
+		for ( quad in quads )
+			ctx.drawQuad(this, quad);
+	}
+
+	function computeQuads() : Array<RenderContext.DrawCommand> {
+		var computedQuads = [];
+		var e = first;
+		while ( e != null ) {
+			if ( e.visible && e.tile != null )
+				computedQuads.push(quadOf(e));
+			e = e.next;
+		}
+		return computedQuads;
+	}
+
+	/** @spec html5.h2d.batch::element-drawn-through-batch: the fork's pushElemSRT, as a corner and two axes. */
+	function quadOf( e : BatchElement ) : RenderContext.DrawCommand {
+		var t = e.tile;
+		tmpMatrix.identity();
+		tmpMatrix.skew(e.skewX, e.skewY);
+		tmpMatrix.scale(e.scaleX, e.scaleY);
+		tmpMatrix.rotate(e.rotation);
+		tmpMatrix.translate(e.x, e.y);
+		return {
+			texture: t.getTexture(),
+			cutX: t.x,
+			cutY: t.y,
+			cutWidth: t.width,
+			cutHeight: t.height,
+			a: tmpMatrix.a,
+			b: tmpMatrix.b,
+			c: tmpMatrix.c,
+			d: tmpMatrix.d,
+			tx: tmpMatrix.transformX(t.dx, t.dy),
+			ty: tmpMatrix.transformY(t.dx, t.dy),
+			alpha: e.alpha,
+		};
 	}
 
 	@:noDebug

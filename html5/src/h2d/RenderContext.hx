@@ -34,21 +34,36 @@ class RenderContext {
 		drawn = [];
 	}
 
-	/** Same corner and axes as the fork's Drawable.emitTile. */
+	/** Same corner and axes as the fork's Drawable.emitTile: a tile is a quad with no transform of its own. */
 	public function drawTile(drawable:Drawable, tile:Tile) {
-		drawn.push({
+		drawQuad(drawable, {
 			texture: tile.getTexture(),
 			cutX: tile.x,
 			cutY: tile.y,
 			cutWidth: tile.width,
 			cutHeight: tile.height,
-			a: drawable.matA,
-			b: drawable.matB,
-			c: drawable.matC,
-			d: drawable.matD,
-			tx: drawable.absX + tile.dx * drawable.matA + tile.dy * drawable.matC,
-			ty: drawable.absY + tile.dx * drawable.matB + tile.dy * drawable.matD,
-			alpha: drawable.alpha,
+			a: 1, b: 0, c: 0, d: 1,
+			tx: tile.dx,
+			ty: tile.dy,
+			alpha: 1.0,
+		});
+	}
+
+	/** Draws a quad given in the drawable's space (like a batch element's), through the drawable's absolute matrix. */
+	public function drawQuad(drawable:Drawable, quad:DrawCommand) {
+		drawn.push({
+			texture: quad.texture,
+			cutX: quad.cutX,
+			cutY: quad.cutY,
+			cutWidth: quad.cutWidth,
+			cutHeight: quad.cutHeight,
+			a: drawable.matA * quad.a + drawable.matC * quad.b,
+			b: drawable.matB * quad.a + drawable.matD * quad.b,
+			c: drawable.matA * quad.c + drawable.matC * quad.d,
+			d: drawable.matB * quad.c + drawable.matD * quad.d,
+			tx: drawable.absX + quad.tx * drawable.matA + quad.ty * drawable.matC,
+			ty: drawable.absY + quad.tx * drawable.matB + quad.ty * drawable.matD,
+			alpha: quad.alpha * drawable.alpha,
 		});
 	}
 }
