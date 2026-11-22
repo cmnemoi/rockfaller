@@ -248,3 +248,25 @@ Playwright :
 - Étant donné le canevas affiché à la moitié de sa taille, quand on clique sur le canard, alors le clic l'atteint.
 - Étant donné la souris sur le canard, alors le curseur devient une main.
 - Étant donné un écran tactile, quand on touche le canard, alors son `Interactive` reçoit le clic.
+
+## `Graphics`
+
+Le jeu n'utilise `h2d.Graphics` qu'à un endroit : l'écran noir des transitions (`ProcessManager`), un rectangle plein sur toute la scène, dont l'alpha est animé. `mt.gx.h2d.Proto` et `mt.deepnight.hui` l'utilisent aussi, mais le code du jeu ne les atteint pas.
+
+### Règle
+
+#### Les rectangles pleins se dessinent dans leur couleur
+
+`{#html5.h2d.graphics::filled-rectangles}`
+
+Entre `beginFill(couleur, alpha)` et `endFill()`, `drawRect` ajoute un rectangle de cette couleur et de cet alpha. Comme dans le fork, l'octet du haut de la couleur n'est pas l'alpha. Un `drawRect` hors d'un remplissage ne dessine rien. `clear()` retire les rectangles. L'alpha du `Graphics` s'ajoute à celui du remplissage.
+
+Les lignes, les cercles et les polygones du fork ne sont pas portés : un appel échoue à la compilation.
+
+### Critères d'acceptation (compilés en JS, lancés par Node)
+
+- Étant donné l'écran noir de `ProcessManager`, quand la scène se dessine, alors un rectangle noir opaque de 640 × 768 est dessiné en (0, 0).
+- Étant donné l'écran noir à l'alpha 0,5, alors il est dessiné à moitié transparent.
+- Étant donné un remplissage rouge puis un remplissage bleu à l'alpha 0,5, alors chaque rectangle garde sa couleur.
+- Étant donné un `drawRect` sans `beginFill`, alors rien n'est dessiné.
+- Étant donné `clear()`, alors rien n'est dessiné.

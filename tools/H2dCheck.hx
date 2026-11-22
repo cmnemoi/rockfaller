@@ -61,6 +61,11 @@ class H2dCheck {
 		anInteractiveFlippedOnOneAxisNeverGetsTheClick();
 		aRotatedInteractiveIsClickedThroughItsRotation();
 		aBackgroundColorIsDrawnAsAColoredRectangle();
+		aFilledRectangleIsDrawnInItsColor();
+		aGraphicsFadesWithItsAlpha();
+		eachFillKeepsItsOwnColor();
+		aRectangleOutsideAFillDrawsNothing();
+		clearRemovesTheRectangles();
 		trace("PASS");
 	}
 
@@ -658,6 +663,69 @@ class H2dCheck {
 			"a background of 50 x 30 is drawn at (100, 100) (got " + drawn.length + " commands)");
 		var matrix = drawn[0].colorMatrix;
 		check(matrix != null && near(matrix[0], 1) && near(matrix[6], 0) && near(matrix[18], 0x80 / 255), "it is red at alpha 0x80 (got " + matrix + ")");
+	}
+
+	/** The transition's black screen of ProcessManager: a black rectangle over the whole stage. */
+	static function blackScreenIn(scene:Scene):h2d.Graphics {
+		var blackScreen = new h2d.Graphics(scene);
+		blackScreen.beginFill(0xFF000000);
+		blackScreen.drawRect(0, 0, 640, 768);
+		blackScreen.endFill();
+		return blackScreen;
+	}
+
+	/** @spec html5.h2d.graphics::filled-rectangles */
+	static function aFilledRectangleIsDrawnInItsColor() {
+		var scene = new Scene();
+		blackScreenIn(scene);
+
+		var drawn = render(scene);
+
+		check(drawn.length == 1 && drawn[0].a == 640 && drawn[0].d == 768 && drawn[0].tx == 0 && drawn[0].ty == 0, "the black screen covers 640 x 768 from (0, 0)");
+		var matrix = drawn[0].colorMatrix;
+		check(matrix != null && matrix[0] == 0 && matrix[6] == 0 && matrix[12] == 0 && matrix[18] == 1, "it is opaque black (got " + matrix + ")");
+	}
+
+	/** @spec html5.h2d.graphics::filled-rectangles */
+	static function aGraphicsFadesWithItsAlpha() {
+		var scene = new Scene();
+		blackScreenIn(scene).alpha = 0.5;
+
+		var matrix = render(scene)[0].colorMatrix;
+
+		check(matrix[18] == 0.5, "the black screen at alpha 0.5 is drawn half transparent (got " + matrix + ")");
+	}
+
+	/** @spec html5.h2d.graphics::filled-rectangles */
+	static function eachFillKeepsItsOwnColor() {
+		var scene = new Scene();
+		var graphics = new h2d.Graphics(scene);
+		graphics.beginFill(0xFF0000);
+		graphics.drawRect(0, 0, 10, 10);
+		graphics.beginFill(0x0000FF, 0.5);
+		graphics.drawRect(20, 0, 10, 10);
+		graphics.endFill();
+
+		var drawn = render(scene);
+
+		check(drawn.length == 2 && drawn[0].colorMatrix[0] == 1 && drawn[1].colorMatrix[12] == 1 && drawn[1].colorMatrix[18] == 0.5 && drawn[1].tx == 20,
+			"a red rectangle, then a half-transparent blue one at x = 20");
+	}
+
+	/** @spec html5.h2d.graphics::filled-rectangles */
+	static function aRectangleOutsideAFillDrawsNothing() {
+		var scene = new Scene();
+		new h2d.Graphics(scene).drawRect(0, 0, 10, 10);
+
+		check(render(scene).length == 0, "a rectangle drawn without beginFill draws nothing");
+	}
+
+	/** @spec html5.h2d.graphics::filled-rectangles */
+	static function clearRemovesTheRectangles() {
+		var scene = new Scene();
+		blackScreenIn(scene).clear();
+
+		check(render(scene).length == 0, "clear() removes the rectangles");
 	}
 
 	static function bitmapCutAt(cutX:Int):Bitmap {
