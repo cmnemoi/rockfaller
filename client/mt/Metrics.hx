@@ -71,7 +71,7 @@ class Metrics {
 	 */
 	public static inline function h() {
 		var stageH =#if(flash||openfl) flash.Lib.current.stage.stageHeight
-					#elseif(heaps) hxd.Stage.getInstance().height
+					#elseif(heaps || js) hxd.Stage.getInstance().height
 					#else
 						#error "Metrics.h() cannot be found on that target/platform"
 					#end;
@@ -88,7 +88,7 @@ class Metrics {
 	 */
 	public static inline function w() {
 		var stageW =#if(flash||openfl) flash.Lib.current.stage.stageWidth
-					#elseif(heaps) hxd.Stage.getInstance().width
+					#elseif(heaps || js) hxd.Stage.getInstance().width
 					#else
 						#error "Metrics.w() cannot be found on that target/platform"
 					#end;
