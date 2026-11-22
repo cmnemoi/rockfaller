@@ -168,7 +168,7 @@ class GoalManager
 		}
 		
 		switch (tb) {
-			case TypeBonus.TBColor :
+			case TypeBonus.TBColor(_) :
 				if (SpecialManager.IS_ON_MERCURY(rbomb.cX, rbomb.cY))
 					for (r in arRock)
 						SpecialManager.CREATE_MERCURY(r.cX, r.cY);

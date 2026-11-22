@@ -529,7 +529,7 @@ class FX
 				cFX.rotation = 3.14 / 4;
 				createBombX(true);
 				createBombY(true);
-			case TypeBonus.TBColor :
+			case TypeBonus.TBColor(_) :
 				DO_GENERAL_SHAKE(10, 10);
 				for (ro in arRockToDestroy) {
 					createMiniBomb(ro.cX, ro.cY);

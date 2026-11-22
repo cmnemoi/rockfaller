@@ -222,7 +222,7 @@ class SpecialManager
 							for (dr in arRockDeleted) {
 								if (Rock.IS_NEIGHBOOR(dr, r) && dr.type != null) {
 									switch (tb) {
-										case TypeBonus.TBColor :
+										case TypeBonus.TBColor(_) :
 											switch (dr.type) {
 												case TypeRock.TRClassic :
 													r.type = TypeRock.TRBonus(TypeBonus.TBColor(dr.type));

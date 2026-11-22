@@ -229,7 +229,7 @@ class Common {
 					case TypeBonus.TBBombVert :		return "bombVert";
 					case TypeBonus.TBBombPlus :		return "bombPlus";
 					case TypeBonus.TBBombCross :	return "bombCross";
-					case TypeBonus.TBColor :		return "bombColor";
+					case TypeBonus.TBColor(_) :		return "bombColor";
 				}
 			case TypeRock.TRMagma :
 				return "lava";
