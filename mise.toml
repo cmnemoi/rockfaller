@@ -38,6 +38,10 @@ run = "haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -m
 description = "Check the player's progress"
 run = "haxe -cp . -cp src/com -D version2_1 -resource data/levels.json@levels -main tools.ProgressCheck --interp"
 
+[tasks."check:atlas"]
+description = "Check how TexturePacker atlases are read"
+run = "haxe -cp . -cp client -main tools.AtlasCheck --interp"
+
 [tasks."test:levels"]
 description = "Test the level extraction (without the videos)"
 dir = "{{config_root}}/tools/levels"
@@ -53,7 +57,7 @@ run = "node --test 'web/*.test.mjs'"
 
 [tasks.test]
 description = "Run every test that needs no video"
-depends = ["check:protocol", "check:progress", "test:levels", "test:web"]
+depends = ["check:protocol", "check:progress", "check:atlas", "test:levels", "test:web"]
 
 [tasks.build]
 description = "Build the release Flash client"

@@ -83,7 +83,8 @@ Lecture de l'atlas (tests en Haxe, lancés par `haxe --interp` en 3.2.1 et en 4.
 
 - Étant donné `assets1.xml`, quand on lit `animalDuck`, alors on obtient le rectangle (418, 1821, 61 × 67), le décalage (-20, -16) et le cadre 98 × 98.
 - Étant donné `taupinotron.xml` avec les dossiers en préfixe, quand on lit les découpes, alors `gripAnim/0000`, `gripAnim/0001`… donnent `gripAnim` images 0, 1…
-- Étant donné `taupinotron.xml` sans les dossiers en préfixe, quand on lit les découpes, alors le dossier disparaît du nom.
+- Étant donné `taupinotron.xml` sans les dossiers en préfixe, quand on lit les découpes, alors `gripAnim/0000` perd tout son nom : le dossier part, puis le numéro. Le nom obtenu est vide, et c'est pour cela que le jeu plantait au niveau 3.
+- Étant donné `taupinotron.xml`, quand on cherche `gripAnim/0001`, alors on le trouve aussi par son nom brut.
 - Étant donné `fx.xml`, quand on lit `mudPartSmall-24`, alors le nom obtenu est `mudPartSmall-`.
 - Étant donné deux découpes identiques, quand on les lit, alors elles ont le même numéro d'image.
 - Étant donné `assets1.xml`, quand on cherche un nom qui n'existe pas, alors la recherche échoue avec un message qui contient ce nom.

@@ -41,6 +41,9 @@ jobs:
       - name: Check the player's progress
         run: mise run check:progress
 
+      - name: Check how atlases are read
+        run: mise run check:atlas
+
       - uses: astral-sh/setup-uv@v6
 
       - name: Test the level extraction

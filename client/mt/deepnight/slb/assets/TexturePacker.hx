@@ -11,24 +11,7 @@ import mt.deepnight.slb.BLib;
 
 #end
 
-//this definition can invade other module, so let's stick to privacy for now
-private typedef Slice = {
-	var name	: String;
-	var frame	: Int;
-	var x		: Int;
-	var y		: Int;
-	var wid		: Int;
-	var hei		: Int;
-	var offX	: Int;
-	var offY	: Int;
-	var fwid	: Int;
-	var fhei	: Int;
-}
-
-
 class TexturePacker {
-	@:noCompletion public static var SLICES : Array<Slice> = new Array();
-
 
 	/**
 	 * Import the specified TexturePacker data using OpenFl Assets
@@ -202,83 +185,18 @@ class TexturePacker {
 
 	#if !macro
 
-	static inline function makeChecksum(slice:Slice) : String {
-		return slice.name+","+slice.x+","+slice.y+","+slice.wid+","+slice.hei+","+slice.offX+","+slice.offY+","+slice.fwid+","+slice.fhei;
-	}
-
 	@:noCompletion public static function parseXml(xmlString:String, source:flash.display.BitmapData, treatFoldersAsPrefixes:Bool #if h3d, ?tile:h2d.Tile#end) : BLib {
 		var lib = new BLib(source #if h3d, tile #end);
-		var xml = new haxe.xml.Fast( Xml.parse(xmlString) );
-		var removeExt = ~/\.(png|gif|jpeg|jpg)/gi;
-		var leadNumber = ~/([0-9]*)$/;
 		try {
-			// Parse frames
-			var slices : Map<String, Int> = new Map();
-			var anims : Map<String, Array<Int>> = new Map();
-			for(atlas in xml.nodes.TextureAtlas) {
-				var last : Slice = null;
-				var frame = 0;
-				for(sub in atlas.nodes.SubTexture) {
-					// Read XML
-					var slice : Slice = {
-						name	: sub.att.name,
-						frame	: 0,
-						x		: Std.parseInt(sub.att.x),
-						y		: Std.parseInt(sub.att.y),
-						wid		: Std.parseInt(sub.att.width),
-						hei		: Std.parseInt(sub.att.height),
-						offX	: !sub.has.frameX ? 0 : Std.parseInt(sub.att.frameX),
-						offY	: !sub.has.frameY ? 0 : Std.parseInt(sub.att.frameY),
-						fwid	: !sub.has.frameWidth ? Std.parseInt(sub.att.width) : Std.parseInt(sub.att.frameWidth),
-						fhei	: !sub.has.frameHeight ? Std.parseInt(sub.att.height) : Std.parseInt(sub.att.frameHeight),
-					}
-
-					// Clean-up name
-					slice.name = removeExt.replace(sub.att.name, "");
-					if( slice.name.indexOf("/")>=0 )
-						if( treatFoldersAsPrefixes )
-							slice.name = StringTools.replace(slice.name, "/", "_");
-						else
-							slice.name = slice.name.substr(slice.name.lastIndexOf("/")+1);
-
-					// Remove leading numbers and "_"
-					if( leadNumber.match(slice.name) ) {
-						slice.name = slice.name.substr(0, leadNumber.matchedPos().pos);
-						while( slice.name.length>0 && slice.name.charAt(slice.name.length-1)=="_" ) // trim leading "_"
-							slice.name = slice.name.substr(0, slice.name.length-1);
-					}
-
-					// New serie
-					if( last == null || last.name != slice.name)
-						frame = 0;
-
-					var csum = makeChecksum(slice);
-					if( !slices.exists(csum) ) {
-						// Not an existing slice
-						slices.set(csum, frame);
-						slice.frame = frame;
-						lib.sliceCustom(slice.name, slice.frame, slice.x, slice.y, slice.wid, slice.hei, {x:slice.offX, y:slice.offY, realWid:slice.fwid, realHei:slice.fhei} );
-						// Also slice using the raw name
-						lib.sliceCustom(sub.att.name, 0, slice.x, slice.y, slice.wid, slice.hei, {x:slice.offX, y:slice.offY, realWid:slice.fwid, realHei:slice.fhei} );
-						frame++;
-					}
-
-					var realFrame = slices.get(csum);
-					if( !anims.exists(slice.name) )
-						anims.set(slice.name, [realFrame]);
-					else
-						anims.get(slice.name).push(realFrame);
-
-					SLICES.push(slice);
-
-					last = slice;
-				}
+			var atlas = TexturePackerXml.read(xmlString, treatFoldersAsPrefixes);
+			for(entry in atlas.slices) {
+				var slice = entry.slice;
+				var realFrame = {x:slice.offX, y:slice.offY, realWid:slice.fwid, realHei:slice.fhei};
+				lib.sliceCustom(slice.name, slice.frame, slice.x, slice.y, slice.wid, slice.hei, realFrame);
+				lib.sliceCustom(entry.rawName, 0, slice.x, slice.y, slice.wid, slice.hei, realFrame);
 			}
-
-			// Define anims
-			for(k in anims.keys())
-				lib.__defineAnim(k, anims.get(k));
-
+			for(name in atlas.animations.keys())
+				lib.__defineAnim(name, atlas.animations.get(name));
 		}
 		catch(e:Dynamic) {
 			throw SLBError.AssetImportFailed(e);
