@@ -6,7 +6,6 @@ import js.lib.Promise;
 import mt.deepnight.slb.BLib;
 import mt.deepnight.slb.assets.TexturePacker;
 import hxd.res.FontBuilder;
-import pixi.core.Application;
 import pixi.core.Pixi.MipmapModes;
 import pixi.core.textures.BaseTexture;
 
@@ -17,8 +16,6 @@ import pixi.core.textures.BaseTexture;
 class Main {
 	static inline var GAME_WIDTH = 640;
 	static inline var GAME_HEIGHT = 768;
-	static inline var UPDATES_PER_SECOND = 30;
-	static inline var MAX_FRAME_MS = 100;
 	static inline var TITLE_FONT = "BenchNine";
 	static inline var TITLE_FONT_URL = "../font/BenchNine-Regular.ttf";
 	static inline var TITLE_SIZE = 44;
@@ -26,54 +23,55 @@ class Main {
 	static inline var DUCK_SOUND = "rocks_mouseover2.mp3";
 
 	static function main() {
-		var app = new Application({width: GAME_WIDTH, height: GAME_HEIGHT, backgroundColor: 0x000000});
-		Browser.document.body.appendChild(app.view);
-		hxd.Stage.getInstance().attachTo(app.view);
-		mt.audio.Audio.backend = new mt.audio.WebAudioBackend();
-		var scene = new Scene();
-		var renderer = new PixiRenderer(app.renderer);
-		app.stage.addChild(renderer.root);
+		var engine = new h3d.Engine();
+		engine.onReady = function() {
+			var scene = new Scene();
+			Promise.all([loadLib("assets1", false), loadLib("taupinotron", true), FontBuilder.load(TITLE_FONT, TITLE_FONT_URL), mt.audio.Sound.preload(DUCK_SOUND, "../sfx/" + DUCK_SOUND)]).then(function(loaded:Array<Dynamic>) {
+				var libs:Array<BLib> = cast loaded;
+				var items = libs[0];
+				var taupinotron = libs[1];
+				var duck = items.h_get("animalDuck", 0.5, 0.5, scene);
+				duck.setPos(GAME_WIDTH / 4, GAME_HEIGHT / 2);
+				var grip = taupinotron.h_get("gripAnim", 0.5, 0.5, scene);
+				grip.setPos(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+				grip.a.playAndLoop("gripAnim");
+				var title = new h2d.Text(FontBuilder.getFont(TITLE_FONT, TITLE_SIZE, {antiAliasing: false}), scene);
+				title.text = "Rockfaller Journey : \u00E9t\u00E9";
+				title.setPos(20, 40);
+				// Clicking the duck turns it: the Interactive covers its 98 x 98 frame, centred on it.
+				var duckButton = new h2d.Interactive(DUCK_FRAME, DUCK_FRAME, scene);
+				duckButton.setPos(duck.x - DUCK_FRAME / 2, duck.y - DUCK_FRAME / 2);
+				var duckClicks = 0;
+				duckButton.onClick = function(_) {
+					duckClicks++;
+					duck.rotation += Math.PI / 8;
+					new mt.flash.Sfx(mt.flash.Sfx.getAsset(DUCK_SOUND)).play();
+				};
 
-		Promise.all([loadLib("assets1", false), loadLib("taupinotron", true), FontBuilder.load(TITLE_FONT, TITLE_FONT_URL), mt.audio.Sound.preload(DUCK_SOUND, "../sfx/" + DUCK_SOUND)]).then(function(loaded:Array<Dynamic>) {
-			var libs:Array<BLib> = cast loaded;
-			var items = libs[0];
-			var taupinotron = libs[1];
-			var duck = items.h_get("animalDuck", 0.5, 0.5, scene);
-			duck.setPos(GAME_WIDTH / 4, GAME_HEIGHT / 2);
-			var grip = taupinotron.h_get("gripAnim", 0.5, 0.5, scene);
-			grip.setPos(GAME_WIDTH / 2, GAME_HEIGHT / 2);
-			grip.a.playAndLoop("gripAnim");
-			var title = new h2d.Text(FontBuilder.getFont(TITLE_FONT, TITLE_SIZE, {antiAliasing: false}), scene);
-			title.text = "Rockfaller Journey : \u00E9t\u00E9";
-			title.setPos(20, 40);
-			// Clicking the duck turns it: the Interactive covers its 98 x 98 frame, centred on it.
-			var duckButton = new h2d.Interactive(DUCK_FRAME, DUCK_FRAME, scene);
-			duckButton.setPos(duck.x - DUCK_FRAME / 2, duck.y - DUCK_FRAME / 2);
-			var duckClicks = 0;
-			duckButton.onClick = function(_) {
-				duckClicks++;
-				duck.rotation += Math.PI / 8;
-				new mt.flash.Sfx(mt.flash.Sfx.getAsset(DUCK_SOUND)).play();
-			};
+				// The game's Main loop: the timer counts Flash frames (30 per second), each one is an update.
+				var flashFrames = 0.0;
+				hxd.System.setLoop(function() {
+					hxd.Timer.update();
+					flashFrames += hxd.Timer.tmod;
+					while (flashFrames >= 1) {
+						taupinotron.updateChildren();
+						scene.checkEvents(); // what the game's Process.updateAll does
+						flashFrames--;
+					}
+					engine.render(scene);
+				});
 
-			var context = new RenderContext();
-			var elapsedMs = 0.0;
-			app.ticker.add(function(_) {
-				// Like PixiJS's deltaMS (missing from the externs): a frame counts for 100 ms at most, so a hidden tab does not fast-forward.
-				elapsedMs += Math.min(app.ticker.elapsedMS, MAX_FRAME_MS);
-				while (elapsedMs >= 1000 / UPDATES_PER_SECOND) {
-					elapsedMs -= 1000 / UPDATES_PER_SECOND;
-					taupinotron.updateChildren();
-					scene.checkEvents(); // what the game's Process.updateAll does
-				}
-				scene.render(context);
-				renderer.show(context.drawn);
-			});
-
-			#if debug
-			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
-			#end
-		}).catchError(showError);
+				#if debug
+				var app = {
+					view: engine.pixiRenderer.view,
+					renderer: engine.pixiRenderer,
+					render: function() engine.render(scene),
+				};
+				untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
+				#end
+			}).catchError(showError);
+		};
+		engine.init();
 	}
 
 	static function loadLib(atlas:String, treatFoldersAsPrefixes:Bool):Promise<BLib> {

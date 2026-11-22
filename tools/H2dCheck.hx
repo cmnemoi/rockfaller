@@ -67,6 +67,8 @@ class H2dCheck {
 		aRectangleOutsideAFillDrawsNothing();
 		clearRemovesTheRectangles();
 		particleBoundsContainLikeFlash();
+		at60HzTheTimerSettlesOnHalfAFlashFrame();
+		aFrameLongerThanHalfASecondDoesNotJumpTheTimer();
 		trace("PASS");
 	}
 
@@ -735,6 +737,27 @@ class H2dCheck {
 
 		check(bounds.contains(10, 20) && bounds.contains(39.9, 59.9), "the top-left corner and the inside are in");
 		check(!bounds.contains(40, 30) && !bounds.contains(20, 60) && !bounds.contains(9.9, 30), "the right and bottom edges, and what is left of x, are out");
+	}
+
+	/** The game runs at Flash's 30 frames per second: on a 60 Hz screen, a frame is half a Flash frame. */
+	static function at60HzTheTimerSettlesOnHalfAFlashFrame() {
+		hxd.Timer.calc_tmod = 1;
+		for (frame in 0...200) {
+			hxd.Timer.oldTime = haxe.Timer.stamp() - 1 / 60;
+			hxd.Timer.update();
+		}
+
+		check(Math.abs(hxd.Timer.tmod - 0.5) < 0.01, "at 60 Hz, tmod settles on 0.5 (got " + hxd.Timer.tmod + ")");
+	}
+
+	/** Like the fork: a frame longer than maxDeltaTime (0.5 s) counts as one Flash frame and leaves tmod alone. */
+	static function aFrameLongerThanHalfASecondDoesNotJumpTheTimer() {
+		hxd.Timer.calc_tmod = 1;
+		hxd.Timer.oldTime = haxe.Timer.stamp() - 2;
+
+		hxd.Timer.update();
+
+		check(hxd.Timer.tmod == 1 && Math.abs(hxd.Timer.deltaT - 1 / 30) < 1e-9, "a 2 s frame keeps tmod at 1 and counts 1/30 s (got " + hxd.Timer.tmod + ", " + hxd.Timer.deltaT + ")");
 	}
 
 	static function bitmapCutAt(cutX:Int):Bitmap {

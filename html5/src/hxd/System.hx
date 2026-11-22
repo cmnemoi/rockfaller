@@ -25,6 +25,29 @@ class System {
 		return msg;
 	}
 
+	#if js
+	static var loop:Void->Void;
+	static var looping = false;
+
+	/** Like the fork's Flash ENTER_FRAME loop: f runs once per screen frame (requestAnimationFrame), until replaced or set to null. */
+	public static function setLoop(f:Void->Void) {
+		loop = f;
+		if (f != null && !looping) {
+			looping = true;
+			js.Browser.window.requestAnimationFrame(runLoop);
+		}
+	}
+
+	static function runLoop(_) {
+		if (loop == null) {
+			looping = false;
+			return;
+		}
+		loop();
+		js.Browser.window.requestAnimationFrame(runLoop);
+	}
+	#end
+
 	public static function setCursor(c:Cursor) {
 		cursor = c;
 		#if js
