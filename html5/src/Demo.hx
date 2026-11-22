@@ -13,7 +13,7 @@ import pixi.core.textures.BaseTexture;
  * Entry point of the PixiJS page (/pixi/): the game's own SpriteLib, drawn by the h2d layer on PixiJS.
  * @spec html5.slb::page-plays-grip-anim
  */
-class Main {
+class Demo {
 	static inline var GAME_WIDTH = 640;
 	static inline var GAME_HEIGHT = 768;
 	static inline var TITLE_FONT = "BenchNine";

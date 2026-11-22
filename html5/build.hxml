@@ -1,2 +1,3 @@
 common.hxml
+-main Demo
 -js ../dist/web/pixi/main.js

@@ -1,0 +1,26 @@
+# The game, built for the browser: run in html5/ through mise (Haxe 4.3.7).
+# The game's folders come first: common.hxml's src comes last and wins.
+-cp ../client/client
+-cp ../client/client/src
+-cp ../client/client/lang
+-cp ../src/com
+-cp ../data
+-cp ../client/client/assetsWeb
+-lib castle
+common.hxml
+-D standalone
+-D NoTextureGC
+-D sound
+-D version2_1
+-D resourcesPath=assetsWeb
+-main GameMain
+-js ../dist/web/pixi/game.js
+# The resources the Flash build embeds (client/client/include.xml).
+-resource ../data/data.cdb@data
+-resource ../data/levels.json@levels
+-resource ../client/client/lang/client.fr.mo@fr
+-resource ../client/client/lang/client.es.mo@es
+-resource ../client/client/lang/client.en.mo@en
+-resource ../client/client/lang/client.pt.mo@pt
+-resource ../client/client/lang/client.it.mo@it
+-resource ../client/client/lang/client.de.mo@de

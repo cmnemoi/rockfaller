@@ -7,4 +7,3 @@
 -D h3d
 # Int, Float and Bool fields left unset get Flash's 0 and false, not JS's undefined.
 --macro addGlobalMetadata('', '@:build(FlashDefaults.build())', true, true, false)
--main Main

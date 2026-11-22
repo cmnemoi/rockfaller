@@ -17,7 +17,7 @@ private class Char {
 
 class TileFont extends h2d.Font {
 	
-	inline function new(  
+	#if flash inline #end function new( // Haxe 4 cannot inline a constructor that calls super
 		name,size, lineHeight,
 		symbols : Array<Char>
 	) {

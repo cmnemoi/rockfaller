@@ -62,7 +62,7 @@ run = "node --test 'web/*.test.mjs'"
 
 [tasks.test]
 description = "Run every test that needs no video"
-depends = ["check:protocol", "check:progress", "check:atlas", "html5:check:atlas", "html5:check:h2d", "html5:check:sound", "html5:check:assets", "html5:check:spritelib", "test:levels", "test:web"]
+depends = ["check:protocol", "check:progress", "check:atlas", "html5:check:atlas", "html5:check:h2d", "html5:check:sound", "html5:check:assets", "html5:check:boot", "html5:check:spritelib", "test:levels", "test:web"]
 
 [tasks.build]
 description = "Build the release Flash client"
@@ -74,6 +74,7 @@ depends = ["build"]
 run = [
   "bash tools/build-web.sh",
   "mise -C html5 exec -- haxe build.hxml",
+  "mise -C html5 exec -- haxe game.hxml",
 ]
 
 [tasks.serve]
@@ -107,6 +108,13 @@ run = [
   "node dist/checks/assets.js",
 ]
 
+[tasks."html5:check:boot"]
+description = "Check the JS build's progress store and asset list (compiled to JS, run by Node)"
+run = [
+  "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp client/client -cp src/com -cp .haxelib/h3d/git -cp html5/src -D h3d --macro \"addGlobalMetadata('', '@:build(FlashDefaults.build())', true, true, false)\" -main tools.BootCheck -js dist/checks/boot.js",
+  "node dist/checks/boot.js",
+]
+
 [tasks."html5:check:spritelib"]
 description = "Check the SpriteLib (BLib, HSprite, AnimManager) on the h2d layer, with Haxe 4"
 run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git -cp html5/src -D h3d --macro \"addGlobalMetadata('', '@:build(FlashDefaults.build())', true, true, false)\" -main tools.SpriteLibCheck --interp"
@@ -114,6 +122,6 @@ run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git
 [tasks."test:site"]
 description = "Check the built site in headless Chrome: run `mise run web` first"
 run = [
-  "mise -C html5 exec -- haxe common.hxml -debug -js ../dist/html5-test/main.js",
+  "mise -C html5 exec -- haxe common.hxml -main Demo -debug -js ../dist/html5-test/main.js",
   "npx playwright test",
 ]

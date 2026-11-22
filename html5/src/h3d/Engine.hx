@@ -53,7 +53,8 @@ class Engine {
 		renderer = new PixiRenderer(pixiRenderer);
 		js.Browser.document.body.appendChild(pixiRenderer.view);
 		hxd.Stage.getInstance().attachTo(pixiRenderer.view);
-		mt.audio.Audio.backend = new mt.audio.WebAudioBackend();
+		if (mt.audio.Audio.backend == null) // GameMain makes it first, to decode the sounds it preloads
+			mt.audio.Audio.backend = new mt.audio.WebAudioBackend();
 		#end
 		onReady();
 	}
