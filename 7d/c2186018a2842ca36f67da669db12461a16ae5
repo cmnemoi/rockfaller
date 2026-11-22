@@ -1,0 +1,41 @@
+package.json
+  s_da33d0161772b7::t_7c1dc9d2cfc233 1-8
+docs/specs/html5-spritelib-on-pixi.md
+  s_da33d0161772b7::t_92718456453fd1 82
+html5/test/pixi-page.spec.mjs
+  s_da33d0161772b7::t_ba4a5bd726c13b 1-4,8-13,15-26,30-35,39,42-43,47,50-56,58,60-61,65-66,68,72,74-75,79-81,83,85-86
+.gitignore
+  s_da33d0161772b7::t_7c1dc9d2cfc233 9-11
+docs/specs/html5-plan.md
+  s_da33d0161772b7::t_92718456453fd1 91
+.github/workflows/web.yml
+  s_da33d0161772b7::t_a9901531d65e81 30-31,42,44-45,47-48,50-51,53-54
+mise.toml
+  s_da33d0161772b7::t_a9901531d65e81 30-36,72,74-77,97-98,101
+playwright.config.mjs
+  s_da33d0161772b7::t_17a2edf252e272 1-15,17-18
+  s_da33d0161772b7::t_d74c361917214e 16
+package-lock.json
+  s_da33d0161772b7::t_d108bbeac8ddd5 1-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7dc2186018a2842ca36f67da669db12461a16ae5",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
