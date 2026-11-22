@@ -92,7 +92,8 @@ class Lib {
 		#end
 	}
 
-	#if( h3d || heaps )
+	// These two helpers need the fork's GPU engine, which the JS build replaces; the game calls neither.
+	#if( (h3d || heaps) && flash )
 	public static function redirectTracesToH2dConsole(c:h2d.Console) {
 		haxe.Log.trace = function(m, ?pos) {
 			if ( pos != null && pos.customParams == null )
@@ -103,7 +104,7 @@ class Lib {
 	}
 	#end
 
-	#if h3d
+	#if (h3d && flash)
    /**
 	* guarantees that the screen will return some correctly size bitmap...
 	*/

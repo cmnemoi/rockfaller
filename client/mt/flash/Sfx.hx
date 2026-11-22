@@ -5,10 +5,17 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 #end
 
-#if !macro
+#if (flash && !macro)
 import flash.media.Sound;
 import flash.media.SoundTransform;
 import flash.media.SoundChannel;
+#elseif !macro
+// The JS build has no flash package: the same small API, played with Web Audio.
+import mt.audio.Sound;
+import mt.audio.SoundTransform;
+import mt.audio.SoundChannel;
+#end
+#if !macro
 import mt.deepnight.Tweenie;
 import mt.deepnight.Lib;
 #end
@@ -53,7 +60,9 @@ class Sfx {
 	static var SPATIAL_PANNING_RANGE2 : Float = 100 * 100;
 	static inline var DEBUG = false;
 
+	#if flash
 	var loadingBar			: flash.display.Sprite;
+	#end
 	public var sound		: Sound;
 	var volume				: Float;
 	var panning				: Float;
@@ -211,7 +220,7 @@ class Sfx {
 		PLAYING.push(this);
 		curPlay = sound.play( startOffset, loops, st);
 		if( curPlay != null )
-			curPlay.addEventListener(flash.events.Event.SOUND_COMPLETE, onComplete);
+			curPlay.addEventListener(#if flash flash.events.Event.SOUND_COMPLETE #else SoundChannel.SOUND_COMPLETE #end, onComplete);
 	}
 
 	public inline function isPlaying() {
@@ -474,6 +483,25 @@ class Sfx {
 
 	/* IMPORT TOOLS ********************/
 
+	#if !flash
+	/** @spec html5.sound::download-like-flash: no loading bar, the game hides it anyway. */
+	public static function download(?target:Sfx, url:String, ?onComplete:Sfx->Void, ?onError:String->Void) : Sfx {
+		if( target==null )
+			target = new Sfx( new Sound() );
+		else
+			target.sound = new Sound();
+		target.sound.load(url, function() {
+			if( onComplete!=null )
+				onComplete(target);
+		}, function(message) {
+			if( onError==null )
+				trace("Error loading SFX: "+message)
+			else
+				onError(message);
+		});
+		return target;
+	}
+	#else
 	public static function download(?target:Sfx, url:String, ?onComplete:Sfx->Void, ?onError:String->Void) : Sfx {
 		if( target==null )
 			target = new Sfx( new Sound() );
@@ -525,20 +553,21 @@ class Sfx {
 
 		return target;
 	}
+	#end
 
 	#end
 
-	#if openfl
+	#if (openfl || js || macro)
 	/**
 	* Parses the @systemPath directory to create methods to instanciate easily the sounds.  Sounds are instanciated with openfl Assets.
 	*/
 
 	#if !macro
-	static var assetsCache : Map<String,flash.media.Sound> = new Map();
+	static var assetsCache : Map<String,Sound> = new Map();
 	public static function getAsset( n : String ){
 		if( assetsCache.exists(n) )
 			return assetsCache.get(n);
-		var s = openfl.Assets.getSound(n);
+		var s = #if openfl openfl.Assets.getSound(n) #else Sound.preloaded(n) #end;
 		assetsCache.set(n,s);
 		return s;
 	}
@@ -547,10 +576,14 @@ class Sfx {
 		if( assetsCache.exists(n) ) {
 			onLoaded(assetsCache.get(n));
 		} else {
+			#if openfl
 			openfl.Assets.loadSound(n, function(s) {
 				assetsCache.set(n, s);
 				onLoaded(s);
 			});
+			#else
+			onLoaded(getAsset(n));
+			#end
 		}
 	}
 	#end
@@ -616,7 +649,7 @@ class Sfx {
 					},
 					params : [],
 				}
-				var wrapperExpr : Expr = { pos:p, expr:EFunction(name, f) }
+				var wrapperExpr : Expr = { pos:p, expr:EFunction(#if (haxe_ver >= 4) FNamed(name) #else name #end, f) }
 				sounds.push({ field:name, expr:wrapperExpr });
 			}
 			if( n>0 ) break;
@@ -702,7 +735,7 @@ class Sfx {
 					},
 					params : [],
 				}
-				var wrapperExpr : Expr = { pos:p, expr:EFunction(name, f) }
+				var wrapperExpr : Expr = { pos:p, expr:EFunction(#if (haxe_ver >= 4) FNamed(name) #else name #end, f) }
 				sounds.push({ field:name, expr:wrapperExpr });
 			}
 			if( n>0 ) break;

@@ -11,24 +11,24 @@ import haxe.macro.Context;
 enum TType {
 	TLinear;
 	TLoop; // loop : valeur initiale -> valeur finale -> valeur initiale
-	TLoopEaseIn; // loop avec départ lent
+	TLoopEaseIn; // loop avec dÃ©part lent
 	TLoopEaseOut; // loop avec fin lente
 	TEase;
-	TEaseIn; // départ lent, fin linéaire
-	TEaseOut; // départ linéaire, fin lente
-	TBurn; // départ rapide, milieu lent, fin rapide,
-	TBurnIn; // départ rapide, fin lente,
-	TBurnOut; // départ lente, fin rapide
+	TEaseIn; // dÃ©part lent, fin linÃ©aire
+	TEaseOut; // dÃ©part linÃ©aire, fin lente
+	TBurn; // dÃ©part rapide, milieu lent, fin rapide,
+	TBurnIn; // dÃ©part rapide, fin lente,
+	TBurnOut; // dÃ©part lente, fin rapide
 	TZigZag; // une oscillation et termine sur Fin
-	TRand; // progression chaotique de début -> fin. ATTENTION : la durée ne sera pas respectée (plus longue)
-	TShake; // variation aléatoire de la valeur entre Début et Fin, puis s'arrête sur Début (départ rapide)
-	TShakeBoth; // comme TShake, sauf que la valeur tremble aussi en négatif
-	TJump; // saut de Début -> Fin
-	TElasticEnd; // léger dépassement à la fin, puis réajustment
+	TRand; // progression chaotique de dÃ©but -> fin. ATTENTION : la durÃ©e ne sera pas respectÃ©e (plus longue)
+	TShake; // variation alÃ©atoire de la valeur entre DÃ©but et Fin, puis s'arrÃªte sur DÃ©but (dÃ©part rapide)
+	TShakeBoth; // comme TShake, sauf que la valeur tremble aussi en nÃ©gatif
+	TJump; // saut de DÃ©but -> Fin
+	TElasticEnd; // lÃ©ger dÃ©passement Ã  la fin, puis rÃ©ajustment
 	TBackOut;
 }
 
-// GoogleDoc pour tester les valeurs de Bézier
+// GoogleDoc pour tester les valeurs de BÃ©zier
 // ->	https://spreadsheets.google.com/ccc?key=0ArnbjvQe8cVJdGxDZk1vdE50aUxvM1FlcDAxNWRrZFE&hl=en&authkey=CLCwp8QO
 
 
@@ -45,7 +45,7 @@ class Tween {
 	public var from			: Float;
 	public var to			: Float;
 	public var type(default,set): TType;
-	public var plays		: Int; // -1 = infini, 1 et plus = nombre d'exécutions (1 par défaut)
+	public var plays		: Int; // -1 = infini, 1 et plus = nombre d'exÃ©cutions (1 par dÃ©faut)
 	var pixelSnap			: Bool; // arrondi toutes les valeurs si TRUE (utile pour les anims pixelart)
 	public var delay		: Int; // frame based
 

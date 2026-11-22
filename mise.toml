@@ -62,7 +62,7 @@ run = "node --test 'web/*.test.mjs'"
 
 [tasks.test]
 description = "Run every test that needs no video"
-depends = ["check:protocol", "check:progress", "check:atlas", "html5:check:atlas", "html5:check:h2d", "html5:check:spritelib", "test:levels", "test:web"]
+depends = ["check:protocol", "check:progress", "check:atlas", "html5:check:atlas", "html5:check:h2d", "html5:check:sound", "html5:check:spritelib", "test:levels", "test:web"]
 
 [tasks.build]
 description = "Build the release Flash client"
@@ -91,6 +91,13 @@ description = "Check the h2d layer of the JS build (what it draws), compiled to 
 run = [
   "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git -cp html5/src -D h3d --macro \"addGlobalMetadata('', '@:build(FlashDefaults.build())', true, true, false)\" -main tools.H2dCheck -js dist/checks/h2d.js",
   "node dist/checks/h2d.js",
+]
+
+[tasks."html5:check:sound"]
+description = "Check the game's Sfx on the JS build's sound classes, with a fake audio backend (compiled to JS, run by Node)"
+run = [
+  "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git -cp html5/src -D h3d --macro \"addGlobalMetadata('', '@:build(FlashDefaults.build())', true, true, false)\" -main tools.SoundCheck -js dist/checks/sound.js",
+  "node dist/checks/sound.js",
 ]
 
 [tasks."html5:check:spritelib"]
