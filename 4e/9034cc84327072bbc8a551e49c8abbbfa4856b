@@ -1,0 +1,31 @@
+html5/src/h3d/mat/Texture.hx
+  s_da33d0161772b7::t_d4aae2d7c269c5 14-16,51-68
+  s_da33d0161772b7::t_f21d49fd2725c6 69
+html5/src/hxd/res/FontBuilder.hx
+  s_da33d0161772b7::t_d4aae2d7c269c5 45-49
+html5/src/hxd/Stage.hx
+  s_da33d0161772b7::t_d4aae2d7c269c5 26-30
+client/mt/deepnight/deprecated/Process.hx
+  s_da33d0161772b7::t_8afd60355f9c77 6,96-100,106,126,205-208
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4e9034cc84327072bbc8a551e49c8abbbfa4856b",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
