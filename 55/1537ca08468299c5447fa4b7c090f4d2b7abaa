@@ -1,0 +1,55 @@
+html5/src/h2d/Tools.hx
+  s_da33d0161772b7::t_a5755f0f957cba 1-33
+html5/src/hxd/Stage.hx
+  s_da33d0161772b7::t_9fa060d406f577 1-16
+html5/src/h3d/mat/Texture.hx
+  s_da33d0161772b7::t_eed0bbf91934e1 1-26
+html5/src/h2d/Bitmap.hx
+  s_da33d0161772b7::t_a5755f0f957cba 1-42
+html5/src/h2d/SpriteBatch.hx
+  s_da33d0161772b7::t_3381a8128a9703 1-259
+mise.toml
+  s_da33d0161772b7::t_fd45598760133a 60,85-91
+  s_da33d0161772b7::t_9c4076be9c84cf 92
+tools/H2dCheck.hx
+  s_da33d0161772b7::t_17158efa99f6b0 1-4,6-100,102-111
+  s_da33d0161772b7::t_f66320941ad2e8 5,101
+.github/workflows/web.yml
+  s_da33d0161772b7::t_fd45598760133a 63-67
+html5/src/hxd/System.hx
+  s_da33d0161772b7::t_9fa060d406f577 1-17
+html5/src/h2d/Drawable.hx
+  s_da33d0161772b7::t_3b3b7a44a1d68b 14-15,31-32
+  s_da33d0161772b7::t_a5755f0f957cba 1-13,16-30,33-49
+html5/src/h2d/Tile.hx
+  s_da33d0161772b7::t_eed0bbf91934e1 1-79
+html5/src/h2d/RenderContext.hx
+  s_da33d0161772b7::t_eed0bbf91934e1 1-54
+html5/src/h2d/Scene.hx
+  s_da33d0161772b7::t_a5755f0f957cba 1-14
+tools/SpriteLibCheck.hx
+  s_da33d0161772b7::t_582ce030ff9761 3,12,16,20-25,34,39-40,44-111,113-126
+  s_da33d0161772b7::t_f66320941ad2e8 4,112
+  s_da33d0161772b7::t_a2b694d2ee1e09 1-2,5-11,13-15,17-19,26-33,35-38,41-43,127-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "551537ca08468299c5447fa4b7c090f4d2b7abaa",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
