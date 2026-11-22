@@ -54,7 +54,17 @@ Le chemin de sources (`-cp`) de chaque build choisit l'implémentation. Il n'y a
 
 `{#html5::flash-stays-until-parity}`
 
-La version Ruffle reste à l'adresse actuelle. La version PixiJS est publiée sous `/pixi/`. Elle remplace la version Ruffle seulement quand les 180 niveaux sont jouables dans les deux versions.
+La version Ruffle reste à l'adresse actuelle. La version PixiJS est publiée sous `/pixi/`. Elle remplace la version Ruffle seulement quand la parité est atteinte (`html5::parity`).
+
+### La parité autorise la bascule
+
+`{#html5::parity}`
+
+La version PixiJS remplace la version Ruffle quand ces trois conditions sont vraies :
+
+- Les 180 niveaux se terminent dans la version PixiJS.
+- Sur une liste d'écrans fixes (accueil, carte, début du niveau 1, menus), une capture PixiJS et une capture Ruffle sont identiques. Un script les prend dans Chrome sans affichage. Les écrans qui dépendent du hasard (fin de partie) se vérifient à la main.
+- Le jeu se joue au toucher sur un téléphone, ou dans le mode mobile de Chrome. Un toucher agit comme un clic.
 
 ### La progression des joueurs ne se perd pas
 
@@ -62,7 +72,19 @@ La version Ruffle reste à l'adresse actuelle. La version PixiJS est publiée so
 
 Un joueur qui passe de la version Ruffle à la version PixiJS garde ses niveaux débloqués et ses meilleurs scores, dans le même navigateur.
 
-Question ouverte : où Ruffle garde-t-il le stockage local du jeu, et la page PixiJS peut-elle le lire ? À vérifier avant l'étape 4.
+Ruffle garde les `SharedObject` dans le `localStorage`, encodés en AMF (format binaire de Flash). `/pixi/` a la même origine, donc la page peut les lire. Au premier lancement, la version PixiJS lit cette sauvegarde une fois et l'écrit dans son propre format. Le décodeur AMF ne lit que les types que le jeu écrit. On le fait juste avant la bascule.
+
+### Le son démarre au premier clic
+
+`{#html5::sound-starts-on-first-click}`
+
+Les navigateurs bloquent le son avant un geste de l'utilisateur. Le jeu n'affiche pas de bouton « lecture » : l'écran d'accueil reste muet, et le son démarre au premier clic ou toucher dans le jeu.
+
+### L'écran de chargement est simple
+
+`{#html5::simple-loading-screen}`
+
+Le chargement affiche une barre de progression faite avec `loader.png` et `loaderIngame.png`. L'animation de `loading.swf` n'est pas refaite. Cette décision est provisoire.
 
 ### Chaque classe de la couche `h2d` se comporte comme dans Heaps
 
@@ -81,10 +103,16 @@ Un sprite pris dans un atlas n'affiche aucun pixel de ses voisins, même réduit
 Chaque étape est publiable seule. Chaque étape a sa propre spec quand elle commence.
 
 1. **Page PixiJS minimale** — [`html5-first-pixi-page.md`](html5-first-pixi-page.md).
-2. **Grille d'un niveau.** `h2d.Tile`, `h2d.Bitmap` et `h2d.Sprite` sur PixiJS. La page affiche la grille d'un niveau de `data/levels.json`.
-3. **Reste de la couche `h2d`.** `HSprite`, `h2d.Font`, `h2d.Text`, puis `Interactive`, `Layers`, `SpriteBatch`, `Graphics`. Une classe par commit, chacune avec un test.
-4. **Le vrai client en Haxe 4.** Un fichier à la fois. On remplace les ~10 fichiers qui utilisent `flash.*` (son, stockage, événements, préchargeur). On migre la progression (`html5::progress-survives-migration`).
-5. **Parité, puis bascule.** Les 180 niveaux se jouent dans la version PixiJS. Elle remplace la version Ruffle, et on supprime le build Flash.
+2. **Mesure, puis grille d'un niveau.**
+   - Un essai d'une demi-journée compile le client en Haxe 4 vers JS. On note les erreurs dans `docs/specs/html5-inventory.md`, puis on jette l'essai. Cet inventaire remplace les estimations de cette spec.
+   - La couche `h2d` commence (`html5/src/h2d`) : `h2d.Tile`, `h2d.Bitmap` et `h2d.Sprite` sur PixiJS. La page affiche la grille d'un niveau de `data/levels.json`.
+   - Le script de captures de parité commence.
+3. **Reste de la couche `h2d`.** Les classes de l'inventaire, une par commit, chacune avec un test.
+4. **Le vrai client en Haxe 4.** Un fichier à la fois. Chaque usage de `flash.*` suit un Parallel Change (son, stockage, événements, préchargeur).
+5. **Parité, puis bascule.**
+   - Migration de la progression (`html5::progress-survives-migration`).
+   - Parité vérifiée (`html5::parity`).
+   - La page actuelle reçoit un interrupteur Ruffle/PixiJS dans le même emplacement `#game`. À la bascule, PixiJS devient la valeur par défaut. Ensuite, on supprime le build Flash, Ruffle et le code `#if flash`.
 
 ## Ce qu'on reprend de Kadokadeo
 
@@ -103,6 +131,8 @@ On ne reprend pas les skills `mt-to-haxe` (notre code est déjà en Haxe), `scal
 ## Hors périmètre
 
 - L'éditeur de niveaux (`client/levelEditor`).
-- Une version mobile native.
+- Une version mobile native, et le mode portrait plein écran sur téléphone.
+- Une haxelib séparée pour la couche `h2d` : on l'extraira si un deuxième jeu en a besoin.
+- Des parties automatiques complètes dans Chrome sans affichage : le hasard du jeu n'est pas fixé, et le jeu n'a pas de replays.
 - PixiJS 7 ou 8 : il n'existe pas d'externs Haxe maintenus pour ces versions. On changera de version seulement si PixiJS 6 bloque.
 - Les mécaniques de niveaux pas encore reconstruites (eau, magma, motifs, geysers). Elles suivent `docs/PLAN.md`, quel que soit le moteur.

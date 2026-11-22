@@ -60,7 +60,7 @@ La page d'accueil du site sert toujours la version Ruffle. La CI construit encor
 - Étant donné le site déployé, quand on ouvre `/`, alors la version Ruffle se lance comme avant.
 - Étant donné une image d'atlas absente, quand on ouvre `/pixi/`, alors la page affiche une erreur qui nomme `assets1.png`.
 
-Les trois premiers critères sont des tests unitaires (Haxe compilé en JS, lancé par `node --test`, comme les tests de `web/`). Les trois derniers se vérifient dans un navigateur.
+Les trois premiers critères sont des tests unitaires en Haxe, lancés par `haxe --interp`, comme `check:protocol`. La lecture de l'atlas ne dépend pas du navigateur. Les trois derniers se vérifient dans un navigateur.
 
 ## Hors périmètre
 
