@@ -4,6 +4,7 @@ package h2d;
  * The fork's h2d.Tile without the GPU: a cut (x, y, width, height) of a texture, drawn shifted by (dx, dy).
  * The methods are the fork's, ported as the game needs them; a missing one fails at compile time.
  */
+@:allow(h2d)
 class Tile {
 	var innerTex:h3d.mat.Texture;
 

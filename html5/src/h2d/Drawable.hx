@@ -18,6 +18,10 @@ class DrawableShader {
  * Color and filter are kept but not drawn yet (step 3).
  */
 class Drawable extends Sprite {
+	public static var DEFAULT_EMIT = false;
+	/** The game sets it to true in Main: every drawable is smoothed. */
+	public static var DEFAULT_FILTER = false;
+
 	public var shader(default, null):DrawableShader;
 	public var color(get, set):h3d.Vector;
 	public var colorAdd(get, set):h3d.Vector;
@@ -35,7 +39,8 @@ class Drawable extends Sprite {
 		blendMode = Normal;
 		shader = (sh == null) ? new DrawableShader() : sh;
 		shader.alpha = 1.0;
-		filter = false;
+		filter = DEFAULT_FILTER;
+		emit = DEFAULT_EMIT;
 	}
 
 	function get_alpha():Float return shader.alpha;

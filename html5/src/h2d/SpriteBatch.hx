@@ -123,6 +123,10 @@ class SpriteBatch extends Drawable {
 
 	public var tile : Tile;
 	public var length(default, null) : Int = 0;
+	// The fork's vertex format switches: the layer always draws rotation, scale, color and alpha.
+	public var hasRotationScale : Bool = true;
+	public var hasVertexColor : Bool = true;
+	public var hasVertexAlpha : Bool = true;
 
 	var first : BatchElement;
 	var last : BatchElement;

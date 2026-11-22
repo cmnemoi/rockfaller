@@ -315,7 +315,9 @@ class Main {
 
 	var dpStart = 0;
 	var dpOld : h2d.Sprite  = null;
+	// The fork's GPU draw-call profiler, a debug tool (key D): the JS build has no draw calls of the fork to count.
 	public function showDrawProfiler() {
+		#if flash
 		var scene = mt.deepnight.deprecated.HProcess.GLOBAL_SCENE;
 		hxd.DrawProfiler.TIP_FG_COL = 0x00FF32;
 		hxd.DrawProfiler.TIP_SHADOW = false;
@@ -326,6 +328,7 @@ class Main {
 		dpStart += 10;
 		dpOld = hxd.DrawProfiler.makeGfx( t );
 		scene.addChild( dpOld );
+		#end
 	}
 
 	public function resetDrawProfiler() {
