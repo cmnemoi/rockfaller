@@ -1,14 +1,33 @@
 package ;
 
+#if flash
 import flash.events.KeyboardEvent;
 import flash.Lib;
 import flash.ui.Keyboard;
+#end
 
 import Common;
 
 import process.Game;
 import process.Levels;
 import data.Settings;
+
+#if !flash
+// The JS build reads the keyboard from the window: for these keys, DOM key codes are Flash's.
+private typedef KeyboardEvent = js.html.KeyboardEvent;
+
+private class Keyboard {
+	public static inline var LEFT = 37;
+	public static inline var RIGHT = 39;
+	public static inline var A = 65;
+	public static inline var D = 68;
+	public static inline var L = 76;
+	public static inline var M = 77;
+	public static inline var P = 80;
+	public static inline var R = 82;
+	public static inline var T = 84;
+}
+#end
 
 /**
  * ...
@@ -28,8 +47,13 @@ class Input
 	{
 		this.game = Game.ME;
 		
+		#if flash
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		#else
+		js.Browser.window.addEventListener("keydown", onKeyDown);
+		js.Browser.window.addEventListener("keyup", onKeyUp);
+		#end
 	}
 	
 	private function onKeyDown(e:KeyboardEvent):Void {
@@ -77,7 +101,12 @@ class Input
 	}
 	
 	public function destroy() {
+		#if flash
 		Lib.current.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		Lib.current.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		#else
+		js.Browser.window.removeEventListener("keydown", onKeyDown);
+		js.Browser.window.removeEventListener("keyup", onKeyUp);
+		#end
 	}
 }
