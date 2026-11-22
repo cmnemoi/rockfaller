@@ -1,0 +1,47 @@
+html5/src/mt/audio/Audio.hx
+  s_da33d0161772b7::t_f82a1ad39dbe5b 1-6
+client/mt/deepnight/Tweenie.hx
+  s_da33d0161772b7::t_3b8a73a374256f 14,17-21,23-27,31,48
+docs/specs/html5-sound.md
+  s_da33d0161772b7::t_12d6ebdb5eb575 27-32,64
+  s_da33d0161772b7::t_8a3ecd06050093 1-26,33-63
+tools/SoundCheck.hx
+  s_da33d0161772b7::t_5edcdb682c1372 1-2,4-192
+  s_da33d0161772b7::t_c3f0299091e10b 3
+html5/src/mt/audio/SoundChannel.hx
+  s_da33d0161772b7::t_28d3b1022655c2 1-43
+html5/src/mt/audio/AudioBackend.hx
+  s_da33d0161772b7::t_28d3b1022655c2 1-16
+client/mt/flash/Sfx.hx
+  s_da33d0161772b7::t_5151b4a7889414 8,12-18,63,65,223,486-504,556,566,570,579,584-586
+  s_da33d0161772b7::t_0815e8f2793cb8 560,652,738
+html5/src/mt/audio/Sound.hx
+  s_da33d0161772b7::t_28d3b1022655c2 1-62
+html5/src/mt/audio/SoundTransform.hx
+  s_da33d0161772b7::t_28d3b1022655c2 1-12
+client/mt/deepnight/Lib.hx
+  s_da33d0161772b7::t_d9784aa165f79e 95-96,107
+mise.toml
+  s_da33d0161772b7::t_529dd09b425f4d 65,96-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1c5bed5a1fa1de01406d604ebbcdff5aae4992df",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
