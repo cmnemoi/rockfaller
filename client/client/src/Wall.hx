@@ -23,7 +23,7 @@ class Wall extends Sprite
 	var arHS					: Array<HSprite>;
 	var arHSBE					: Array<HSpriteBE>;
 	
-	var fd 						: mt.deepnight.deprecated.SpriteLibBitmap.FrameData;
+	var fd 						: #if flash mt.deepnight.deprecated.SpriteLibBitmap.FrameData #else mt.deepnight.slb.BLib.FrameData #end; // never read: the local fd of the background hides it
 	var scaleValue				: Float;
 	
 	var offsetY					: Int;
