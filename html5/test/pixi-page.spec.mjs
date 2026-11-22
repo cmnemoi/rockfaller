@@ -9,7 +9,8 @@ test.beforeEach(async ({ page }) => {
   const debugBundle = await readFile('dist/html5-test/main.js');
   await page.route('**/pixi/main.js', (route) => route.fulfill({ body: debugBundle, contentType: 'text/javascript' }));
   await page.goto('/pixi/');
-  await page.waitForFunction(() => window.rockfallerDebug?.context.drawn.length === 2);
+  // The duck, the grip, then the title's glyphs.
+  await page.waitForFunction(() => window.rockfallerDebug?.context.drawn.length > 2);
 });
 
 /** Every draw command, next to the PixiJS sprite that shows it, read in the same frame. */
@@ -61,16 +62,21 @@ test('PixiJS shows a rotated, flipped, half-transparent sprite with its whole ma
   expectPixiToShowTheCommands(drawn);
 });
 
-/** The colour drawn at the duck's centre, read back from the GPU. */
-function duckCentrePixel(page) {
-  return page.evaluate(() => {
-    const { app, duck } = window.rockfallerDebug;
+/**
+ * The RGBA bytes of a screen area, read back from the GPU after a render.
+ * extract.canvas(), not extract.pixels(): from the screen, pixels() comes upside down.
+ */
+function readScreen(page, area) {
+  return page.evaluate(({ x, y, width, height }) => {
+    const { app } = window.rockfallerDebug;
     app.render();
-    const width = app.renderer.width;
-    const pixels = app.renderer.extract.pixels();
-    const index = (Math.round(duck.y) * width + Math.round(duck.x)) * 4;
-    return Array.from(pixels.slice(index, index + 3));
-  });
+    return Array.from(app.renderer.extract.canvas().getContext('2d').getImageData(x, y, width, height).data);
+  }, area);
+}
+
+async function duckCentrePixel(page) {
+  const { x, y } = await page.evaluate(() => ({ x: Math.round(window.rockfallerDebug.duck.x), y: Math.round(window.rockfallerDebug.duck.y) }));
+  return (await readScreen(page, { x, y, width: 1, height: 1 })).slice(0, 3);
 }
 
 /** @spec html5.h2d.color::blend-mode-like-fork */
@@ -117,11 +123,66 @@ test('PixiJS shows the grip animation frame the SpriteLib is on', async ({ page 
 
 /** @spec html5.h2d::positions-compose */
 test('a sprite removed from the scene disappears from PixiJS', async ({ page }) => {
+  const before = (await readCommandsAndSprites(page)).commands.length;
+
   await page.evaluate(() => window.rockfallerDebug.grip.remove());
   await twoFrames(page);
 
   const { commands, sprites } = await readCommandsAndSprites(page);
+  expect(commands).toHaveLength(before - 1);
+  expect(sprites).toHaveLength(commands.length);
+});
 
-  expect(commands).toHaveLength(1);
-  expect(sprites).toHaveLength(1);
+/** The title's font, and what Canvas 2D measures for the same font. */
+function readTitleFont(page) {
+  return page.evaluate(() => {
+    const { title } = window.rockfallerDebug;
+    const font = title.font;
+    const context = document.createElement('canvas').getContext('2d');
+    context.font = `${font.size}px "${font.name}"`;
+    const metrics = context.measureText('A');
+    return {
+      advance: font.getChar('A'.charCodeAt(0)).width,
+      measuredAdvance: Math.ceil(metrics.width),
+      lineHeight: font.lineHeight,
+      measuredLineHeight: Math.ceil(metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent) + 1,
+      accentedGlyphWidth: font.getChar(0xe9).t.width,
+    };
+  });
+}
+
+/** @spec html5.h2d.text::font-built-like-fork */
+test('a built font has the glyph advances and line height of the fork, measured on the loaded font', async ({ page }) => {
+  const font = await readTitleFont(page);
+
+  expect(font.advance).toBe(font.measuredAdvance);
+  expect(font.lineHeight).toBe(font.measuredLineHeight);
+  expect(font.accentedGlyphWidth, 'é has a glyph of its own').toBeGreaterThan(0);
+});
+
+/** @spec html5.h2d.text::font-built-like-fork */
+test('the title is drawn: its glyphs light pixels on the black background', async ({ page }) => {
+  const area = await page.evaluate(() => {
+    const { title } = window.rockfallerDebug;
+    return { x: title.x, y: title.y, width: 200, height: title.font.lineHeight };
+  });
+
+  const pixels = await readScreen(page, area);
+
+  const litPixels = pixels.filter((value, index) => index % 4 === 0 && value > 128).length;
+  expect(litPixels).toBeGreaterThan(100);
+});
+
+/** @spec html5.h2d.text::font-built-like-fork */
+test('building a font the browser has not loaded fails and names it', async ({ page }) => {
+  const message = await page.evaluate(() => {
+    try {
+      window.rockfallerDebug.FontBuilder.getFont('Comic Platypus', 20);
+      return null;
+    } catch (error) {
+      return String(error.message ?? error);
+    }
+  });
+
+  expect(message).toContain('Comic Platypus');
 });

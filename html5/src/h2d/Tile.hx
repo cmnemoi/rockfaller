@@ -32,6 +32,10 @@ class Tile {
 		return innerTex;
 	}
 
+	public function setTexture(tex:h3d.mat.Texture) {
+		this.innerTex = tex;
+	}
+
 	public function sub(x:Int, y:Int, w:Int, h:Int, dx = 0, dy = 0):Tile {
 		return new Tile(innerTex, this.x + x, this.y + y, w, h, dx, dy);
 	}

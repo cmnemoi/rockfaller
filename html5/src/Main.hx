@@ -5,6 +5,7 @@ import js.html.Image;
 import js.lib.Promise;
 import mt.deepnight.slb.BLib;
 import mt.deepnight.slb.assets.TexturePacker;
+import hxd.res.FontBuilder;
 import pixi.core.Application;
 import pixi.core.Pixi.MipmapModes;
 import pixi.core.textures.BaseTexture;
@@ -18,6 +19,9 @@ class Main {
 	static inline var GAME_HEIGHT = 768;
 	static inline var UPDATES_PER_SECOND = 30;
 	static inline var MAX_FRAME_MS = 100;
+	static inline var TITLE_FONT = "BenchNine";
+	static inline var TITLE_FONT_URL = "../font/BenchNine-Regular.ttf";
+	static inline var TITLE_SIZE = 44;
 
 	static function main() {
 		var app = new Application({width: GAME_WIDTH, height: GAME_HEIGHT, backgroundColor: 0x000000});
@@ -26,7 +30,8 @@ class Main {
 		var renderer = new PixiRenderer(app.renderer);
 		app.stage.addChild(renderer.root);
 
-		Promise.all([loadLib("assets1", false), loadLib("taupinotron", true)]).then(function(libs:Array<BLib>) {
+		Promise.all([loadLib("assets1", false), loadLib("taupinotron", true), FontBuilder.load(TITLE_FONT, TITLE_FONT_URL)]).then(function(loaded:Array<Dynamic>) {
+			var libs:Array<BLib> = cast loaded;
 			var items = libs[0];
 			var taupinotron = libs[1];
 			var duck = items.h_get("animalDuck", 0.5, 0.5, scene);
@@ -34,6 +39,9 @@ class Main {
 			var grip = taupinotron.h_get("gripAnim", 0.5, 0.5, scene);
 			grip.setPos(GAME_WIDTH / 2, GAME_HEIGHT / 2);
 			grip.a.playAndLoop("gripAnim");
+			var title = new h2d.Text(FontBuilder.getFont(TITLE_FONT, TITLE_SIZE, {antiAliasing: false}), scene);
+			title.text = "Rockfaller Journey : \u00E9t\u00E9";
+			title.setPos(20, 40);
 
 			var context = new RenderContext();
 			var elapsedMs = 0.0;
@@ -49,7 +57,7 @@ class Main {
 			});
 
 			#if debug
-			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, BlendMode: h2d.BlendMode, Vector: h3d.Vector};
+			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, title: title, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder};
 			#end
 		}).catchError(showError);
 	}

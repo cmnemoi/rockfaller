@@ -178,3 +178,22 @@ Police de test : A fait 6 px de large, B 7, l'espace 3, é 6. Les lignes font 10
 - Étant donné « é », quand la scène se dessine, alors il est dessiné avec son propre glyphe.
 - Étant donné un texte rouge, quand la scène se dessine, alors ses glyphes ne gardent que le rouge.
 - Étant donné un texte à l'alpha 0,5, quand la scène se dessine, alors ses glyphes sont dessinés à l'alpha 0,5.
+
+#### Une police se construit comme avec le `FontBuilder` du fork
+
+`{#html5.h2d.text::font-built-like-fork}`
+
+Le `FontBuilder` du fork dessine chaque caractère avec un `TextField` Flash. Celui de la couche le dessine avec Canvas 2D, et garde les mêmes règles : largeur d'un glyphe = largeur mesurée arrondie au-dessus, hauteur de ligne = plus grande hauteur de glyphe + 1, même rangement des glyphes dans la texture. La police doit être chargée par le navigateur (`FontBuilder.load`, avec l'API `FontFace`). Sinon, `getFont` échoue et nomme la police, au lieu de dessiner avec une police de secours.
+
+`document.fonts.check()` ne suffit pas : il répond « oui » pour une famille qu'il ne connaît pas. La couche cherche la famille dans `document.fonts`, avec le statut `loaded`.
+
+Les métriques de Canvas 2D peuvent différer d'un pixel de celles de Flash. La parité par captures (étape 4) mesurera cet écart.
+
+### Critères d'acceptation (Playwright)
+
+- Étant donné BenchNine chargée en 44 px, quand on construit la police, alors la largeur du glyphe « A » vaut la largeur mesurée par Canvas 2D, arrondie au-dessus, et la hauteur de ligne vaut la hauteur de la police + 1.
+- Étant donné la police construite, quand on demande « é », alors il a son propre glyphe.
+- Étant donné le titre « Rockfaller Journey : été », quand la page se dessine, alors plus de 100 pixels de sa zone sont allumés sur le fond noir.
+- Étant donné une police jamais chargée, quand on la construit, alors l'erreur contient son nom.
+
+Note sur les tests de pixels : depuis l'écran, `extract.pixels()` de PixiJS 6 rend l'image retournée verticalement. Les tests lisent l'écran avec `extract.canvas()`. Le premier test de pixel (le canard, au milieu de l'écran) passait par chance.
