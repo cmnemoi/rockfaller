@@ -1,0 +1,29 @@
+tools/AtlasCheck.hx
+  s_da33d0161772b7::t_9db6eb1dff2029 1-109
+docs/specs/html5-first-pixi-page.md
+  s_da33d0161772b7::t_53434c36485924 86-87
+client/mt/deepnight/slb/assets/TexturePackerXml.hx
+  s_da33d0161772b7::t_ac299823b56da6 1-124
+client/mt/deepnight/slb/assets/TexturePacker.hx
+  s_da33d0161772b7::t_2942e3d4d13fd5 191-196,198-199
+mise.toml
+  s_da33d0161772b7::t_e98b556a1fb967 41-44,60
+.github/workflows/web.yml
+  s_da33d0161772b7::t_e98b556a1fb967 44-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "033a0ddd801b5ba5b030a96d9d98284033dc6606",
+  "prompts": {},
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
