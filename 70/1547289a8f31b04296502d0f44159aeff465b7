@@ -1,0 +1,53 @@
+tools/H2dCheck.hx
+  s_da33d0161772b7::t_8d0014909472e7 13
+  s_da33d0161772b7::t_99128153f773f9 17,416-423,554-561
+  s_da33d0161772b7::t_867b0319450a01 46-53,424-518
+  s_da33d0161772b7::t_8451abb1851d35 519,562
+html5/common.hxml
+  s_da33d0161772b7::t_99128153f773f9 8-9
+html5/src/h2d/Drawable.hx
+  s_da33d0161772b7::t_b8858aaa07e127 3-6,8-12,21-25,32-34,37-44
+  s_da33d0161772b7::t_357bbe125a7f00 45
+html5/src/h2d/Tile.hx
+  s_da33d0161772b7::t_b8858aaa07e127 62-75
+html5/src/h2d/TileGroup.hx
+  s_da33d0161772b7::t_b8858aaa07e127 1-69
+html5/src/h3d/mat/Texture.hx
+  s_da33d0161772b7::t_682fa52be85cc3 10,19
+html5/src/h3d/anim/Animation.hx
+  s_da33d0161772b7::t_03f343c02ab821 1-4
+mise.toml
+  s_da33d0161772b7::t_8d0014909472e7 90-91,93-94
+  s_da33d0161772b7::t_99128153f773f9 92,98
+html5/src/FlashDefaults.hx
+  s_da33d0161772b7::t_99128153f773f9 1-15,18,20-25,27-28,30-32,39-54
+  s_da33d0161772b7::t_26b8706befb05f 16-17,35-38
+  s_da33d0161772b7::t_3e07bf229c316c 19,26,29,33-34
+docs/specs/html5-h2d-layer.md
+  s_da33d0161772b7::t_038edb0a9de90a 154-180
+docs/specs/html5-inventory.md
+  s_da33d0161772b7::t_e7f9663d05e10e 80
+docs/specs/html5-migration.md
+  s_da33d0161772b7::t_8b9ab935119b37 104-111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "701547289a8f31b04296502d0f44159aeff465b7",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_da33d0161772b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "660356a6-b186-4240-abfd-476afa2b33a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
