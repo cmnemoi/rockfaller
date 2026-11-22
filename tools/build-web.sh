@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # Assembles the web version in dist/web: the page, the release SWF and a pinned,
-# self-hosted Ruffle (Flash emulator), so the page depends on no CDN.
+# self-hosted Ruffle (Flash emulator), plus a pinned PixiJS for /pixi/, so the pages depend on no CDN.
 # Run tools/build-flash.sh client release first.
 set -eu
 
 ruffle_version="0.7.1"
 ruffle_sha256="ef12edbee135d581a9cd523837d746da30a07a64dbf1cf472d2e472c656f4b5e"
+# PixiJS for the JS build (/pixi/): the version Kadokadeo uses with the pixi-haxe externs.
+pixi_version="6.0.2"
+pixi_sha256="2d44efaa49be95ff02c36b911a492d8699ea2bee5f095619feb624908cef37ab"
 
 cd "$(dirname "$0")/.."
 swf="client/client/bin/flash/bin/rockFallerMobile.swf"
@@ -28,5 +31,10 @@ curl -sSLf -o "$archive" \
 echo "$ruffle_sha256  $archive" | shasum -a 256 -c - >/dev/null
 unzip -q "$archive" -d "$site/ruffle"
 rm -f "$site"/ruffle/*.map
+
+mkdir -p "$site/pixi"
+curl -sSLf -o "$archive" "https://registry.npmjs.org/pixi.js/-/pixi.js-$pixi_version.tgz"
+echo "$pixi_sha256  $archive" | shasum -a 256 -c - >/dev/null
+tar xzf "$archive" -O package/dist/browser/pixi.min.js > "$site/pixi/pixi.min.js"
 
 echo "web version in $site"
