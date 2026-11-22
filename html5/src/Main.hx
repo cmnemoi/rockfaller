@@ -23,16 +23,18 @@ class Main {
 	static inline var TITLE_FONT_URL = "../font/BenchNine-Regular.ttf";
 	static inline var TITLE_SIZE = 44;
 	static inline var DUCK_FRAME = 98;
+	static inline var DUCK_SOUND = "rocks_mouseover2.mp3";
 
 	static function main() {
 		var app = new Application({width: GAME_WIDTH, height: GAME_HEIGHT, backgroundColor: 0x000000});
 		Browser.document.body.appendChild(app.view);
 		hxd.Stage.getInstance().attachTo(app.view);
+		mt.audio.Audio.backend = new mt.audio.WebAudioBackend();
 		var scene = new Scene();
 		var renderer = new PixiRenderer(app.renderer);
 		app.stage.addChild(renderer.root);
 
-		Promise.all([loadLib("assets1", false), loadLib("taupinotron", true), FontBuilder.load(TITLE_FONT, TITLE_FONT_URL)]).then(function(loaded:Array<Dynamic>) {
+		Promise.all([loadLib("assets1", false), loadLib("taupinotron", true), FontBuilder.load(TITLE_FONT, TITLE_FONT_URL), mt.audio.Sound.preload(DUCK_SOUND, "../sfx/" + DUCK_SOUND)]).then(function(loaded:Array<Dynamic>) {
 			var libs:Array<BLib> = cast loaded;
 			var items = libs[0];
 			var taupinotron = libs[1];
@@ -51,6 +53,7 @@ class Main {
 			duckButton.onClick = function(_) {
 				duckClicks++;
 				duck.rotation += Math.PI / 8;
+				new mt.flash.Sfx(mt.flash.Sfx.getAsset(DUCK_SOUND)).play();
 			};
 
 			var context = new RenderContext();
@@ -68,7 +71,7 @@ class Main {
 			});
 
 			#if debug
-			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder};
+			untyped Browser.window.rockfallerDebug = {app: app, scene: scene, renderer: renderer, context: context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
 			#end
 		}).catchError(showError);
 	}

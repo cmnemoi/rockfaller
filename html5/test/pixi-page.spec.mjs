@@ -6,6 +6,15 @@ import { readFile } from 'node:fs/promises';
 const GRIP_FRAME_TO_CATCH = 5;
 
 test.beforeEach(async ({ page }) => {
+  // Counts the Web Audio sources the page creates, without any test code in the page.
+  await page.addInitScript(() => {
+    window.audioSources = 0;
+    const createBufferSource = AudioContext.prototype.createBufferSource;
+    AudioContext.prototype.createBufferSource = function () {
+      window.audioSources++;
+      return createBufferSource.call(this);
+    };
+  });
   const debugBundle = await readFile('dist/html5-test/main.js');
   await page.route('**/pixi/main.js', (route) => route.fulfill({ body: debugBundle, contentType: 'text/javascript' }));
   await page.goto('/pixi/');
@@ -154,6 +163,29 @@ test('the cursor becomes a hand over the duck', async ({ page }) => {
   await page.mouse.move(x, y);
 
   await expect.poll(() => page.evaluate(() => window.rockfallerDebug.app.view.style.cursor)).toBe('pointer');
+});
+
+/** @spec html5::sound-starts-on-first-click */
+test('the audio context waits for a gesture, then runs after the first click', async ({ page }) => {
+  const stateBefore = await page.evaluate(() => window.rockfallerDebug.audio.context.state);
+  const { x, y } = await duckOnPage(page);
+
+  await page.mouse.click(x, y);
+
+  expect(stateBefore).toBe('suspended');
+  await expect.poll(() => page.evaluate(() => window.rockfallerDebug.audio.context.state)).toBe('running');
+});
+
+/** @spec html5.sound::sfx-like-flash */
+test('clicking the duck once the audio runs plays its sound through Web Audio', async ({ page }) => {
+  const { x, y } = await duckOnPage(page);
+  await page.mouse.click(x, y);
+  await expect.poll(() => page.evaluate(() => window.rockfallerDebug.audio.context.state)).toBe('running');
+  const sourcesBefore = await page.evaluate(() => window.audioSources);
+
+  await page.mouse.click(x, y);
+
+  await expect.poll(() => page.evaluate(() => window.audioSources)).toBe(sourcesBefore + 1);
 });
 
 test.describe('on a touch screen', () => {

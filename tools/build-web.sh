@@ -22,6 +22,7 @@ mkdir -p "$site/img" "$site/font"
 cp www/img/bg_game.jpg www/img/ogFb.png "$site/img/"
 cp -R web/img/flags "$site/img/"
 cp assets/BenchNine-Regular.ttf "$site/font/"
+cp -R client/client/sfx "$site/sfx"  # the game's sounds, for the JS build
 cp "$swf" "$site/rockfaller.swf"
 
 archive="$(mktemp)"
