@@ -185,7 +185,8 @@ class TexturePacker {
 
 	#if !macro
 
-	@:noCompletion public static function parseXml(xmlString:String, source:flash.display.BitmapData, treatFoldersAsPrefixes:Bool #if h3d, ?tile:h2d.Tile#end) : BLib {
+	// The JS build has no BitmapData: it gives a tile, and source stays null.
+	@:noCompletion public static function parseXml(xmlString:String, source: #if flash flash.display.BitmapData #else Dynamic #end, treatFoldersAsPrefixes:Bool #if h3d, ?tile:h2d.Tile#end) : BLib {
 		var lib = new BLib(source #if h3d, tile #end);
 		try {
 			var atlas = TexturePackerXml.read(xmlString, treatFoldersAsPrefixes);
@@ -207,7 +208,7 @@ class TexturePacker {
 	#end
 
 
-	#if !macro
+	#if (flash && !macro)
 	public static function downloadXml(xmlUrl:String, imgUrl:String, treatFoldersAsPrefixes:Bool, onComplete:BLib->Void, ?onCustomError:Void->Void = null) {
 		var xml : String = null;
 		var bd : flash.display.BitmapData = null;
