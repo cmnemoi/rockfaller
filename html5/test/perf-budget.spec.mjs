@@ -132,3 +132,29 @@ test('no shader program is linked while playing, up to the tutorial spotlight', 
   expect(onPage[0].at, 'the meter kept the first frames').toBeLessThan(onPage[onPage.length - 1].at);
   expect(linked, 'programs linked in the frames shown on the page').toBe(0);
 });
+
+/** @spec html5.perf::one-loop: PixiJS's interaction manager ran a second requestAnimationFrame loop */
+test('the page runs one animation frame callback per frame', async ({ page }) => {
+  await startGame(page, '&perf');
+  await page.waitForTimeout(2000);
+
+  const frames = await framesDuring(page, 1000);
+  expect(Math.max(...frames.filter((frame) => !frame.offscreen).map((frame) => frame.callbacks))).toBe(1);
+});
+
+/** @spec html5.h2d::renderer-settings */
+test('the renderer has no interaction manager, keeps its textures and draws an opaque canvas', async ({ page }) => {
+  await startGame(page, '&perf');
+  await page.waitForTimeout(1000);
+
+  const settings = await page.evaluate(() => {
+    const renderer = window.rockfallerPerf.renderer;
+    return {
+      interaction: 'interaction' in renderer.plugins && !!renderer.plugins.interaction,
+      textureGcManual: renderer.textureGC.mode === PIXI.GC_MODES.MANUAL,
+      canvasAlpha: renderer.gl.getContextAttributes().alpha,
+    };
+  });
+
+  expect(settings).toEqual({ interaction: false, textureGcManual: true, canvasAlpha: false });
+});

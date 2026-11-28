@@ -357,3 +357,16 @@ La première image qui utilise un shader le compile et le lie : jusqu'à 378 ms 
 ### Critères d'acceptation
 
 - (Playwright) Voir `html5.perf::no-shader-while-playing` dans [`html5-performance-budgets.md`](html5-performance-budgets.md).
+
+## Réglages du renderer
+
+`{#html5.h2d::renderer-settings}`
+
+- **Pas de gestionnaire d'interaction PixiJS.** `hxd.Stage` et `h2d.Scene` gèrent le pointeur, comme dans le fork. Celui de PixiJS lançait une seconde boucle et testait tous les sprites à chaque mouvement du pointeur.
+- **Les textures restent sur le GPU.** Le ramasse-miettes de textures de PixiJS est en manuel, comme `NoTextureGC` du build Flash. Sinon, PixiJS retire une texture non dessinée depuis 3600 rendus, et la renvoie avec une saccade quand elle revient à l'écran.
+- **Le canvas est opaque** (`useContextAlpha: false`). Le fond du jeu est noir et opaque ; le navigateur n'a pas à mélanger le canvas avec la page.
+
+### Critères d'acceptation (Playwright, page du jeu avec `?perf`)
+
+- Étant donné le jeu lancé, alors le renderer n'a pas de `plugins.interaction`, son `textureGC.mode` vaut `MANUAL`, et son contexte WebGL n'a pas d'alpha.
+- Les tests du pointeur de la page de démo restent verts, dont « le curseur devient une main ».

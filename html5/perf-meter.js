@@ -49,6 +49,7 @@
     clearInterval(waitForPixi);
     const render = PIXI.Renderer.prototype.render;
     PIXI.Renderer.prototype.render = function (root, ...rest) {
+      perf.renderer = this; // for the checks of its settings
       const before = { ...gl };
       const start = performance.now();
       const result = render.call(this, root, ...rest);

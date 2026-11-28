@@ -65,13 +65,22 @@ Lier un programme GPU fige le jeu : 378 ms au premier masque du projecteur du tu
 
 - Étant donné une nouvelle partie, quand le joueur passe la première bulle du tutoriel jusqu'au projecteur, alors aucune image montrée sur la page n'a lié de programme.
 
+## Une seule boucle
+
+`{#html5.perf::one-loop}`
+
+La page reçoit un seul rappel `requestAnimationFrame` par image : celui de la boucle du jeu. Le gestionnaire d'interaction de PixiJS en ajoutait un second, et testait les 800 à 1300 sprites à chaque mouvement du pointeur (`html5.h2d::renderer-settings`).
+
+### Critère d'acceptation (Playwright, page du jeu avec `?perf`)
+
+- Étant donné le jeu lancé, alors chaque image montrée sur la page reçoit un seul rappel `requestAnimationFrame`.
+
 ## Budgets à venir
 
 Chaque budget s'écrit ici, avec ses critères, au début de son lot.
 
 | Règle | Lot | Aujourd'hui |
 |---|---|---|
-| `html5.perf::one-loop` : un seul rappel `requestAnimationFrame` par image | 4 | 2 |
 | `html5.perf::no-identical-frame` : 30 images rendues par seconde à 60 Hz comme à 120 Hz | 5 | une par rafraîchissement de l'écran |
 | `html5.perf::little-garbage-per-frame` : au plus 100 Ko alloués par image rendue (sonde) | 6 | environ 1 070 Ko |
 | `html5.perf::sound-memory` : sons décodés au démarrage sous le seuil choisi (sonde) | 7 | 209 Mo |
