@@ -14,6 +14,12 @@ class PixiRenderer {
 	// PixiJS has no SoftAdd nor SoftOverlay: they get ids of their own, past PixiJS's.
 	static inline var SOFT_ADD = 100;
 	static inline var SOFT_OVERLAY = 101;
+	static inline var WHITE = 0xFFFFFF;
+	// Where PixiJS's 5 x 4 color matrix keeps each channel's own factor.
+	static inline var RED_FACTOR = 0;
+	static inline var GREEN_FACTOR = 6;
+	static inline var BLUE_FACTOR = 12;
+	static inline var ALPHA_FACTOR = 18;
 
 	public var root(default, null):Container;
 	var sprites:Array<Sprite>;
@@ -43,10 +49,19 @@ class PixiRenderer {
 	/**
 	 * @spec html5.h2d.color::color-like-fork-shader: PixiJS's ColorMatrixFilter works on straight colors, like the fork's shader.
 	 * A sprite keeps its filter, so turning a color on and off does not compile a new one each time.
+	 * @spec html5.h2d.color::multiplied-color-as-tint: a filter costs two render target switches; a color that only
+	 * multiplies is PixiJS's tint and alpha instead.
 	 */
 	static function showColor(sprite:Sprite, colorMatrix:Array<Float>) {
+		sprite.tint = WHITE;
 		if (colorMatrix == null) {
 			if (sprite.filters != null) sprite.filters = null;
+			return;
+		}
+		if (onlyMultiplies(colorMatrix)) {
+			if (sprite.filters != null) sprite.filters = null;
+			sprite.tint = channelOf(colorMatrix[RED_FACTOR]) << 16 | channelOf(colorMatrix[GREEN_FACTOR]) << 8 | channelOf(colorMatrix[BLUE_FACTOR]);
+			sprite.alpha = colorMatrix[ALPHA_FACTOR];
 			return;
 		}
 		var filter:ColorMatrixFilter = untyped sprite.__colorFilter;
@@ -56,6 +71,21 @@ class PixiRenderer {
 		}
 		filter.matrix = colorMatrix;
 		if (sprite.filters == null) sprite.filters = [filter];
+	}
+
+	/** In PixiJS's 5 x 4 matrix, each output's factor of the same input is on the diagonal: every 6th number. */
+	static function onlyMultiplies(colorMatrix:Array<Float>):Bool {
+		for (index in 0...colorMatrix.length) {
+			var factor = colorMatrix[index];
+			var onDiagonal = index % 6 == 0;
+			if (onDiagonal ? factor < 0 || factor > 1 : factor != 0)
+				return false;
+		}
+		return true;
+	}
+
+	static function channelOf(factor:Float):Int {
+		return Math.round(factor * 255);
 	}
 
 	/**

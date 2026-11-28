@@ -27,6 +27,7 @@ const results = { options, startup: null, screens: [] };
 try {
   await measureNewGame();
   await measureLevel5();
+  await measureMapScroll();
 } finally {
   await browser.close();
   server.kill();
@@ -49,13 +50,6 @@ async function measureLevel5() {
   await click(page, LOGIN_CLOSE);
   await page.waitForTimeout(2500);
   results.screens.push(await measure(page, cdp, 'carte', () => page.waitForTimeout(5000)));
-  results.screens.push(await measure(page, cdp, 'défilement de la carte', async () => {
-    for (let drag = 0; drag < 4; drag++) {
-      await dragVertically(page, 200, 600);
-      await dragVertically(page, 600, 200);
-    }
-  }));
-  await page.waitForTimeout(1500);
   await click(page, LEVEL_5);
   await page.waitForTimeout(4000);
   results.screens.push(await measure(page, cdp, 'fenêtre du niveau 5', () => page.waitForTimeout(4000)));
@@ -73,6 +67,20 @@ async function measureLevel5() {
   }));
   mkdirSync('dist/perf', { recursive: true });
   await page.screenshot({ path: 'dist/perf/last-screen.png' }); // to check the moves were played
+  await page.context().close();
+}
+
+/** On a page of its own: the map's inertia leaves it scrolled, and level 5 out of reach. */
+async function measureMapScroll() {
+  const { page, cdp } = await openGame(LEVEL_5_UNLOCKED);
+  await click(page, LOGIN_CLOSE);
+  await page.waitForTimeout(2500);
+  results.screens.push(await measure(page, cdp, 'défilement de la carte', async () => {
+    for (let drag = 0; drag < 4; drag++) {
+      await dragVertically(page, 200, 600);
+      await dragVertically(page, 600, 200);
+    }
+  }));
   await page.context().close();
 }
 

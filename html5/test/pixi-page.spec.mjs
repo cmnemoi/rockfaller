@@ -88,6 +88,54 @@ async function duckCentrePixel(page) {
   return (await readScreen(page, { x, y, width: 1, height: 1 })).slice(0, 3);
 }
 
+/** Places the colour bench, then reads it: the centre of each square, and the brightest pixel of the text. */
+async function readColorBench(page) {
+  const bench = await page.evaluate(() => window.rockfallerDebug.colorBench());
+  await twoFrames(page);
+  const centre = (index) => readScreen(page, { x: bench.x + index * 2 * bench.square + bench.square / 2, y: bench.y + bench.square / 2, width: 1, height: 1 })
+    .then((pixel) => pixel.slice(0, 3));
+  const textPixels = await readScreen(page, { x: bench.x, y: bench.textY, width: 200, height: Math.ceil(bench.textHeight) });
+  let brightest = [0, 0, 0];
+  for (let index = 0; index < textPixels.length; index += 4) {
+    const pixel = textPixels.slice(index, index + 3);
+    if (pixel[0] + pixel[1] + pixel[2] > brightest[0] + brightest[1] + brightest[2]) brightest = pixel;
+  }
+  const filtered = await page.evaluate(() => window.rockfallerDebug.renderer.sprites.filter((sprite) => sprite.visible && sprite.filters && sprite.filters.length).length);
+  return { halfRed: await centre(0), alphaByColor: await centre(1), alphaAlone: await centre(2), invisibleRed: await centre(3), text: brightest, filtered };
+}
+
+function expectNear(actual, expected, what) {
+  actual.forEach((channel, index) => expect(Math.abs(channel - expected[index]), `${what}: got ${actual}, expected ${expected}`).toBeLessThanOrEqual(1));
+}
+
+/** @spec html5.h2d.color::multiplied-color-as-tint */
+test('a white text coloured 0x804020 reads (128, 64, 32) where its glyphs are full', async ({ page }) => {
+  expectNear((await readColorBench(page)).text, [128, 64, 32], 'the text');
+});
+
+/** @spec html5.h2d.color::multiplied-color-as-tint */
+test('a white square coloured (0.5, 1, 1) at alpha 0.5 over black reads (64, 128, 128)', async ({ page }) => {
+  expectNear((await readColorBench(page)).halfRed, [64, 128, 128], 'the square');
+});
+
+/** @spec html5.h2d.color::multiplied-color-as-tint */
+test('a colour that only halves the alpha reads like an alpha of 0.5', async ({ page }) => {
+  const bench = await readColorBench(page);
+
+  expectNear(bench.alphaByColor, bench.alphaAlone, 'the square halved by its colour');
+  expectNear(bench.alphaAlone, [128, 128, 128], 'the square at alpha 0.5');
+});
+
+/** @spec html5.h2d.color::multiplied-color-as-tint */
+test('a red square at alpha 0 leaves no trace on black', async ({ page }) => {
+  expect((await readColorBench(page)).invisibleRed).toEqual([0, 0, 0]);
+});
+
+/** @spec html5.h2d.color::multiplied-color-as-tint: a filter costs two render target switches */
+test('colours that only multiply draw without a PixiJS filter', async ({ page }) => {
+  expect((await readColorBench(page)).filtered).toBe(0);
+});
+
 /** @spec html5.h2d.color::blend-mode-like-fork */
 test('a SoftOverlay sprite over black leaves black, as the DstColor + One factors of the fork do', async ({ page }) => {
   const normal = await duckCentrePixel(page);

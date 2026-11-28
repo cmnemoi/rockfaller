@@ -21,6 +21,11 @@ class Demo {
 	static inline var TITLE_SIZE = 44;
 	static inline var DUCK_FRAME = 98;
 	static inline var DUCK_SOUND = "rocks_mouseover2.mp3";
+	// The colour bench, in the empty bottom of the page.
+	static inline var BENCH_X = 20;
+	static inline var BENCH_Y = 620;
+	static inline var BENCH_SQUARE = 20;
+	static inline var BENCH_TEXT_SIZE = 60;
 
 	static function main() {
 		var engine = new h3d.Engine();
@@ -83,7 +88,31 @@ class Demo {
 					}
 					veil.alphaMap = h2d.Tile.fromTexture(h3d.mat.Texture.fromCanvas(canvas));
 				};
-				untyped Browser.window.rockfallerDebug = {spotlight: spotlight, app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
+				// The colour bench, for the parity checks of the colours: white squares and a text, each coloured its way, over black.
+				var colorBench = function() {
+					var white = h2d.Tile.fromColor(0xFFFFFFFF, BENCH_SQUARE, BENCH_SQUARE);
+					var square = function(index:Int) {
+						var bitmap = new h2d.Bitmap(white, scene);
+						bitmap.setPos(BENCH_X + index * 2 * BENCH_SQUARE, BENCH_Y);
+						return bitmap;
+					};
+					var halfRed = square(0);
+					halfRed.color = new h3d.Vector(0.5, 1, 1, 1);
+					halfRed.alpha = 0.5;
+					var alphaByColor = square(1);
+					alphaByColor.color = new h3d.Vector(1, 1, 1, 0.5);
+					var alphaAlone = square(2);
+					alphaAlone.alpha = 0.5;
+					var invisibleRed = square(3);
+					invisibleRed.color = new h3d.Vector(1, 0, 0, 1);
+					invisibleRed.alpha = 0;
+					var text = new h2d.Text(FontBuilder.getFont(TITLE_FONT, BENCH_TEXT_SIZE, {antiAliasing: false}), scene);
+					text.textColor = 0x804020;
+					text.text = "IIII";
+					text.setPos(BENCH_X, BENCH_Y + 2 * BENCH_SQUARE);
+					return {square: BENCH_SQUARE, x: BENCH_X, y: BENCH_Y, textY: BENCH_Y + 2 * BENCH_SQUARE, textHeight: text.textHeight};
+				};
+				untyped Browser.window.rockfallerDebug = {colorBench: colorBench, spotlight: spotlight, app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
 				#end
 			}).catchError(showError);
 		};

@@ -33,13 +33,23 @@ Deux fois par seconde, il affiche dans un coin de la page les images rendues par
 - Étant donné la page du jeu avec `?perf`, après 2 s de jeu, alors le compteur a vu des images rendues, et chacune a fait au moins un appel GPU.
 - Étant donné la page du jeu avec `?perf`, alors l'affichage montre les images rendues par seconde.
 
+## Pas de passe de rendu sur les menus
+
+`{#html5.perf::no-render-pass-on-menus}`
+
+Sur la carte et sur la fenêtre de niveau, aucune image ne change de cible de rendu, et aucun sprite n'a de filtre. Les textes colorés, seuls porteurs de filtres sur ces écrans, passent par la teinte (`html5.h2d.color::multiplied-color-as-tint`).
+
+### Critères d'acceptation (Playwright, page du jeu avec `?perf`)
+
+- Étant donné le niveau 5 débloqué et la fenêtre LOGIN fermée, quand la carte s'affiche, alors aucune image ne change de cible de rendu, et aucun sprite n'a de filtre.
+- Étant donné la fenêtre du niveau 5 ouverte, alors aucune image ne change de cible de rendu, et aucun sprite n'a de filtre.
+
 ## Budgets à venir
 
 Chaque budget s'écrit ici, avec ses critères, au début de son lot.
 
 | Règle | Lot | Aujourd'hui |
 |---|---|---|
-| `html5.perf::no-render-pass-on-menus` : sur la carte et la fenêtre de niveau, aucun changement de cible de rendu, aucun sprite filtré | 1 | 576 changements par image |
 | `html5.perf::no-render-pass-in-game` : au tutoriel, en partie et pendant les coups, aucun changement de cible hors du masque du projecteur ; au plus 15 appels GPU par image | 2 | 632 à 756 changements par image |
 | `html5.perf::no-shader-while-playing` : aucun programme lié après la première image du jeu | 3 | 2 programmes au projecteur, 378 ms |
 | `html5.perf::one-loop` : un seul rappel `requestAnimationFrame` par image | 4 | 2 |

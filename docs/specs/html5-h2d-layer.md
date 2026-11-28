@@ -120,6 +120,14 @@ Sans couleur, la commande n'a pas de matrice : le sprite n'a pas de filtre, et l
 
 Piège connu (Kadokadeo) : le premier filtre utilisé compile un shader et fige le jeu de 10 à 80 ms. À traiter quand les écrans du jeu tourneront (étape 4) : préparer les filtres au démarrage.
 
+#### Une couleur qui multiplie devient une teinte
+
+`{#html5.h2d.color::multiplied-color-as-tint}`
+
+Un filtre PixiJS dessine son sprite dans une texture intermédiaire : deux changements de cible de rendu par sprite, ce qui sature le GPU (voir [`html5-performance.md`](html5-performance.md)). Une matrice qui multiplie seulement chaque canal, par un facteur entre 0 et 1, sans décalage ni mélange des canaux, est donc dessinée par la teinte (`tint`) et l'alpha du sprite PixiJS, sans filtre. C'est le cas des textes colorés. Le résultat est le même, à l'arrondi de la teinte sur 8 bits près.
+
+Les autres matrices gardent leur filtre, jusqu'au lot 2 du plan [`html5-performance-plan.md`](html5-performance-plan.md).
+
 ### Critères d'acceptation
 
 - (`--interp`) Étant donné un `Drawable` sans mode, quand la scène se dessine, alors il est dessiné en `Normal`. En `Add`, il est dessiné en `Add`.
@@ -130,6 +138,11 @@ Piège connu (Kadokadeo) : le premier filtre utilisé compile un shader et fige 
 - (`--interp`) Étant donné un alpha de 0,5 et `colorAdd` d'alpha 0,25, quand la scène se dessine, alors l'alpha sorti vaut `0,5 a + 0,25` : l'alpha passe avant l'ajout.
 - (`--interp`) Étant donné un élément de batch de couleur (0,5 ; 1 ; 1), quand la scène se dessine, alors son rouge est divisé par deux.
 - (Playwright) Étant donné le canard en noir avec du rouge pur ajouté, quand il est dessiné, alors le pixel de son centre vaut exactement (255, 0, 0). Des décalages lus de 0 à 255 donneraient presque du noir.
+- (Playwright, banc de couleurs de la page de démo) Étant donné un texte blanc de couleur `0x804020` sur fond noir, alors son pixel le plus clair se lit (128, 64, 32), à 1 près.
+- (Playwright, banc) Étant donné un carré blanc de couleur (0,5 ; 1 ; 1) et d'alpha 0,5 sur fond noir, alors il se lit (64, 128, 128), à 1 près.
+- (Playwright, banc) Étant donné un carré blanc dont la couleur ne change que l'alpha (0,5), alors il se lit comme un carré blanc d'alpha 0,5.
+- (Playwright, banc) Étant donné un carré blanc coloré en rouge et d'alpha 0, alors il ne laisse aucune trace sur le fond noir.
+- (Playwright, banc) Étant donné ces carrés, alors aucun n'a de filtre PixiJS.
 - (Playwright) Étant donné le canard sur fond noir, quand il passe en `SoftOverlay`, alors le pixel de son centre devient noir (`noir × (1 + source) = noir`), alors qu'il était jaune en `Normal`. Ce test lit le pixel rendu par le GPU : il prouve que le mode ajouté est bien utilisé.
 
 ## `Layers`

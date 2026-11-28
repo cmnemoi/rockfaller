@@ -290,6 +290,22 @@ Commit du lot 0, CPU ×1, temps GPU par requête. Démarrage : 27,4 Mo télécha
 | Partie | 11,3 | 101 | 648 | 640 | 790 (320, 0) | 2 | 9,0 | 0 | 0 | 968 |
 | Coups | 11,3 | 107 | 664 | 646 | 809 (323, 0) | 2 | 9,1 | 0 | 0 | 1001 |
 
+### Lot 1 : teinte native
+
+CPU ×1, sans temps GPU. Ce jour-là, une page vide recevait 60 rappels `requestAnimationFrame` par seconde : le plafond de la mesure est 60, et non plus 30.
+
+| Écran | Images/s | Plus longue (ms) | Appels GPU | Changements de cible | Sprites (filtrés, masqués) | Ko alloués/image |
+|---|---|---|---|---|---|---|
+| Tutoriel | 12,3 | 96 | 605 | 600 | 862 (300, 0) | 1035 |
+| Projecteur | 12,0 | 328 | 611 | 602 | 862 (300, 1) | 1096 |
+| Carte | **61,0** | 38 | **5** | **0** | 1227 (0, 0) | 965 |
+| Défilement de la carte | **60,9** | 47 | 7 | 0 | 1227 (0, 0) | 993 |
+| Fenêtre du niveau 5 | **61,2** | 24 | 6 | 0 | 1330 (0, 0) | 1076 |
+| Partie | 12,3 | 99 | 606 | 600 | 790 (300, 0) | 957 |
+| Coups | 12,5 | 97 | 617 | 600 | 804 (300, 0) | 985 |
+
+Les menus sont au plafond. Le tutoriel et la partie attendent le lot 2 : les 300 particules de magma gardent leur filtre.
+
 ## Questions ouvertes
 
 - **Quels téléphones ?** Il faut au moins un téléphone Android modeste, et si possible un iPhone. Le compteur `?perf` du plan permet de mesurer sur l'appareil.
