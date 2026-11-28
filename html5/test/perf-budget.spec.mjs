@@ -96,6 +96,7 @@ test('the tutorial draws without render target switches but for its mask', async
 
 /** @spec html5.perf::no-render-pass-in-game */
 test('a game of level 5 and its moves draw without any render target switch', async ({ page }) => {
+  test.setTimeout(90000); // map, popup, game and moves: about 15 s on a GPU, more on the CI's software renderer
   await page.addInitScript((progress) => localStorage.setItem('rockfaller.progress', progress), LEVEL_5_UNLOCKED);
   await startGame(page, '&perf');
   await page.waitForTimeout(3000);
