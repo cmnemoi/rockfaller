@@ -124,9 +124,11 @@ class FontBuilder {
 		// Chrome thickens light text on a transparent canvas: the glyphs are drawn black, then painted white
 		// with their alpha kept, which gives Flash's weight.
 		context.fillStyle = "#000000";
-		context.textBaseline = "top";
+		// Like a Flash TextField, the line's top is the font's ascent above the baseline (Canvas's "top" is the em box's).
+		context.textBaseline = "alphabetic";
+		var ascent:Float = (context.measureText("H") : Dynamic).fontBoundingBoxAscent;
 		for (glyph in placed)
-			context.fillText(String.fromCharCode(glyph.code), glyph.x, glyph.y);
+			context.fillText(String.fromCharCode(glyph.code), glyph.x, glyph.y + ascent);
 		context.globalCompositeOperation = "source-in";
 		context.fillStyle = "#FFFFFF";
 		context.fillRect(0, 0, width, height);

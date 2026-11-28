@@ -189,6 +189,8 @@ Le `FontBuilder` du fork dessine chaque caractère avec un `TextField` Flash. Ce
 
 Les métriques de Canvas 2D peuvent différer d'un pixel de celles de Flash. La parité par captures (étape 4) mesurera cet écart.
 
+Comme dans un `TextField` Flash, le haut de la ligne est à une ascendante de la police au-dessus de la ligne de base. Le `textBaseline = "top"` de Canvas prend le haut du carré em, plus bas : avec BenchNine, le texte montait de 11 px à 44 px de taille. Bug trouvé en jouant : le texte des boutons et des bulles était trop haut.
+
 Chrome épaissit un texte clair dessiné sur un fond transparent (correction gamma selon la couleur du texte). La couche dessine donc les glyphes en noir, puis les repeint en blanc sans changer leur alpha : leur graisse est alors celle de Flash. Constaté par comparaison avec Ruffle, sur la bulle du tutoriel.
 
 ### Critères d'acceptation (Playwright)

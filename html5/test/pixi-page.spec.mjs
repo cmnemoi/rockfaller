@@ -289,6 +289,24 @@ test('the title is drawn: its glyphs light pixels on the black background', asyn
   expect(litPixels).toBeGreaterThan(100);
 });
 
+/** @spec html5.h2d.text::font-built-like-fork: like a Flash TextField, the line's top is the font's ascent above the baseline */
+test('a glyph stands on the baseline, the font ascent below the top of its tile', async ({ page }) => {
+  const glyph = await page.evaluate(() => {
+    const { title } = window.rockfallerDebug;
+    const tile = title.font.getChar('H'.charCodeAt(0)).t;
+    const canvas = tile.getTexture().pixiTexture.resource.source;
+    const pixels = canvas.getContext('2d').getImageData(tile.x, tile.y, tile.width, tile.height).data;
+    let lowestLitRow = -1;
+    for (let index = 3; index < pixels.length; index += 4)
+      if (pixels[index] > 128) lowestLitRow = Math.floor(index / 4 / tile.width);
+    const context = document.createElement('canvas').getContext('2d');
+    context.font = `${title.font.size}px "${title.font.name}"`;
+    return { baseline: lowestLitRow + 1, ascent: context.measureText('H').fontBoundingBoxAscent };
+  });
+
+  expect(Math.abs(glyph.baseline - glyph.ascent), `baseline at ${glyph.baseline}, ascent ${glyph.ascent}`).toBeLessThanOrEqual(1);
+});
+
 /** @spec html5.h2d.text::font-built-like-fork */
 test('building a font the browser has not loaded fails and names it', async ({ page }) => {
   const message = await page.evaluate(() => {
