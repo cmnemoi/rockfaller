@@ -215,18 +215,61 @@ Côté PixiJS, le constat est le même partout :
 
 **Ce que cela change au plan.** Le lot 1, la teinte native, est la pratique courante. Pour le lot 2, pixi-heaven ne suffit pas : il couvre « multiplier puis ajouter » par canal, mais pas le mélange des canaux de la colorisation du magma. Les écrans mesurés n'ont d'ailleurs aucune couleur de type « multiplier puis ajouter ». Le lot 2 reste donc un shader de couleur sur mesure, sur le modèle du `DrawableShader` du fork et des shaders de base d'OpenFL.
 
+## Techniques connues, pour notre méthode
+
+Notre méthode : un graphe de scène h2d qui produit des commandes de dessin, montrées par PixiJS 6 en WebGL, avec des téléphones modestes comme cible. Voici les techniques publiées qui s'y appliquent, rangées par problème. Les sources sont surtout des guides de fabricants de GPU, des documentations et des forums : les chiffres des forums restent anecdotiques.
+
+### GPU : éviter les passes de rendu
+
+- Sur un GPU à tuiles (Mali, Adreno, PowerVR, Apple), changer de framebuffer force le GPU à finir et à écrire la cible en cours, puis à recharger la suivante. Les guides d'Arm, de Samsung et de Mozilla disent de lier chaque framebuffer **une seule fois par image**, et de faire tous ses dessins avant d'en changer ([Arm, Vulkanised 2023](https://vulkan.org/user/pages/09.events/vulkanised-2023/vulkanised_2023_getting_started_on_mobile_and_best_practices_for_arm_gpus.pdf), [Samsung](https://developer.samsung.com/galaxy-gamedev/resources/articles/opengl.html), [Mozilla](https://wiki.mozilla.org/Platform/GFX/MobileGPUs), [Android](https://medium.com/androiddevelopers/efficient-render-passes-on-tile-based-rendering-hardware-621070158e40)). Nos 576 à 756 changements par image vont à l'opposé : cela confirme les problèmes 1 et 2.
+- PixiJS le dit aussi : les filtres et les masques de sprite coûtent cher ([guide de performance](https://pixijs.com/8.x/guides/concepts/performance-tips)). Sur les forums, un filtre par sprite casse le regroupement ([exemple](https://html5gamedevs.com/topic/48173-performance-issues-with-filter-based-dye-system)).
+- Heaps, l'origine de notre couche, donne la même règle : peu d'appels GPU, des tuiles d'un même atlas dans un `SpriteBatch` ou un `TileGroup`, et `engine.drawCalls` pour compter ([documentation Heaps](https://tobil4sk.github.io/heaps.io/documentation/drawing-tiles.html)).
+- **Couleur sans filtre.** OpenFL garde `ColorTransform` dans ses shaders ([`OpenGLRenderer`](https://cdn.jsdelivr.net/npm/openfl@9.5.2/lib/openfl/display/OpenGLRenderer.d.ts)). Pour PixiJS 6 : [pixi-heaven](https://github.com/pixijs/pixi-heaven) (teinte claire et sombre dans le lot) et [pixi-batch-renderer](https://www.npmjs.com/package/pixi-batch-renderer) (attributs de lot sur mesure). `BatchPluginFactory` de PixiJS 6 permet aussi un shader de lot sur mesure ([forum](https://www.html5gamedevs.com/topic/44978-shader-performances/)), mais sans exemple officiel pour un attribut de couleur par sprite.
+
+### GPU : le nombre de textures par lot
+
+- PixiJS 6 regroupe les sprites tant que leurs textures tiennent dans les unités de texture du GPU (`SPRITE_MAX_TEXTURES`, au plus 32), et jusqu'à 4096 sprites par lot (`SPRITE_BATCH_SIZE`) ([réglages PixiJS](https://pixijs.download/release/docs/PIXI.settings.html)).
+- **Nouveau point à mesurer.** Un téléphone modeste offre souvent 8 ou 16 unités de texture, contre 16 ou plus sur le M5. Nos écrans mélangent jusqu'à 8 atlas de 2048 px et les textures des polices : sur téléphone, les 5 à 9 appels mesurés ici pourraient se multiplier. La sonde peut le simuler en fixant `PIXI.settings.SPRITE_MAX_TEXTURES` à 8.
+
+### Canvas et remplissage
+
+- Un canvas opaque (`alpha: false`) évite au navigateur de le mélanger avec la page ([MDN, optimiser le canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas)). Notre fond est noir et opaque : PixiJS 6 le permet avec `useContextAlpha: false`. Un vieux rapport dit que Safari sur iOS l'ignorait ([liste WebGL](https://groups.google.com/g/webgl-dev-list/c/h7WYgntLnvU)) : à vérifier.
+- `preserveDrawingBuffer` doit rester à `false`, et l'anticrénelage coupé ([MDN, bonnes pratiques WebGL](https://developer.mozilla.org/docs/Web/API/WebGL_API/WebGL_best_practices), [Mozilla](https://bugzilla.mozilla.org/show_bug.cgi?id=912551)). Ce sont les valeurs par défaut de PixiJS 6 : rien à faire.
+- Sur mobile, le remplissage des pixels est souvent la limite. Garder la résolution du canvas à 640 × 768, sans la multiplier par la densité de l'écran, protège les téléphones (voir « Netteté sur écran Retina »).
+
+### Mesurer le GPU, pas seulement le CPU
+
+- `EXT_disjoint_timer_query_webgl2` mesure le temps GPU d'un groupe de dessins ([Khronos](https://registry.khronos.org/webgl/extensions/EXT_disjoint_timer_query_webgl2/)). Son support varie selon le navigateur ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/EXT_disjoint_timer_query)) ; [webgl-profiler](https://github.com/figma/webgl-profiler) de Figma s'en sert. La sonde du lot 0 peut l'utiliser quand il est là : elle mesurerait le temps GPU au lieu de le déduire.
+
+### Boucle de jeu
+
+- Séparer la logique, à pas fixe, du rendu est la pratique courante. Sauter le rendu quand rien n'a changé figure parmi les options discutées au W3C ([WICG](https://discourse.wicg.io/t/proposal-allow-developers-to-indicate-their-ideal-frame-rate/4422)). Android rappelle que tourner en continu à 120 Hz chauffe et vide la batterie ([Android](https://developer.android.com/games/optimize/display-refresh-rate-change)). Cela confirme le problème 3.
+
+### Ramasse-miettes JavaScript
+
+- Le ramasse-miettes met le jeu en pause, et ses pauses se voient. La fréquence des pauses dépend du **débit d'allocation**, pas de la mémoire totale ([Facebook Instant Games](https://developers.facebook.com/documentation/games/build/game-performance), [DEV](https://dev.to/helloashish99/javascript-gc-pauses-allocation-rate-frontend-jank-3jig)). Conseils : pas de `new`, `{}` ni `[]` dans la boucle, des réservoirs pour les objets qui naissent et meurent souvent ([web.dev](https://web.dev/articles/speed-static-mem-pools), [Construct](https://www.construct.net/en/blogs/construct-official-blog-1/write-low-garbage-real-time-761)). Nos commandes de dessin et nos matrices sont exactement ce cas : cela confirme le problème 4.
+
+### Textures
+
+- Le greffon `prepare` de PixiJS envoie les textures au GPU à l'avance ([PixiJS v4 Gotchas](https://github.com/pixijs/pixijs/wiki/v4-Gotchas)). Décoder les images avec `createImageBitmap` devait éviter les saccades d'envoi, mais les résultats varient selon le navigateur ([Mozilla](https://bugzilla.mozilla.org/show_bug.cgi?id=1486454), [WebKit](https://bugs.webkit.org/show_bug.cgi?id=234920), [WebGL Fundamentals](https://webglfundamentals.org/webgl/lessons/webgl-qna-how-to-load-images-in-the-background-with-no-jank.html)). Pour nous : envoyer les atlas pendant la barre de chargement, et mesurer sur téléphone.
+
+### Son
+
+- `decodeAudioData` garde toute la piste en PCM ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData), [WebKit](https://www2.webkit.org/show_bug.cgi?id=189337)). Pour la musique, la pratique est de la lire en flux par `<audio>` et `MediaElementAudioSourceNode` ([W3C](https://lists.w3.org/Archives/Public/public-audio/2012OctDec/0784.html)).
+- **Risque pour nous :** nos musiques bouclent. Une boucle en flux peut laisser un blanc au retour au début, et le flux a eu des soucis sous Safari ([forum Babylon.js](https://forum.babylonjs.com/t/importing-audioscenecomponent-causes-massive-increase-in-memory-usage/52410)). Il faut l'écouter avant de le retenir. Autre piste : ne décoder que la musique en cours, en libérant l'autre.
+
 ## Plan proposé
 
 Un lot par problème, chacun avec ses tests d'abord. Chaque lot se mesure avec la sonde, avant et après.
 
-0. **La sonde dans le dépôt.** `tools/perf.mjs` et une tâche `mise run perf`, hors CI. Le résultat se compare d'un commit à l'autre.
+0. **La sonde dans le dépôt.** `tools/perf.mjs` et une tâche `mise run perf`, hors CI. Le résultat se compare d'un commit à l'autre. Elle mesure aussi le temps GPU (`EXT_disjoint_timer_query_webgl2`, quand il est là) et simule un téléphone à 8 unités de texture.
 1. **Teinte native** (problème 1, première moitié). Cela retire tous les filtres de la carte et des fenêtres.
 2. **Shader de couleur et `alphaMap` par drawable** (problèmes 1 et 2). Cela retire les filtres restants et le masque.
 3. **Shaders compilés au chargement** (problème 2).
-4. **Retirer le gestionnaire d'interaction ; ramasse-miettes de textures en manuel** (problèmes 7 et 6).
+4. **Réglages du renderer** (problèmes 7 et 6) : retirer le gestionnaire d'interaction, ramasse-miettes de textures en manuel, canvas opaque (`useContextAlpha: false`).
 5. **Dessiner seulement après un pas du jeu** (problème 3).
 6. **Moins d'allocations par image** (problème 4).
-7. **Musiques en flux ; textures envoyées au chargement** (problèmes 5 et 6).
+7. **Musiques en flux, après écoute des boucles ; textures envoyées au chargement** (problèmes 5 et 6).
 
 Les lots 1 à 3 rendent le jeu fluide. Les lots 4 à 7 réduisent la charge, la mémoire et les saccades : les téléphones modestes étant visés, ils sont nécessaires aussi.
 
