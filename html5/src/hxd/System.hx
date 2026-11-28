@@ -43,8 +43,9 @@ class System {
 			looping = false;
 			return;
 		}
-		loop();
+		// @spec html5.h2d::loop-survives-errors: asked first, so a frame that throws does not stop the game, like Flash's ENTER_FRAME.
 		js.Browser.window.requestAnimationFrame(runLoop);
+		loop();
 	}
 	#end
 

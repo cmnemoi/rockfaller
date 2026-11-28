@@ -16,6 +16,7 @@ import hxd.Event.EventKind;
 class H2dCheck {
 	static function main() {
 		aFieldLeftUnsetHasFlashsDefaultValue();
+		aFrameThatFailsDoesNotStopTheGameLoop();
 		aClonedTileChangesIndependently();
 		aChildIsDrawnThroughItsParentsPositionAndScale();
 		aFlippedBitmapIsMirroredAroundItsPivot();
@@ -829,6 +830,24 @@ class H2dCheck {
 		var context = new RenderContext();
 		scene.render(context);
 		return context.drawn;
+	}
+
+	/** @spec html5.h2d::loop-survives-errors: like Flash's ENTER_FRAME; one error froze the end of level's Next button */
+	static function aFrameThatFailsDoesNotStopTheGameLoop() {
+		var frames:Array<Dynamic->Void> = [];
+		js.Syntax.code("globalThis.window = {0}", {requestAnimationFrame: function(frame) frames.push(frame)});
+		var calls = 0;
+		hxd.System.setLoop(function() {
+			calls++;
+			if (calls == 1) throw "a frame fails";
+		});
+
+		try frames.shift()(0) catch (_:Dynamic) {}
+		if (frames.length > 0) frames.shift()(0);
+
+		hxd.System.setLoop(null);
+		js.Syntax.code("delete globalThis.window");
+		check(calls == 2, "after a frame throws, the next frame still runs (got " + calls + " frames)");
 	}
 
 	static function check(condition:Bool, expectation:String) {

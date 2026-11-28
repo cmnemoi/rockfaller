@@ -296,3 +296,15 @@ Bug trouvé en jouant : un clic sur les pierres ne les faisait pas tourner, et l
 
 - Étant donné un sprite en (100, 50) d'échelle 2 et la souris en (120, 70), alors `mouseX` et `mouseY` valent (10, 10).
 - Étant donné le même sprite, alors `localToGlobal` donne (120, 70) pour le point (10, 10).
+
+## La boucle du jeu survit à une erreur
+
+`{#html5.h2d::loop-survives-errors}`
+
+En Flash, `ENTER_FRAME` continue après une erreur dans une image. La boucle JS fait pareil : elle demande l'image suivante avant de lancer celle-ci.
+
+Bug trouvé en jouant : une erreur du son, à la fin du tutoriel, gelait le jeu ; le bouton « next » ne répondait plus.
+
+### Critères d'acceptation (Node)
+
+- Étant donné une boucle dont la première image lève une erreur, alors l'image suivante tourne quand même.
