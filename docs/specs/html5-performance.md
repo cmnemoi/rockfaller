@@ -198,12 +198,20 @@ Nuance de la sonde : le temps GPU mesuré par requête (`EXT_disjoint_timer_quer
 
 ### 5. Sons décodés d'avance
 
-**Constat.** Le chargement décode les 81 sons : 208,7 Mo de PCM en mémoire. Les musiques passent par la banque de sons (`SBANK.Rockfaller_interface()`), donc par ces sons décodés. Elles font les deux tiers des MP3 (7 Mo sur 10), donc sans doute les deux tiers du PCM : cette part est estimée.
+**Constat.** Le chargement décode les 81 sons : 208,7 Mo de PCM en mémoire, en stéréo à 48 kHz. Les musiques passent par la banque de sons (`SBANK.Rockfaller_interface()`), donc par ces sons décodés. Mesure son par son :
+
+| Son | Durée | Décodé |
+|---|---|---|
+| `Rockfaller_ingame.mp3` | 208 s | 79,9 Mo |
+| `Rockfaller_interface.mp3` | 172 s | 66,1 Mo |
+| Les 79 bruitages | — | 62,7 Mo |
 
 **Correction, à choisir.**
 
 - **A. Musiques en flux** : un élément `<audio>` branché dans le contexte Web Audio (`MediaElementAudioSourceNode`), pour garder le volume et la sourdine de `Sfx`. C'est la pratique courante ([W3C](https://lists.w3.org/Archives/Public/public-audio/2012OctDec/0784.html)). Risques : un blanc possible au retour au début de la boucle, et des soucis passés sous Safari ([forum Babylon.js](https://forum.babylonjs.com/t/importing-audioscenecomponent-causes-massive-increase-in-memory-usage/52410)).
-- **B. Une seule musique décodée à la fois** : la musique est décodée quand elle commence, et l'autre est libérée. La boucle reste parfaite, mais il reste environ 100 Mo pour la plus longue musique, et un temps de décodage au changement d'écran.
+- **B. Une seule musique décodée à la fois** : la musique est décodée quand elle commence, et l'autre est libérée. La boucle reste parfaite, mais il reste jusqu'à 80 Mo pour la musique de partie, et un temps de décodage au changement d'écran.
+
+Avec A, il reste 63 Mo de bruitages ; avec B, jusqu'à 143 Mo. Pour aller plus bas, les bruitages peuvent être décodés à 24 kHz, ce qui divise leur taille par deux : à écouter aussi.
 
 ### 6. Textures envoyées au GPU au premier affichage
 
@@ -270,7 +278,7 @@ Il n'existe pas d'outil qui porte le code d'un jeu Flash vers PixiJS.
 
 ## Dérive constatée
 
-Les règles `html5.boot::*` et `html5.assets::*` sont citées par les tests (`tools/BootCheck.hx`, `tools/AssetCheck.hx`) et par le code, mais aucun fichier de spec ne les définit. Le lot des textures du plan crée cette spec.
+Les règles `html5.boot::*` et `html5.assets::*` étaient citées par les tests (`tools/BootCheck.hx`, `tools/AssetCheck.hx`) et par le code, mais aucun fichier de spec ne les définissait. Corrigé : [`html5-boot.md`](html5-boot.md).
 
 ## Suivi
 

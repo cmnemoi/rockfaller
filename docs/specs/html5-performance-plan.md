@@ -19,7 +19,7 @@ Ce plan suit l'audit [`html5-performance.md`](html5-performance.md). Il corrige 
 | [`html5-h2d-layer.md`](html5-h2d-layer.md), section « Couleur et modes de fusion » | Comment la couleur est dessinée : teinte native, matrice dans le lot |
 | [`html5-h2d-layer.md`](html5-h2d-layer.md), nouvelles sections | Shaders prêts, réglages du renderer, cadence de la boucle |
 | [`html5-sound.md`](html5-sound.md) | Les musiques non gardées décodées |
-| `html5-boot.md` (créée au lot 8) | Les règles `html5.boot::*` et `html5.assets::*` déjà citées par le code, et l'envoi des textures |
+| [`html5-boot.md`](html5-boot.md) (créée en avance) | Les règles `html5.boot::*` et `html5.assets::*` déjà citées par le code, et l'envoi des textures |
 
 Chaque lot écrit ses règles dans la spec **avant** ses tests.
 
@@ -221,15 +221,16 @@ Ce jalon décide du lot 8 : envoyer toutes les textures, ou monde par monde, ou 
 
 Décision d'abord, avec toi, à l'écoute :
 
-- **A. En flux** : `<audio>` et `MediaElementAudioSourceNode`. La mémoire tombe à quelques Mo. Risques : un blanc à la boucle, Safari.
-- **B. Une seule décodée** : la musique est décodée quand elle commence, et l'autre est libérée. La boucle reste parfaite, mais il reste environ 100 Mo.
+- **A. En flux** : `<audio>` et `MediaElementAudioSourceNode`. Les musiques ne prennent plus que quelques Mo ; il reste 63 Mo de bruitages. Risques : un blanc à la boucle, Safari.
+- **B. Une seule décodée** : la musique est décodée quand elle commence, et l'autre est libérée. La boucle reste parfaite, mais il reste jusqu'à 143 Mo (80 Mo de musique de partie et 63 Mo de bruitages).
+- **En plus de A ou B** : décoder les bruitages à 24 kHz divise leur taille par deux.
 
 Un essai de A sur une branche jetable : les deux musiques en boucle, dans Chrome, Firefox et Safari, à comparer à l'oreille avec la version Flash.
 
 Règles :
 
 - `html5.sound::music-not-kept-decoded` (`html5-sound.md`) : selon le choix, en flux, ou une seule musique décodée à la fois.
-- `html5.perf::sound-memory` : au démarrage, au plus 50 Mo de sons décodés avec A, ou 150 Mo avec B. Aujourd'hui : 209 Mo.
+- `html5.perf::sound-memory` : au démarrage, au plus 65 Mo de sons décodés avec A, ou 145 Mo avec B (moitié moins pour les bruitages à 24 kHz). Aujourd'hui : 209 Mo, dont 146 Mo de musiques.
 
 Tests d'abord :
 
@@ -245,7 +246,7 @@ Selon le jalon A.
 
 Règles :
 
-- `html5-boot.md` est créée. Elle reprend les règles `html5.boot::*` et `html5.assets::*` déjà citées par le code.
+- `html5-boot.md` existe déjà (créée en avance) : la règle s'y ajoute.
 - `html5.boot::textures-sent-while-loading` : les textures sont envoyées au GPU pendant la barre de chargement. C'est toutes, ou celles du monde en cours, selon le jalon A.
 - `html5.perf::no-upload-while-playing` : aucun envoi de texture pendant le défilement de la carte ni pendant une partie.
 
