@@ -189,6 +189,8 @@ Le `FontBuilder` du fork dessine chaque caractère avec un `TextField` Flash. Ce
 
 Les métriques de Canvas 2D peuvent différer d'un pixel de celles de Flash. La parité par captures (étape 4) mesurera cet écart.
 
+Chrome épaissit un texte clair dessiné sur un fond transparent (correction gamma selon la couleur du texte). La couche dessine donc les glyphes en noir, puis les repeint en blanc sans changer leur alpha : leur graisse est alors celle de Flash. Constaté par comparaison avec Ruffle, sur la bulle du tutoriel.
+
 ### Critères d'acceptation (Playwright)
 
 - Étant donné BenchNine chargée en 44 px, quand on construit la police, alors la largeur du glyphe « A » vaut la largeur mesurée par Canvas 2D, arrondie au-dessus, et la hauteur de ligne vaut la hauteur de la police + 1.
@@ -308,3 +310,18 @@ Bug trouvé en jouant : une erreur du son, à la fin du tutoriel, gelait le jeu 
 ### Critères d'acceptation (Node)
 
 - Étant donné une boucle dont la première image lève une erreur, alors l'image suivante tourne quand même.
+
+## Taille d'une tuile
+
+`{#html5.h2d::tile-size-like-fork}`
+
+Une tuile du fork a deux tailles : sa zone dans la texture (ses UV) et sa taille dessinée (`width`, `height`). `sub` et `setSize` changent les deux. `scaleToSize` ne change que la taille dessinée : la zone entière est alors étirée ou réduite. Les polices bitmap du jeu (`mt.heaps.TileFont`) passent par `Font.resizeTo`, donc par `scaleToSize`.
+
+Bug trouvé en jouant : les lettres de « CONGRATULATIONS », de « SCORE » et du score étaient coupées, car la couche coupait la zone au lieu de la réduire.
+
+### Critères d'acceptation (Node)
+
+- Étant donné une tuile de 40 × 20 réduite à 20 × 5 par `scaleToSize`, alors toute la zone de 40 × 20 est dessinée, à l'échelle 0,5 × 0,25, et son décalage est réduit aussi.
+- Étant donné une police réduite de moitié par `resizeTo`, alors une lettre est dessinée entière, à moitié de sa taille.
+- Étant donné un élément de lot avec une tuile réduite, alors la réduction de la tuile et l'échelle de l'élément se composent.
+- Étant donné une tuile de 40 × 20 passée à 10 × 10 par `setSize`, alors une zone de 10 × 10 est dessinée, à l'échelle 1.

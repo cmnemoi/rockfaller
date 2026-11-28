@@ -121,10 +121,15 @@ class FontBuilder {
 		canvas.width = width;
 		canvas.height = height;
 		context.font = cssFont;
-		context.fillStyle = "#FFFFFF";
+		// Chrome thickens light text on a transparent canvas: the glyphs are drawn black, then painted white
+		// with their alpha kept, which gives Flash's weight.
+		context.fillStyle = "#000000";
 		context.textBaseline = "top";
 		for (glyph in placed)
 			context.fillText(String.fromCharCode(glyph.code), glyph.x, glyph.y);
+		context.globalCompositeOperation = "source-in";
+		context.fillStyle = "#FFFFFF";
+		context.fillRect(0, 0, width, height);
 		// The texture is made once the glyphs are drawn, so PixiJS never uploads an empty canvas.
 		var texture = h3d.mat.Texture.fromPixi(atlasTexture(canvas));
 		for (glyph in placed) {
