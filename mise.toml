@@ -16,6 +16,10 @@ linux-x64 = { asset_pattern = "neko-2.1.0-linux64.tar.gz" }
 macos-x64 = { asset_pattern = "neko-2.1.0-osx64.tar.gz" }
 macos-arm64 = { asset_pattern = "neko-2.1.0-osx64.tar.gz" }
 
+# The test tools (Playwright) and the dev server (Vite): Node's LTS.
+[tools.node]
+version = "24.19.0"
+
 [env]
 # Neko loads its libneko and ndll files from here: DYLD on macOS, LD on Linux.
 DYLD_LIBRARY_PATH = "{{env.HOME}}/.local/share/mise/installs/neko/2-1-0"
@@ -78,9 +82,9 @@ run = [
 ]
 
 [tasks.serve]
-description = "Serve the web version on http://localhost:8000"
+description = "Serve the web version on http://localhost:8000; the PixiJS game rebuilds and reloads when a .hx file changes"
 depends = ["web"]
-run = "python3 -m http.server 8000 --directory dist/web"
+run = "npx vite"
 
 # The JS build (PixiJS) runs in html5/, with Haxe 4.3.7 from html5/mise.toml.
 [tasks."html5:check:atlas"]

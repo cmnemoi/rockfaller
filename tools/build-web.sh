@@ -32,11 +32,13 @@ curl -sSLf -o "$archive" \
 echo "$ruffle_sha256  $archive" | shasum -a 256 -c - >/dev/null
 unzip -q "$archive" -d "$site/ruffle"
 rm -f "$site"/ruffle/*.map
+# Without their .map files, the scripts must not point to them: browsers and Vite would ask for them.
+sed -i.bak '/^\/\/# sourceMappingURL=/d' "$site"/ruffle/*.js && rm -f "$site"/ruffle/*.bak
 
 mkdir -p "$site/pixi"
 curl -sSLf -o "$archive" "https://registry.npmjs.org/pixi.js/-/pixi.js-$pixi_version.tgz"
 echo "$pixi_sha256  $archive" | shasum -a 256 -c - >/dev/null
-tar xzf "$archive" -O package/dist/browser/pixi.min.js > "$site/pixi/pixi.min.js"
+tar xzf "$archive" -O package/dist/browser/pixi.min.js | sed '/^\/\/# sourceMappingURL=/d' > "$site/pixi/pixi.min.js"
 # The game's assets, under the ids the game asks for (see html5/src/AssetManifest.hx).
 mkdir -p "$site/pixi/assets/data" "$site/pixi/assets/assets"
 cp -R client/client/assetsWeb/. "$site/pixi/assets/"
