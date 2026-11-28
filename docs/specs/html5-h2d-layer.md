@@ -388,3 +388,23 @@ Les horodatages de `requestAnimationFrame` varient d'environ une milliseconde : 
 - Étant donné un écran à 30 Hz, puis à 20 Hz, alors elle tourne à chaque image : 30, puis 20 fois.
 - Étant donné un écran à 120 Hz dont les horodatages varient de ±1 ms, alors elle tourne 29 à 31 fois.
 - Étant donné une image qui lève une erreur, alors l'image suivante tourne quand même (`html5.h2d::loop-survives-errors`).
+
+## Les commandes de dessin sont réutilisées
+
+`{#html5.h2d::commands-reused}`
+
+Une image allouait environ 1 Mo : une commande neuve par tuile, un objet par quad, cinq tableaux par tuile colorée, une `Matrix` par sprite PixiJS. Désormais :
+
+- `RenderContext` garde ses commandes, leurs matrices de couleur et leurs `alphaMap` d'une image à l'autre ;
+- un drawable remplit le quad de travail du contexte (`quadFor`, `scratchQuad`) au lieu d'en créer un ;
+- la matrice de couleur s'écrit en place, sans tableau intermédiaire ;
+- un `SpriteBatch` qui n'est pas statique dessine ses éléments directement ; un lot statique garde ses quads, et leur couleur, jusqu'à `invalidate()` ;
+- `PixiRenderer` réutilise une `Matrix` de travail, et déplace la découpe d'une texture en place.
+
+Limite connue : V8 range les nombres flottants des champs d'objet dans des boîtes (`HeapNumber`), même pour une instance de classe. Chaque nombre écrit dans une commande en alloue donc une. Il reste environ 250 à 300 Ko par image ; descendre plus bas demanderait de ranger les nombres des commandes dans des tableaux typés.
+
+### Critères d'acceptation (compilés en JS, lancés par Node)
+
+- Étant donné une scène dessinée deux fois avec le même contexte, alors la seconde image a les mêmes objets de commande que la première.
+- Étant donné un `Bitmap` coloré dont la couleur change entre deux images, alors la seconde image écrit la nouvelle couleur dans le même tableau de matrice.
+- Étant donné un lot statique dont un élément change de couleur sans `invalidate()`, alors le lot dessine encore l'ancienne couleur, comme son ancienne place.

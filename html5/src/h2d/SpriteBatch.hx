@@ -178,10 +178,6 @@ class SpriteBatch extends Drawable {
 	/** @spec html5.h2d.batch::elements-in-list-order */
 	override function draw( ctx : RenderContext ) {
 		if ( first == null ) return;
-		if ( !computed || !optimized ) {
-			quads = computeQuads();
-			computed = true;
-		}
 		// @spec html5.h2d.batch::too-many-elements-draws-nothing
 		if ( nbQuad() > MAX_ELEMENTS ) {
 			#if debug
@@ -190,8 +186,26 @@ class SpriteBatch extends Drawable {
 			return;
 			#end
 		}
+		if ( !optimized ) {
+			drawElements(ctx);
+			return;
+		}
+		if ( !computed ) {
+			quads = computeQuads();
+			computed = true;
+		}
 		for ( quad in quads )
 			ctx.drawQuad(this, quad);
+	}
+
+	/** A static batch keeps its quads until invalidated, like the fork's buffers; the others are drawn as they are. */
+	function drawElements( ctx : RenderContext ) {
+		var e = first;
+		while ( e != null ) {
+			if ( e.visible && e.tile != null )
+				ctx.drawQuad(this, fillQuad(e, ctx.scratchQuad(), e.color));
+			e = e.next;
+		}
 	}
 
 	function computeQuads() : Array<RenderContext.DrawCommand> {
@@ -199,35 +213,22 @@ class SpriteBatch extends Drawable {
 		var e = first;
 		while ( e != null ) {
 			if ( e.visible && e.tile != null )
-				computedQuads.push(quadOf(e));
+				computedQuads.push(fillQuad(e, RenderContext.newCommand(), e.color == null ? null : e.color.clone()));
 			e = e.next;
 		}
 		return computedQuads;
 	}
 
 	/** @spec html5.h2d.batch::element-drawn-through-batch: the fork's pushElemSRT, as a corner and two axes. */
-	function quadOf( e : BatchElement ) : RenderContext.DrawCommand {
+	function fillQuad( e : BatchElement, quad : RenderContext.DrawCommand, color : h3d.Vector ) : RenderContext.DrawCommand {
 		var t = e.tile;
 		tmpMatrix.identity();
 		tmpMatrix.skew(e.skewX, e.skewY);
 		tmpMatrix.scale(e.scaleX, e.scaleY);
 		tmpMatrix.rotate(e.rotation);
 		tmpMatrix.translate(e.x, e.y);
-		return {
-			texture: t.getTexture(),
-			cutX: t.x,
-			cutY: t.y,
-			cutWidth: t.cutWidth,
-			cutHeight: t.cutHeight,
-			a: tmpMatrix.a * t.stretchX(),
-			b: tmpMatrix.b * t.stretchX(),
-			c: tmpMatrix.c * t.stretchY(),
-			d: tmpMatrix.d * t.stretchY(),
-			tx: tmpMatrix.transformX(t.dx, t.dy),
-			ty: tmpMatrix.transformY(t.dx, t.dy),
-			alpha: e.alpha,
-			vertexColor: e.color == null ? null : e.color.clone(),
-		};
+		return RenderContext.fillQuad(quad, t.getTexture(), t.x, t.y, t.cutWidth, t.cutHeight, tmpMatrix.a * t.stretchX(), tmpMatrix.b * t.stretchX(),
+			tmpMatrix.c * t.stretchY(), tmpMatrix.d * t.stretchY(), tmpMatrix.transformX(t.dx, t.dy), tmpMatrix.transformY(t.dx, t.dy), e.alpha, color);
 	}
 
 	@:noDebug

@@ -42,13 +42,7 @@ class Graphics extends Drawable {
 
 	override function draw(ctx:RenderContext) {
 		for (rectangle in rectangles)
-			ctx.drawQuad(this, {
-				texture: h3d.mat.Texture.white(),
-				cutX: 0, cutY: 0, cutWidth: 1, cutHeight: 1,
-				a: rectangle.width, b: 0, c: 0, d: rectangle.height,
-				tx: rectangle.x, ty: rectangle.y,
-				alpha: 1.0,
-				vertexColor: rectangle.color,
-			});
+			ctx.drawQuad(this, ctx.quadFor(h3d.mat.Texture.white(), 0, 0, 1, 1, rectangle.width, 0, 0, rectangle.height, rectangle.x, rectangle.y,
+				1.0, rectangle.color));
 	}
 }

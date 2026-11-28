@@ -81,13 +81,22 @@ La page reçoit un seul rappel `requestAnimationFrame` par rafraîchissement de 
 
 Le jeu rend au plus 30 images par seconde, à 60 Hz comme à 120 Hz : une par pas du jeu (`html5.h2d::loop-at-stage-rate`). Vérifié en Node avec des horodatages simulés, car l'écran de la CI a sa propre fréquence.
 
+## Peu de déchets par image
+
+`{#html5.perf::little-garbage-per-frame}`
+
+Une image rendue alloue au plus 350 Ko en moyenne, au tutoriel, sur la carte et en partie. Avant le lot 6 : environ 950 Ko par image, à 60 images par seconde, soit environ 60 Mo/s. Après : 240 à 320 Ko selon l'écran, à 30 images par seconde, soit environ 8 Mo/s. Le plan visait 100 Ko : V8 met en boîte chaque nombre flottant écrit dans un champ d'objet (voir `html5.h2d::commands-reused`). Le reste demanderait des tableaux typés.
+
+### Critère d'acceptation (sonde, hors CI)
+
+- Étant donné `mise run perf`, alors la colonne « Ko alloués/image » reste sous 350 sur chaque écran. Ce n'est pas un test de CI : l'échantillonnage du tas varie d'une exécution à l'autre.
+
 ## Budgets à venir
 
 Chaque budget s'écrit ici, avec ses critères, au début de son lot.
 
 | Règle | Lot | Aujourd'hui |
 |---|---|---|
-| `html5.perf::little-garbage-per-frame` : au plus 100 Ko alloués par image rendue (sonde) | 6 | environ 1 070 Ko |
 | `html5.perf::sound-memory` : sons décodés au démarrage sous le seuil choisi (sonde) | 7 | 209 Mo |
 | `html5.perf::no-upload-while-playing` : aucun envoi de texture pendant le défilement de la carte ni en partie | 8 | 5 à 11 envois au défilement |
 

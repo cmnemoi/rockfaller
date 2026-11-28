@@ -340,6 +340,20 @@ Plus qu'un rappel `requestAnimationFrame` par rafraîchissement. Tous les écran
 | Coups | 30,3 | 55 | 21 | 0 | 890 |
 | Défilement de la carte | 30,5 | 52 | 7 | 0 | 1017 |
 
+### Lot 6 : moins de déchets par image
+
+| Écran | Ko alloués/image avant | Après |
+|---|---|---|
+| Tutoriel | 954 | 250 |
+| Projecteur | 971 | 317 |
+| Carte | 979 | 275 |
+| Fenêtre du niveau 5 | 1088 | 282 |
+| Partie | 866 | 243 |
+| Coups | 890 | 263 |
+| Défilement de la carte | 1017 | 303 |
+
+Avec les 30 images par seconde du lot 5, le débit d'allocation passe d'environ 60 Mo/s à environ 8 Mo/s. Le reste vient surtout de V8, qui met en boîte chaque nombre flottant écrit dans un champ d'objet ; voir le lot 6b du plan.
+
 ## Questions ouvertes
 
 - **Quels téléphones ?** Il faut au moins un téléphone Android modeste, et si possible un iPhone. Le compteur `?perf` du plan permet de mesurer sur l'appareil.

@@ -205,6 +205,10 @@ Changement :
 
 Risque : une commande réutilisée alors qu'elle est encore lue. Les tests d'ordre de dessin et de rendu la détectent.
 
+### Lot 6b, en option : les nombres des commandes dans des tableaux typés
+
+Fait au lot 6 : environ 270 Ko par image au lieu de 950. Le reste vient de V8, qui met en boîte chaque nombre flottant écrit dans un champ d'objet. Ranger les nombres des commandes dans un tableau typé par image (`Float64Array`) le supprimerait, mais change l'API des commandes, que lisent `PixiRenderer` et les tests. À faire seulement si le jalon A montre des saccades de ramasse-miettes sur téléphone.
+
 ## Jalon A : mesure sur téléphone
 
 Après les lots 0 à 5, et si possible le 6. Sur au moins un téléphone Android modeste, et un iPhone si possible, dans Chrome et dans Safari : `/pixi/game.html?perf`.

@@ -1,7 +1,6 @@
 import h2d.RenderContext.DrawCommand;
 import pixi.core.display.Container;
 import pixi.core.math.Matrix;
-import pixi.core.math.shapes.Rectangle;
 import pixi.core.sprites.Sprite;
 import pixi.core.textures.Texture;
 
@@ -20,6 +19,9 @@ class PixiRenderer {
 	static inline var GREEN_FACTOR = 6;
 	static inline var BLUE_FACTOR = 12;
 	static inline var ALPHA_FACTOR = 18;
+
+	// Reused for every sprite, every frame: html5.h2d::commands-reused.
+	static var placement = new Matrix();
 
 	public var root(default, null):Container;
 	var sprites:Array<Sprite>;
@@ -124,10 +126,11 @@ class PixiRenderer {
 		var map = command.alphaMap;
 		if (mask.texture.baseTexture != map.texture.pixiTexture)
 			mask.texture = new Texture(map.texture.pixiTexture);
-		mask.texture.frame = new Rectangle(map.cutX, map.cutY, map.cutWidth, map.cutHeight);
+		cutTo(mask.texture, map.cutX, map.cutY, map.cutWidth, map.cutHeight);
 		// The mask's picture is stretched over the drawn cut, like the fork's alphaMap UVs.
-		mask.transform.setFromMatrix(new Matrix(command.a * command.cutWidth / map.cutWidth, command.b * command.cutWidth / map.cutWidth,
+		mask.transform.setFromMatrix(placementOf(command.a * command.cutWidth / map.cutWidth, command.b * command.cutWidth / map.cutWidth,
 			command.c * command.cutHeight / map.cutHeight, command.d * command.cutHeight / map.cutHeight, command.tx, command.ty));
+
 		mask.visible = true;
 		sprite.mask = mask;
 	}
@@ -145,6 +148,28 @@ class PixiRenderer {
 			case SoftAdd: SOFT_ADD;
 			case SoftOverlay: SOFT_OVERLAY;
 		}
+	}
+
+	static function placementOf(a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float):Matrix {
+		placement.a = a;
+		placement.b = b;
+		placement.c = c;
+		placement.d = d;
+		placement.tx = tx;
+		placement.ty = ty;
+		return placement;
+	}
+
+	/** A sprite's texture is its own (made when its base changed): its frame is moved in place, not replaced. */
+	static function cutTo(texture:Texture, x:Int, y:Int, width:Int, height:Int) {
+		var cut = texture.frame;
+		if (cut.x == x && cut.y == y && cut.width == width && cut.height == height)
+			return;
+		cut.x = x;
+		cut.y = y;
+		cut.width = width;
+		cut.height = height;
+		texture.frame = cut;
 	}
 
 	public function show(commands:Array<DrawCommand>) {
@@ -167,10 +192,9 @@ class PixiRenderer {
 		var pixiTexture = command.texture.pixiTexture;
 		if (sprite.texture.baseTexture != pixiTexture)
 			sprite.texture = new Texture(pixiTexture);
-		var cut = sprite.texture.frame;
-		if (cut.x != command.cutX || cut.y != command.cutY || cut.width != command.cutWidth || cut.height != command.cutHeight)
-			sprite.texture.frame = new Rectangle(command.cutX, command.cutY, command.cutWidth, command.cutHeight);
-		sprite.transform.setFromMatrix(new Matrix(command.a, command.b, command.c, command.d, command.tx, command.ty));
+		cutTo(sprite.texture, command.cutX, command.cutY, command.cutWidth, command.cutHeight);
+		sprite.transform.setFromMatrix(placementOf(command.a, command.b, command.c, command.d, command.tx, command.ty));
+
 		sprite.alpha = command.alpha;
 		sprite.blendMode = cast pixiBlendModeOf(command.blendMode);
 		showColor(sprite, command.colorMatrix);

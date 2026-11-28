@@ -53,17 +53,8 @@ class TileGroup extends Drawable {
 		for (entry in placed) {
 			var t = entry.tile;
 			if (t.width <= 0 || t.height <= 0) continue;
-			ctx.drawQuad(this, {
-				texture: t.getTexture(),
-				cutX: t.x,
-				cutY: t.y,
-				cutWidth: t.cutWidth,
-				cutHeight: t.cutHeight,
-				a: t.stretchX(), b: 0, c: 0, d: t.stretchY(),
-				tx: entry.x + t.dx,
-				ty: entry.y + t.dy,
-				alpha: 1.0,
-			});
+			ctx.drawQuad(this, ctx.quadFor(t.getTexture(), t.x, t.y, t.cutWidth, t.cutHeight, t.stretchX(), 0, 0, t.stretchY(),
+				entry.x + t.dx, entry.y + t.dy, 1.0));
 		}
 	}
 }

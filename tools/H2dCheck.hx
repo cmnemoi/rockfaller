@@ -17,6 +17,9 @@ class H2dCheck {
 	static function main() {
 		aFieldLeftUnsetHasFlashsDefaultValue();
 		aFrameThatFailsDoesNotStopTheGameLoop();
+		drawingTheSameSceneAgainReusesItsCommands();
+		aColouredQuadReusesItsColourMatrix();
+		aStaticBatchKeepsTheColourItWasDrawnWith();
 		onA120HzScreenTheLoopRuns30TimesPerSecond();
 		onA60HzScreenTheLoopRuns30TimesPerSecond();
 		onA144HzScreenTheLoopRunsAbout30TimesPerSecond();
@@ -902,6 +905,51 @@ class H2dCheck {
 		});
 
 		check(calls == 2, "after a frame throws, the next frame still runs (got " + calls + " frames)");
+	}
+
+	/** @spec html5.h2d::commands-reused: about 1 MB of garbage per frame came from new commands */
+	static function drawingTheSameSceneAgainReusesItsCommands() {
+		var scene = new Scene();
+		new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		var batch = new SpriteBatch(atlasTile(), scene);
+		batch.alloc(atlasTile().sub(0, 0, 8, 8));
+		var context = new RenderContext();
+		scene.render(context);
+		var first = context.drawn.copy();
+
+		scene.render(context);
+
+		check(context.drawn.length == 2 && context.drawn[0] == first[0] && context.drawn[1] == first[1], "the second frame draws with the first frame's command objects");
+	}
+
+	/** @spec html5.h2d::commands-reused */
+	static function aColouredQuadReusesItsColourMatrix() {
+		var scene = new Scene();
+		var bitmap = new Bitmap(atlasTile().sub(0, 0, 8, 8), scene);
+		bitmap.color = new h3d.Vector(0.5, 1, 1, 1);
+		var context = new RenderContext();
+		scene.render(context);
+		var first = context.drawn[0].colorMatrix;
+		bitmap.color = new h3d.Vector(0.25, 1, 1, 1);
+
+		scene.render(context);
+
+		check(context.drawn[0].colorMatrix == first && first[0] == 0.25, "the second frame writes the new colour into the same matrix (got red factor " + first[0] + ")");
+	}
+
+	/** @spec html5.h2d.batch::static-until-invalidate: a static batch keeps its element's colour until invalidated, like its place */
+	static function aStaticBatchKeepsTheColourItWasDrawnWith() {
+		var scene = new Scene();
+		var batch = new SpriteBatch(atlasTile(), scene);
+		batch.optimizeForStatic(true);
+		var element = batch.alloc(atlasTile().sub(0, 0, 8, 8));
+		element.color = new h3d.Vector(0.5, 1, 1, 1);
+		render(scene);
+
+		element.color.x = 0.25;
+		var redFactor = render(scene)[0].colorMatrix[0];
+
+		check(redFactor == 0.5, "a static batch still draws its element with its first colour (got " + redFactor + ")");
 	}
 
 	/** @spec html5.h2d::loop-at-stage-rate: Flash called ENTER_FRAME 30 times per second, the stage's rate */

@@ -42,14 +42,8 @@ class Interactive extends Drawable {
 	/** @spec html5.h2d.interactive::background-color: the fork draws a tile of that color, of the interactive's size. */
 	override function draw( ctx : RenderContext ) {
 		if ( backgroundColor != null && (backgroundColor>>>24) > 0 ) {
-			ctx.drawQuad(this, {
-				texture: h3d.mat.Texture.white(),
-				cutX: 0, cutY: 0, cutWidth: 1, cutHeight: 1,
-				a: Std.int(width), b: 0, c: 0, d: Std.int(height),
-				tx: 0, ty: 0,
-				alpha: 1.0,
-				vertexColor: h3d.Vector.fromColor(backgroundColor),
-			});
+			ctx.drawQuad(this, ctx.quadFor(h3d.mat.Texture.white(), 0, 0, 1, 1, Std.int(width), 0, 0, Std.int(height), 0, 0, 1.0,
+				h3d.Vector.fromColor(backgroundColor)));
 		}
 	}
 
