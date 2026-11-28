@@ -362,6 +362,16 @@ Plus qu'un rappel `requestAnimationFrame` par rafraîchissement. Tous les écran
 
 Avec les 30 images par seconde du lot 5, le débit d'allocation passe d'environ 60 Mo/s à environ 8 Mo/s. Le reste vient surtout de V8, qui met en boîte chaque nombre flottant écrit dans un champ d'objet ; voir le lot 6b du plan.
 
+### Jalon A : premier téléphone
+
+Un téléphone Android, dans Chrome, en 4G, avec le compteur `?perf`, pendant le tutoriel du niveau 1 :
+
+| Images/s | Plus longue (ms) | Appels GPU | Changements de cible | Sprites | JS par image |
+|---|---|---|---|---|---|
+| 30 à 31 | 36 | 6 | 0 | 770 | 3 à 7 ms |
+
+Le jeu tient ses 30 images par seconde. Cette partie a révélé un bug sans rapport avec les performances : au toucher, les pierres ne tournaient plus après le tutoriel (`html5.h2d.interactive::touch-moves-before-press`, corrigé). Restent à mesurer : la carte, une partie hors tutoriel, et un iPhone.
+
 ## Questions ouvertes
 
 - **Quels téléphones ?** Il faut au moins un téléphone Android modeste, et si possible un iPhone. Le compteur `?perf` du plan permet de mesurer sur l'appareil.
