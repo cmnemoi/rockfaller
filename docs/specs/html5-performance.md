@@ -4,7 +4,7 @@ Analyse du 28 novembre 2026, sur le commit `ff186cd`. Partie de l'étape 4 de [`
 
 ## En bref
 
-La version PixiJS dessine **9 à 12 images par seconde** sur un Apple M5. Sans ses filtres de couleur, elle en dessine 30, le plafond de la mesure. Le CPU n'y est pour rien : il attend 90 à 97 % du temps. Le GPU est saturé par environ **600 à 760 changements de cible de rendu par image**. Chaque sprite coloré passe par son propre `ColorMatrixFilter`, c'est-à-dire un rendu dans une texture intermédiaire.
+Dans Chrome, la version PixiJS dessine **9 à 12 images par seconde** sur un Apple M5. Sans ses filtres de couleur, elle en dessine 30, le plafond de la mesure. Dans Firefox, sur la même machine, elle dessine environ 93 images par seconde en partie, sur un écran à 120 Hz : le coût des filtres dépend beaucoup du navigateur. Les téléphones modestes sont une cible, et Chrome est leur navigateur le plus courant : ce coût reste donc le premier problème. Le CPU n'y est pour rien : il attend 90 à 97 % du temps. Le GPU est saturé par environ **600 à 760 changements de cible de rendu par image**. Chaque sprite coloré passe par son propre `ColorMatrixFilter`, c'est-à-dire un rendu dans une texture intermédiaire.
 
 Le fork Heaps n'a pas ce coût : sa matrice de couleur est un paramètre du shader, appliqué pendant le dessin. C'est ce qu'il faut refaire.
 
@@ -211,18 +211,23 @@ Un lot par problème, chacun avec ses tests d'abord. Chaque lot se mesure avec l
 6. **Moins d'allocations par image** (problème 4).
 7. **Musiques en flux ; textures envoyées au chargement** (problèmes 5 et 6).
 
-Les lots 1 à 3 rendent le jeu fluide. Les lots 4 à 7 réduisent la charge, la mémoire et les saccades : ils comptent surtout sur mobile.
+Les lots 1 à 3 rendent le jeu fluide. Les lots 4 à 7 réduisent la charge, la mémoire et les saccades : les téléphones modestes étant visés, ils sont nécessaires aussi.
 
 ## Questions ouvertes
 
-- **Firefox n'est pas mesuré.** Le Firefox de Playwright installé ici est trop vieux. Pour compter les images rendues par seconde, coller ceci dans la console de la page du jeu :
+- **Pourquoi Firefox est-il 8 fois plus rapide ?** Mesure à la main, dans la console : environ 93 images rendues par seconde en partie, sur l'écran à 120 Hz du MacBook. Le Firefox de Playwright installé ici est trop vieux pour la sonde. Cause probable, non vérifiée : Chrome passe par ANGLE sur Metal, où chaque changement de cible de rendu devient une passe de rendu Metal complète. Les GPU de téléphone ont la même architecture à tuiles : il faut s'attendre au coût de Chrome, pas à celui de Firefox. À 93 images/s, Firefox reste aussi sous les 120 Hz, et trois images sur quatre sont des doublons (problème 3).
+
+  Pour compter les images rendues par seconde, coller ceci dans la console de la page du jeu. Le script peut être relancé : il garde la fonction d'origine.
 
   ```js
-  let renders = 0;
-  const render = PIXI.Renderer.prototype.render;
-  PIXI.Renderer.prototype.render = function (...args) { renders++; return render.apply(this, args); };
-  setTimeout(() => console.log('images rendues par seconde :', renders / 5), 5000);
+  (() => {
+    const prototype = PIXI.Renderer.prototype;
+    const render = prototype.originalRender ?? (prototype.originalRender = prototype.render);
+    let renders = 0;
+    prototype.render = function (...args) { renders++; return render.apply(this, args); };
+    setTimeout(() => console.log('images rendues par seconde :', renders / 5), 5000);
+  })();
   ```
 
-- **Quels appareils viser ?** Un téléphone d'entrée de gamme rend les lots 4 à 7 nécessaires. Un ordinateur seul les rend secondaires.
+- **Appareils visés : les téléphones modestes aussi.** Les lots 4 à 7 sont donc nécessaires, pas secondaires.
 - **Netteté sur écran Retina.** Le canvas fait 640 × 768 pixels, puis le navigateur l'agrandit. Le passer à la résolution de l'écran rendrait l'image nette, mais multiplierait par 4 les pixels à remplir. C'est un choix de rendu, à trancher à part.
