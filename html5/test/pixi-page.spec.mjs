@@ -399,3 +399,38 @@ test('building a font the browser has not loaded fails and names it', async ({ p
 
   expect(message).toContain('Comic Platypus');
 });
+
+/** The kinds of the events the stage turns the pointer into, in order, as their names. */
+async function listenToTheScene(page) {
+  await page.evaluate(() => {
+    window.heardEvents = [];
+    window.rockfallerDebug.stage.addEventTarget((event) => window.heardEvents.push(['EPush', 'ERelease', 'EMove', 'EOver', 'EOut'][event.kind._hx_index]));
+  });
+}
+
+test.describe('on a touch screen', () => {
+  test.use({ hasTouch: true });
+
+  /** @spec html5.h2d.interactive::touch-moves-before-press: a finger does not hover; the game picks its rocks on moves */
+  test('a tap is heard as a move to the finger, then the press and the release', async ({ page }) => {
+    await listenToTheScene(page);
+    const { x, y } = await duckOnPage(page);
+
+    await page.touchscreen.tap(x, y);
+
+    await expect.poll(() => page.evaluate(() => window.heardEvents.filter((kind) => kind !== 'EOver' && kind !== 'EOut'))).toEqual(['EMove', 'EPush', 'EMove', 'ERelease']);
+  });
+});
+
+/** @spec html5.h2d.interactive::touch-moves-before-press: only a touch adds moves */
+test('a mouse click adds no move of its own', async ({ page }) => {
+  const { x, y } = await duckOnPage(page);
+  await page.mouse.move(x, y);
+  await twoFrames(page);
+  await listenToTheScene(page);
+
+  await page.mouse.down();
+  await page.mouse.up();
+
+  await expect.poll(() => page.evaluate(() => window.heardEvents.filter((kind) => kind !== 'EOver' && kind !== 'EOut'))).toEqual(['EPush', 'ERelease']);
+});

@@ -139,7 +139,7 @@ class Demo {
 					addedElement.alpha = 0.5;
 					return {square: BENCH_SQUARE, x: BENCH_X, y: BENCH_Y, textY: BENCH_Y + 2 * BENCH_SQUARE, textHeight: text.textHeight};
 				};
-				untyped Browser.window.rockfallerDebug = {colorBench: colorBench, spotlight: spotlight, app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
+				untyped Browser.window.rockfallerDebug = {stage: hxd.Stage.getInstance(), colorBench: colorBench, spotlight: spotlight, app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};
 				#end
 			}).catchError(showError);
 		};

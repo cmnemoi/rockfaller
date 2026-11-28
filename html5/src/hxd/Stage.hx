@@ -7,6 +7,7 @@ package hxd;
  */
 class Stage {
 	static var instance:Stage;
+	static inline var MOUSE = "mouse";
 
 	public var width(default, null):Int;
 	public var height(default, null):Int;
@@ -55,10 +56,23 @@ class Stage {
 		canvas.style.touchAction = "none"; // a touch drag must not scroll the page
 		canvas.addEventListener("pointerdown", function(e:js.html.PointerEvent) {
 			canvas.setPointerCapture(e.pointerId); // keeps the release even when it happens outside the canvas
+			moveThereIfTouch(e);
 			fromPointer(EPush, e);
 		});
-		canvas.addEventListener("pointerup", function(e:js.html.PointerEvent) fromPointer(ERelease, e));
+		canvas.addEventListener("pointerup", function(e:js.html.PointerEvent) {
+			moveThereIfTouch(e);
+			fromPointer(ERelease, e);
+		});
 		canvas.addEventListener("pointermove", function(e:js.html.PointerEvent) fromPointer(EMove, e));
+	}
+
+	/**
+	 * @spec html5.h2d.interactive::touch-moves-before-press: a finger does not hover, and the game picks the rocks
+	 * to turn on moves. The original mobile build called onMove() on press and release (#if mobile in Game).
+	 */
+	function moveThereIfTouch(e:js.html.PointerEvent) {
+		if (e.pointerType != MOUSE)
+			fromPointer(EMove, e);
 	}
 
 	function fromPointer(kind:Event.EventKind, e:js.html.PointerEvent) {

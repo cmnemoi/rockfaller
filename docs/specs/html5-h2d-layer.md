@@ -253,6 +253,14 @@ Avec `backgroundColor`, l'`Interactive` dessine un rectangle de sa taille, de ce
 
 `hxd.Stage` écoute les événements « pointer » du canevas : souris et toucher passent par le même chemin. Les positions sont en pixels du jeu, même quand la page affiche le canevas à une autre taille. Le curseur suit celui de l'`Interactive` survolé.
 
+#### Un toucher passe d'abord par la position du doigt
+
+`{#html5.h2d.interactive::touch-moves-before-press}`
+
+Le jeu choisit le groupe de pierres à tourner au survol du pointeur (`Rock.ON_MOVE`, sur `EMove`). Un doigt ne survole pas : le navigateur envoie l'appui sans déplacement avant. Le build mobile d'origine appelait donc `onMove()` à l'appui et au relâchement (`#if mobile` dans `Game`). La couche fait de même pour tous les jeux : un appui ou un relâchement qui ne vient pas de la souris est précédé d'un `EMove` à la même position.
+
+Bug trouvé en jouant sur téléphone : après le tutoriel du niveau 1, les pierres ne tournaient plus. Pendant le tutoriel, `TutoManager` pose lui-même le survol sur le groupe qu'il montre.
+
 ### Critères d'acceptation
 
 Compilés en JS, lancés par Node :
@@ -262,6 +270,8 @@ Compilés en JS, lancés par Node :
 - Étant donné un appui, une sortie, puis un relâchement dehors, alors il n'y a pas de clic.
 - Étant donné deux `Interactive` superposés, quand on clique, alors seul celui du dessus reçoit le clic. Avec `propagateEvents` sur celui du dessus, celui du dessous le reçoit aussi.
 - Étant donné un parent invisible, quand on clique, alors l'`Interactive` ne reçoit rien.
+- (Playwright, toucher) Étant donné la page de démo sur un écran tactile, quand le doigt touche le canard, alors la scène reçoit un déplacement à la position du doigt avant l'appui, puis avant le relâchement.
+- (Playwright, souris) Étant donné un clic de souris, alors la scène ne reçoit pas de déplacement en plus de ceux de la souris.
 - Étant donné un `Interactive` retourné sur un axe (`scaleX = -1`), quand on clique dans sa zone, alors il ne reçoit rien (quirk du fork).
 - Étant donné un `Interactive` tourné d'un quart de tour, quand on clique en (90, 110), alors il reçoit le clic en (10, 10).
 - Étant donné `backgroundColor = 0x80FF0000`, quand la scène se dessine, alors un rectangle rouge de 50 × 30, à l'alpha 0x80, est dessiné en (100, 100).
