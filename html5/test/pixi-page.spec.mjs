@@ -18,8 +18,9 @@ test.beforeEach(async ({ page }) => {
   const debugBundle = await readFile('dist/html5-test/main.js');
   await page.route('**/pixi/main.js', (route) => route.fulfill({ body: debugBundle, contentType: 'text/javascript' }));
   await page.goto('/pixi/');
-  // The duck, the grip, then the title's glyphs.
-  await page.waitForFunction(() => window.rockfallerDebug?.context.drawn.length > 2);
+  // The duck, the grip, then the title's glyphs. Like the fork's, the scene drops pointer events until its first
+  // step has checked them: the first frame can be drawn before that step, when the timer starts a little under one.
+  await page.waitForFunction(() => window.rockfallerDebug?.context.drawn.length > 2 && window.rockfallerDebug.scene.pendingEvents != null);
 });
 
 /** Every draw command, next to the PixiJS sprite that shows it, read in the same frame. */
