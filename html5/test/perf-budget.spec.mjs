@@ -134,12 +134,12 @@ test('no shader program is linked while playing, up to the tutorial spotlight', 
 });
 
 /** @spec html5.perf::one-loop: PixiJS's interaction manager ran a second requestAnimationFrame loop */
-test('the page runs one animation frame callback per frame', async ({ page }) => {
+test('the page runs one animation frame callback per screen refresh', async ({ page }) => {
   await startGame(page, '&perf');
   await page.waitForTimeout(2000);
 
-  const frames = await framesDuring(page, 1000);
-  expect(Math.max(...frames.filter((frame) => !frame.offscreen).map((frame) => frame.callbacks))).toBe(1);
+  const refreshes = await page.evaluate(() => window.rockfallerPerf.callbacksPerRefresh.slice(-60));
+  expect(Math.max(...refreshes.map((refresh) => refresh.callbacks))).toBe(1);
 });
 
 /** @spec html5.h2d::renderer-settings */

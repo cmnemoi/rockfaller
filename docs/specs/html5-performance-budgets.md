@@ -69,11 +69,17 @@ Lier un programme GPU fige le jeu : 378 ms au premier masque du projecteur du tu
 
 `{#html5.perf::one-loop}`
 
-La page reçoit un seul rappel `requestAnimationFrame` par image : celui de la boucle du jeu. Le gestionnaire d'interaction de PixiJS en ajoutait un second, et testait les 800 à 1300 sprites à chaque mouvement du pointeur (`html5.h2d::renderer-settings`).
+La page reçoit un seul rappel `requestAnimationFrame` par rafraîchissement de l'écran : celui de la boucle du jeu. Le gestionnaire d'interaction de PixiJS en ajoutait un second, et testait les 800 à 1300 sprites à chaque mouvement du pointeur (`html5.h2d::renderer-settings`).
 
 ### Critère d'acceptation (Playwright, page du jeu avec `?perf`)
 
-- Étant donné le jeu lancé, alors chaque image montrée sur la page reçoit un seul rappel `requestAnimationFrame`.
+- Étant donné le jeu lancé, alors chaque rafraîchissement de l'écran reçoit un seul rappel `requestAnimationFrame`. Le compteur les regroupe par horodatage : tous les rappels d'un rafraîchissement reçoivent le même.
+
+## Pas d'image identique
+
+`{#html5.perf::no-identical-frame}`
+
+Le jeu rend au plus 30 images par seconde, à 60 Hz comme à 120 Hz : une par pas du jeu (`html5.h2d::loop-at-stage-rate`). Vérifié en Node avec des horodatages simulés, car l'écran de la CI a sa propre fréquence.
 
 ## Budgets à venir
 
@@ -81,7 +87,6 @@ Chaque budget s'écrit ici, avec ses critères, au début de son lot.
 
 | Règle | Lot | Aujourd'hui |
 |---|---|---|
-| `html5.perf::no-identical-frame` : 30 images rendues par seconde à 60 Hz comme à 120 Hz | 5 | une par rafraîchissement de l'écran |
 | `html5.perf::little-garbage-per-frame` : au plus 100 Ko alloués par image rendue (sonde) | 6 | environ 1 070 Ko |
 | `html5.perf::sound-memory` : sons décodés au démarrage sous le seuil choisi (sonde) | 7 | 209 Mo |
 | `html5.perf::no-upload-while-playing` : aucun envoi de texture pendant le défilement de la carte ni en partie | 8 | 5 à 11 envois au défilement |

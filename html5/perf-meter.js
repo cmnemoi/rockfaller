@@ -11,12 +11,18 @@
   let callbacksSinceLastFrame = 0;
   let javascriptMsSinceLastFrame = 0;
 
+  // Callbacks per screen refresh: all callbacks of one refresh get the same time.
+  perf.callbacksPerRefresh = [];
   const requestAnimationFrame = window.requestAnimationFrame.bind(window);
   window.requestAnimationFrame = (callback) => requestAnimationFrame((time) => {
     const start = performance.now();
     callback(time);
     callbacksSinceLastFrame++;
     javascriptMsSinceLastFrame += performance.now() - start;
+    const refreshes = perf.callbacksPerRefresh;
+    if (refreshes.length && refreshes[refreshes.length - 1].time === time) refreshes[refreshes.length - 1].callbacks++;
+    else refreshes.push({ time, callbacks: 1 });
+    if (refreshes.length > KEPT_FRAMES) refreshes.shift();
   });
 
   for (const prototype of [WebGLRenderingContext.prototype, WebGL2RenderingContext.prototype]) {
@@ -99,7 +105,7 @@
       `${lastSecond.length} images/s, la plus longue ${Math.round(longest)} ms`,
       `GPU : ${last.drawCalls} appels, ${last.renderTargetSwitches} changements de cible`,
       `sprites : ${last.sprites}, ${last.filtered} filtrés, ${last.masked} masqués`,
-      `JS : ${last.javascriptMs.toFixed(1)} ms, ${last.callbacks} rappels par image`,
+      `JS : ${last.javascriptMs.toFixed(1)} ms par image, ${perf.callbacksPerRefresh.at(-1).callbacks} rappel(s) par rafraîchissement`,
       `depuis le début : ${gl.programsLinked} programmes, ${gl.textureUploads} envois de textures`,
     ].join('\n');
   }, 500);

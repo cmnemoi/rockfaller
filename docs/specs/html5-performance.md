@@ -326,6 +326,20 @@ Tous les écrans sont au plafond. Le greffon de lot a suffi : le repli par `Mesh
 
 Au projecteur du tutoriel : 0 programme lié en jouant (2 avant), et l'image la plus longue passe de 381 ms à **39 ms**. Le démarrage lie 9 programmes au lieu de 7, hors écran.
 
+### Lots 4 et 5 : réglages du renderer, boucle à 30 images par seconde
+
+Plus qu'un rappel `requestAnimationFrame` par rafraîchissement. Tous les écrans rendent **30 images par seconde** au lieu de 60 sur ce Chrome à 60 Hz : une par pas du jeu. Le travail de rendu par seconde est divisé par 2 à 60 Hz, et par 4 sur un écran à 120 Hz. La colonne « rappels par image » de la sonde vaut 2 : deux rafraîchissements par image rendue.
+
+| Écran | Images/s | Plus longue (ms) | Appels GPU | Changements de cible | Ko alloués/image |
+|---|---|---|---|---|---|
+| Tutoriel | 30,5 | 45 | 6 | 0 | 954 |
+| Projecteur | 30,5 | 56 | 12 | 2 | 971 |
+| Carte | 30,6 | 69 | 5 | 0 | 979 |
+| Fenêtre du niveau 5 | 30,7 | 36 | 6 | 0 | 1088 |
+| Partie | 30,3 | 37 | 7 | 0 | 866 |
+| Coups | 30,3 | 55 | 21 | 0 | 890 |
+| Défilement de la carte | 30,5 | 52 | 7 | 0 | 1017 |
+
 ## Questions ouvertes
 
 - **Quels téléphones ?** Il faut au moins un téléphone Android modeste, et si possible un iPhone. Le compteur `?perf` du plan permet de mesurer sur l'appareil.

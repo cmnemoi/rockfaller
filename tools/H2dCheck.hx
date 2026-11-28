@@ -17,6 +17,11 @@ class H2dCheck {
 	static function main() {
 		aFieldLeftUnsetHasFlashsDefaultValue();
 		aFrameThatFailsDoesNotStopTheGameLoop();
+		onA120HzScreenTheLoopRuns30TimesPerSecond();
+		onA60HzScreenTheLoopRuns30TimesPerSecond();
+		onA144HzScreenTheLoopRunsAbout30TimesPerSecond();
+		onAScreenSlowerThan30HzTheLoopRunsOnEveryFrame();
+		frameTimesOffByAMillisecondKeepThe30CallsPerSecond();
 		aClonedTileChangesIndependently();
 		aChildIsDrawnThroughItsParentsPositionAndScale();
 		aFlippedBitmapIsMirroredAroundItsPivot();
@@ -890,20 +895,69 @@ class H2dCheck {
 
 	/** @spec html5.h2d::loop-survives-errors: like Flash's ENTER_FRAME; one error froze the end of level's Next button */
 	static function aFrameThatFailsDoesNotStopTheGameLoop() {
-		var frames:Array<Dynamic->Void> = [];
-		js.Syntax.code("globalThis.window = {0}", {requestAnimationFrame: function(frame) frames.push(frame)});
 		var calls = 0;
-		hxd.System.setLoop(function() {
+		loopOnFrames([0, 40], function() {
 			calls++;
 			if (calls == 1) throw "a frame fails";
 		});
 
-		try frames.shift()(0) catch (_:Dynamic) {}
-		if (frames.length > 0) frames.shift()(0);
-
-		hxd.System.setLoop(null);
-		js.Syntax.code("delete globalThis.window");
 		check(calls == 2, "after a frame throws, the next frame still runs (got " + calls + " frames)");
+	}
+
+	/** @spec html5.h2d::loop-at-stage-rate: Flash called ENTER_FRAME 30 times per second, the stage's rate */
+	static function onA120HzScreenTheLoopRuns30TimesPerSecond() {
+		var calls = loopCallsInOneSecond(120, 0);
+
+		check(calls == 30, "at 120 Hz, the loop runs 30 times in a second (got " + calls + ")");
+	}
+
+	/** @spec html5.h2d::loop-at-stage-rate */
+	static function onA60HzScreenTheLoopRuns30TimesPerSecond() {
+		var calls = loopCallsInOneSecond(60, 0);
+
+		check(calls == 30, "at 60 Hz, the loop runs 30 times in a second (got " + calls + ")");
+	}
+
+	/** @spec html5.h2d::loop-at-stage-rate: every 4th or 5th frame; the game's Timer counts the steps */
+	static function onA144HzScreenTheLoopRunsAbout30TimesPerSecond() {
+		var calls = loopCallsInOneSecond(144, 0);
+
+		check(calls >= 28 && calls <= 30, "at 144 Hz, the loop runs 28 to 30 times in a second (got " + calls + ")");
+	}
+
+	/** @spec html5.h2d::loop-at-stage-rate */
+	static function onAScreenSlowerThan30HzTheLoopRunsOnEveryFrame() {
+		var at30 = loopCallsInOneSecond(30, 0);
+		var at20 = loopCallsInOneSecond(20, 0);
+
+		check(at30 == 30 && at20 == 20, "at 30 Hz and 20 Hz, the loop runs on every frame (got " + at30 + ", " + at20 + ")");
+	}
+
+	/** @spec html5.h2d::loop-at-stage-rate: animation frame timestamps are not exact */
+	static function frameTimesOffByAMillisecondKeepThe30CallsPerSecond() {
+		var calls = loopCallsInOneSecond(120, 1);
+
+		check(calls >= 29 && calls <= 31, "at 120 Hz with times off by 1 ms, the loop runs 30 times, give or take 1 (got " + calls + ")");
+	}
+
+	/** How many times the loop runs over one second of screen frames, each frame time off by jitter ms, in turns. */
+	static function loopCallsInOneSecond(hertz:Int, jitter:Float):Int {
+		var calls = 0;
+		var frameMs = 1000 / hertz;
+		loopOnFrames([for (frame in 0...hertz) frame * frameMs + (frame % 2 == 0 ? jitter : -jitter)], function() calls++);
+		return calls;
+	}
+
+	/** Runs the game loop on fake animation frames at the given times, then lets it stop. */
+	static function loopOnFrames(frameTimes:Array<Float>, loop:Void->Void) {
+		var frames:Array<Float->Void> = [];
+		js.Syntax.code("globalThis.window = {0}", {requestAnimationFrame: function(frame) frames.push(frame)});
+		hxd.System.setLoop(loop);
+		for (time in frameTimes)
+			try frames.shift()(time) catch (_:Dynamic) {}
+		hxd.System.setLoop(null);
+		frames.shift()(frameTimes[frameTimes.length - 1] + 1000); // finds no loop, and stops asking for frames
+		js.Syntax.code("delete globalThis.window");
 	}
 
 	static function check(condition:Bool, expectation:String) {

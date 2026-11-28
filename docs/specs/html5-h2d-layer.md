@@ -327,6 +327,8 @@ Bug trouvé en jouant : un clic sur les pierres ne les faisait pas tourner, et l
 
 En Flash, `ENTER_FRAME` continue après une erreur dans une image. La boucle JS fait pareil : elle demande l'image suivante avant de lancer celle-ci.
 
+Voir aussi la cadence de la boucle (`html5.h2d::loop-at-stage-rate`).
+
 Bug trouvé en jouant : une erreur du son, à la fin du tutoriel, gelait le jeu ; le bouton « next » ne répondait plus.
 
 ### Critères d'acceptation (Node)
@@ -370,3 +372,19 @@ La première image qui utilise un shader le compile et le lie : jusqu'à 378 ms 
 
 - Étant donné le jeu lancé, alors le renderer n'a pas de `plugins.interaction`, son `textureGC.mode` vaut `MANUAL`, et son contexte WebGL n'a pas d'alpha.
 - Les tests du pointeur de la page de démo restent verts, dont « le curseur devient une main ».
+
+## La boucle tourne à 30 images par seconde
+
+`{#html5.h2d::loop-at-stage-rate}`
+
+Flash appelait `ENTER_FRAME` à la cadence de la scène : les 30 images par seconde du jeu. `hxd.System.setLoop` fait de même : il appelle la boucle du jeu au plus 30 fois par seconde, quelle que soit la fréquence de l'écran. Sur un écran plus lent que 30 Hz, il l'appelle à chaque image. Le jeu avance par pas de 1/30 s, et rien ne bouge entre deux pas : à 60 Hz ou 120 Hz, dessiner à chaque rafraîchissement redessinait 2 ou 4 fois la même image. La vitesse du jeu ne change pas : `Main.update` compte ses pas avec `hxd.Timer.tmod`.
+
+Les horodatages de `requestAnimationFrame` varient d'environ une milliseconde : une tolérance de 4 ms les absorbe. À 144 Hz, la boucle tourne toutes les 4 ou 5 images, comme avant.
+
+### Critères d'acceptation (compilés en JS, lancés par Node, horodatages simulés)
+
+- Étant donné un écran à 120 Hz, puis à 60 Hz, alors la boucle tourne 30 fois en une seconde.
+- Étant donné un écran à 144 Hz, alors elle tourne 28 à 30 fois.
+- Étant donné un écran à 30 Hz, puis à 20 Hz, alors elle tourne à chaque image : 30, puis 20 fois.
+- Étant donné un écran à 120 Hz dont les horodatages varient de ±1 ms, alors elle tourne 29 à 31 fois.
+- Étant donné une image qui lève une erreur, alors l'image suivante tourne quand même (`html5.h2d::loop-survives-errors`).

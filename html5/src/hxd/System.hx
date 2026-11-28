@@ -26,26 +26,44 @@ class System {
 	}
 
 	#if js
+	// Flash called ENTER_FRAME at the stage's rate: the game's 30 frames per second.
+	static inline var STAGE_FRAME_MS = 1000 / hxd.Timer.GAME_FPS;
+	// Animation frame times drift by a millisecond or so: well under a 120 Hz screen's frame (8.3 ms).
+	static inline var FRAME_TIME_TOLERANCE_MS = 4;
+
 	static var loop:Void->Void;
 	static var looping = false;
+	static var lastCallMs:Null<Float> = null;
 
-	/** Like the fork's Flash ENTER_FRAME loop: f runs once per screen frame (requestAnimationFrame), until replaced or set to null. */
+	/**
+	 * Like the fork's Flash ENTER_FRAME loop: f runs 30 times per second, until replaced or set to null.
+	 * @spec html5.h2d::loop-at-stage-rate: the game moves 30 steps per second; drawing every screen frame of a
+	 * 60 or 120 Hz screen would draw the same picture 2 or 4 times. A screen slower than 30 Hz runs f every frame.
+	 */
 	public static function setLoop(f:Void->Void) {
 		loop = f;
 		if (f != null && !looping) {
 			looping = true;
+			lastCallMs = null;
 			js.Browser.window.requestAnimationFrame(runLoop);
 		}
 	}
 
-	static function runLoop(_) {
+	static function runLoop(timeMs:Float) {
 		if (loop == null) {
 			looping = false;
 			return;
 		}
 		// @spec html5.h2d::loop-survives-errors: asked first, so a frame that throws does not stop the game, like Flash's ENTER_FRAME.
 		js.Browser.window.requestAnimationFrame(runLoop);
+		if (isBeforeNextStageFrame(timeMs))
+			return;
+		lastCallMs = timeMs;
 		loop();
+	}
+
+	static function isBeforeNextStageFrame(timeMs:Float):Bool {
+		return lastCallMs != null && timeMs - lastCallMs < STAGE_FRAME_MS - FRAME_TIME_TOLERANCE_MS;
 	}
 	#end
 
