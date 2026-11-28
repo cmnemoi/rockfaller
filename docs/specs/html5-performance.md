@@ -4,7 +4,7 @@ Analyse du 28 novembre 2026, sur le commit `ff186cd`. Partie de l'étape 4 de [`
 
 ## En bref
 
-Dans Chrome, la version PixiJS dessine **9 à 12 images par seconde** sur un Apple M5. Sans ses filtres de couleur, elle en dessine 30, le plafond de la mesure. Dans Firefox, sur la même machine, elle dessine environ 93 images par seconde en partie, sur un écran à 120 Hz : le coût des filtres dépend beaucoup du navigateur. Les téléphones modestes sont une cible, et Chrome est leur navigateur le plus courant : ce coût reste donc le premier problème. Le CPU n'y est pour rien : il attend 90 à 97 % du temps. Le GPU est saturé par environ **600 à 760 changements de cible de rendu par image**. Chaque sprite coloré passe par son propre `ColorMatrixFilter`, c'est-à-dire un rendu dans une texture intermédiaire.
+Dans Chrome, la version PixiJS dessine **9 à 12 images par seconde** sur un Apple M5. Sans ses filtres de couleur, elle en dessine 30, le plafond de la mesure. Firefox n'est pas mesuré de façon fiable (voir « Questions ouvertes »). Les téléphones modestes sont une cible, et Chrome est leur navigateur le plus courant : ce coût reste donc le premier problème. Le CPU n'y est pour rien : il attend 90 à 97 % du temps. Le GPU est saturé par environ **600 à 760 changements de cible de rendu par image**. Chaque sprite coloré passe par son propre `ColorMatrixFilter`, c'est-à-dire un rendu dans une texture intermédiaire.
 
 Le fork Heaps n'a pas ce coût : sa matrice de couleur est un paramètre du shader, appliqué pendant le dessin. C'est ce qu'il faut refaire.
 
@@ -198,6 +198,23 @@ Une solution intermédiaire, un seul filtre posé sur un conteneur qui regroupe 
 - **Les shaders pendant les coups.** Aucun programme n'est lié pendant les coups ni les combos. Seul le projecteur du tutoriel en compile.
 - **Le poids du téléchargement.** 27,4 Mo, contre 39 Mo pour le SWF.
 
+## Ce que font les autres
+
+Recherche du 28 novembre 2026. Il n'existe pas d'outil qui porte le code d'un jeu Flash vers PixiJS. Les approches se rangent en quatre familles.
+
+- **Émuler le SWF.** [Ruffle](https://ruffle.rs) (notre référence de parité) et [AwayFL](https://libraries.io/npm/@awayfl%2Fpoki-player), financé par Poki, font tourner le SWF d'origine. Nitrome publie ainsi ses jeux sur Poki ([entretien](https://www.pocketgamer.biz/interview/73491/interview-poki-preserving-flash-games-nitrome/)). Ce n'est pas un portage : c'est ce que fait déjà la page Flash du site.
+- **Réécrire l'API Flash sur WebGL.** [OpenFL](https://community.openfl.org/t/tips-to-increase-performance-html5/11984?page=2) garde `ColorTransform` dans ses shaders de base, pas dans des filtres, et regroupe les dessins automatiquement ([`OpenGLRenderer`](https://cdn.jsdelivr.net/npm/openfl@9.5.2/lib/openfl/display/OpenGLRenderer.d.ts)). C'est le même choix que le fork Heaps : **la couleur est un paramètre du shader**.
+- **Exporter les animations.** [`@pixi/animate`](https://github.com/pixijs/animate) (v2 pour PixiJS 5 et 6), [pixi-mc](https://github.com/hocti/pixi-mc) et [FlashLib](https://www.npmjs.com/package/flashlib) exportent les clips d'Adobe Animate vers PixiJS. Sans objet ici : les images du jeu sont déjà des atlas.
+- **Réécrire le jeu** dans un autre moteur, comme [Bubble Trouble vers Phaser](https://medium.com/poki/kreso-and-bubble-trouble-a-20-year-tale-6d8932d8de67). Hors sujet : le choix de la migration est de garder le code Haxe.
+
+Côté PixiJS, le constat est le même partout :
+
+- Le [guide de performance de PixiJS](https://pixijs.com/8.x/guides/concepts/performance-tips) dit que les filtres et les masques de sprite coûtent cher, et qu'il faut en limiter le nombre. Des forums constatent qu'un filtre par sprite casse le regroupement des dessins ([un exemple](https://html5gamedevs.com/topic/48173-performance-issues-with-filter-based-dye-system)).
+- Pour colorer sans filtre, PixiJS 6 a des greffons : [pixi-heaven](https://github.com/pixijs/pixi-heaven) (branche v6, teinte claire et sombre dans le shader de lot, donc un `ColorTransform` Flash) et [pixi-batch-renderer](https://www.npmjs.com/package/pixi-batch-renderer) (attributs de lot sur mesure). [pixi-picture](https://github.com/pixijs/pixi-picture) couvre les modes de mélange de Flash.
+- PixiJS 8 hérite la teinte d'un conteneur à ses enfants, et WebGPU y rend les ruptures de lot moins chères ([annonce de la v8](https://pixijs.com/blog/pixi-v8-launches)). Passer de PixiJS 6.0.2 à 8 changerait les externs `pixi-haxe` partagés avec Kadokadeo : ce n'est pas un levier à court terme.
+
+**Ce que cela change au plan.** Le lot 1, la teinte native, est la pratique courante. Pour le lot 2, pixi-heaven ne suffit pas : il couvre « multiplier puis ajouter » par canal, mais pas le mélange des canaux de la colorisation du magma. Les écrans mesurés n'ont d'ailleurs aucune couleur de type « multiplier puis ajouter ». Le lot 2 reste donc un shader de couleur sur mesure, sur le modèle du `DrawableShader` du fork et des shaders de base d'OpenFL.
+
 ## Plan proposé
 
 Un lot par problème, chacun avec ses tests d'abord. Chaque lot se mesure avec la sonde, avant et après.
@@ -215,19 +232,7 @@ Les lots 1 à 3 rendent le jeu fluide. Les lots 4 à 7 réduisent la charge, la 
 
 ## Questions ouvertes
 
-- **Pourquoi Firefox est-il 8 fois plus rapide ?** Mesure à la main, dans la console : environ 93 images rendues par seconde en partie, sur l'écran à 120 Hz du MacBook. Le Firefox de Playwright installé ici est trop vieux pour la sonde. Cause probable, non vérifiée : Chrome passe par ANGLE sur Metal, où chaque changement de cible de rendu devient une passe de rendu Metal complète. Les GPU de téléphone ont la même architecture à tuiles : il faut s'attendre au coût de Chrome, pas à celui de Firefox. À 93 images/s, Firefox reste aussi sous les 120 Hz, et trois images sur quatre sont des doublons (problème 3).
-
-  Pour compter les images rendues par seconde, coller ceci dans la console de la page du jeu. Le script peut être relancé : il garde la fonction d'origine.
-
-  ```js
-  (() => {
-    const prototype = PIXI.Renderer.prototype;
-    const render = prototype.originalRender ?? (prototype.originalRender = prototype.render);
-    let renders = 0;
-    prototype.render = function (...args) { renders++; return render.apply(this, args); };
-    setTimeout(() => console.log('images rendues par seconde :', renders / 5), 5000);
-  })();
-  ```
+- **Firefox n'est pas mesuré de façon fiable.** Le Firefox de Playwright installé ici est trop vieux pour la sonde. Un comptage à la main dans la console a donné environ 93, puis 537 images par seconde : ce chiffre n'est pas retenu. Il faudra mesurer Firefox avec la sonde du lot 0. Les GPU de téléphone sont à tuiles, comme celui du M5 : le coût mesuré dans Chrome est le cas à viser.
 
 - **Appareils visés : les téléphones modestes aussi.** Les lots 4 à 7 sont donc nécessaires, pas secondaires.
 - **Netteté sur écran Retina.** Le canvas fait 640 × 768 pixels, puis le navigateur l'agrandit. Le passer à la résolution de l'écran rendrait l'image nette, mais multiplierait par 4 les pixels à remplir. C'est un choix de rendu, à trancher à part.
