@@ -123,6 +123,10 @@ run = [
 description = "Check the SpriteLib (BLib, HSprite, AnimManager) on the h2d layer, with Haxe 4"
 run = "mise -C html5 exec -- haxe --cwd .. -cp . -cp client -cp .haxelib/h3d/git -cp html5/src -D h3d --macro \"addGlobalMetadata('', '@:build(FlashDefaults.build())', true, true, false)\" -main tools.SpriteLibCheck --interp"
 
+[tasks.perf]
+description = "Measure the PixiJS version's screens in Chrome on the real GPU (not in CI: durations vary): run `mise run web` first. Options: --throttle 4, --texture-units 8, --gpu-time"
+run = "node tools/perf.mjs"
+
 [tasks."test:site"]
 description = "Check the built site in headless Chrome: run `mise run web` first"
 run = [

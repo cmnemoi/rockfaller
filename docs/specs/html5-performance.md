@@ -139,7 +139,9 @@ Sur 5 s du tutoriel, 52,6 Mo alloués, pour environ 49 images rendues, soit envi
 
 **Constat.** Sans les filtres, le jeu passe de 9 à 12 images/s au plafond de 30. Les appels GPU tombent de 585 à 763 par image à 5 à 9. Les changements de cible tombent de 576 à 756 à 0. Le CPU attend, avec les filtres comme sans : le GPU est le goulot.
 
-**Cause.** `RenderContext` produit une commande par tuile, avec la matrice de couleur du drawable (`html5/src/h2d/RenderContext.hx:93`). `PixiRenderer` montre chaque commande par un sprite PixiJS. Si la commande a une matrice, il pose sur ce sprite un `ColorMatrixFilter` (`html5/src/PixiRenderer.hx:47`). Un filtre PixiJS dessine le sprite dans une texture intermédiaire, puis la recopie à l'écran : deux changements de cible de rendu par sprite. Sur un GPU à tuiles, chaque changement de cible écrit puis relit l'image entière. 300 à 380 filtres par image coûtent environ 100 ms de GPU, même sur un M5.
+**Cause.** `RenderContext` produit une commande par tuile, avec la matrice de couleur du drawable (`html5/src/h2d/RenderContext.hx:93`). `PixiRenderer` montre chaque commande par un sprite PixiJS. Si la commande a une matrice, il pose sur ce sprite un `ColorMatrixFilter` (`html5/src/PixiRenderer.hx:47`). Un filtre PixiJS dessine le sprite dans une texture intermédiaire, puis la recopie à l'écran : deux changements de cible de rendu par sprite. Sur un GPU à tuiles, chaque changement de cible écrit puis relit l'image entière. 300 à 380 filtres par image coûtent environ 100 ms par image, même sur un M5.
+
+Nuance de la sonde : le temps GPU mesuré par requête (`EXT_disjoint_timer_query_webgl2`) n'est que de 8 à 11 ms par image. Le reste se passe sans doute dans le processus GPU de Chrome, où ANGLE encode une passe Metal par changement de cible. C'est une hypothèse, pas une mesure. La correction est la même : plus de changement de cible.
 
 **Qui porte ces filtres.** Classement des sprites filtrés, sur une image de chaque écran :
 
@@ -269,6 +271,24 @@ Il n'existe pas d'outil qui porte le code d'un jeu Flash vers PixiJS.
 ## Dérive constatée
 
 Les règles `html5.boot::*` et `html5.assets::*` sont citées par les tests (`tools/BootCheck.hx`, `tools/AssetCheck.hx`) et par le code, mais aucun fichier de spec ne les définit. Le lot des textures du plan crée cette spec.
+
+## Suivi
+
+Chiffres de `mise run perf`, sur cette machine, pour garder la trace de chaque lot du plan.
+
+### Point de départ (lot 0)
+
+Commit du lot 0, CPU ×1, temps GPU par requête. Démarrage : 27,4 Mo téléchargés, 208,7 Mo de sons décodés, 7 programmes liés.
+
+| Écran | Images/s | Plus longue (ms) | Appels GPU | Changements de cible | Sprites (filtrés, masqués) | Rappels/image | GPU moyen (ms) | Programmes | Envois | Ko alloués/image |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Tutoriel | 9,2 | 119 | 803 | 796 | 862 (398, 0) | 2 | 11,3 | 0 | 0 | 1090 |
+| Projecteur | 10,0 | 381 | 803 | 796 | 862 (398, 1) | 2 | 10,5 | 2 | 3 | 1145 |
+| Carte | 12,4 | 94 | 583 | 574 | 1227 (287, 0) | 2 | 8,4 | 0 | 0 | 1027 |
+| Défilement de la carte | 12,3 | 106 | 585 | 574 | 1227 (287, 0) | 2 | 8,6 | 0 | 8 | 1049 |
+| Fenêtre du niveau 5 | 12,2 | 93 | 583 | 574 | 1227 (287, 0) | 2 | 8,5 | 0 | 0 | 1018 |
+| Partie | 11,3 | 101 | 648 | 640 | 790 (320, 0) | 2 | 9,0 | 0 | 0 | 968 |
+| Coups | 11,3 | 107 | 664 | 646 | 809 (323, 0) | 2 | 9,1 | 0 | 0 | 1001 |
 
 ## Questions ouvertes
 
