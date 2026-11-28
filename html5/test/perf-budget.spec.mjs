@@ -117,3 +117,18 @@ test('a game of level 5 and its moves draw without any render target switch', as
   }
   expectOnlyMaskPasses(await page.evaluate(() => window.rockfallerPerf.frames), 'the moves');
 });
+
+const TUTORIAL_OK = [281, 152];
+
+/** @spec html5.perf::no-shader-while-playing */
+test('no shader program is linked while playing, up to the tutorial spotlight', async ({ page }) => {
+  await startGame(page, '&perf');
+  await page.waitForTimeout(3000);
+  await clickGame(page, TUTORIAL_OK); // the spotlight's mask
+  await page.waitForTimeout(2000);
+
+  const onPage = await page.evaluate(() => window.rockfallerPerf.frames.filter((frame) => !frame.offscreen));
+  const linked = onPage.reduce((total, frame) => total + frame.programsLinked, 0);
+  expect(onPage[0].at, 'the meter kept the first frames').toBeLessThan(onPage[onPage.length - 1].at);
+  expect(linked, 'programs linked in the frames shown on the page').toBe(0);
+});

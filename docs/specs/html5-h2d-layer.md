@@ -347,3 +347,13 @@ Bug trouvé en jouant : les lettres de « CONGRATULATIONS », de « SCORE » et 
 - Étant donné une police réduite de moitié par `resizeTo`, alors une lettre est dessinée entière, à moitié de sa taille.
 - Étant donné un élément de lot avec une tuile réduite, alors la réduction de la tuile et l'échelle de l'élément se composent.
 - Étant donné une tuile de 40 × 20 passée à 10 × 10 par `setSize`, alors une zone de 10 × 10 est dessinée, à l'échelle 1.
+
+## Shaders prêts avant de jouer
+
+`{#html5.h2d::shaders-ready-before-play}`
+
+La première image qui utilise un shader le compile et le lie : jusqu'à 378 ms de gel au projecteur du tutoriel. Kadokadeo a le même piège (`Game.warmShaders`). À la création du renderer, le moteur dessine donc une fois, dans une petite texture hors écran, chaque cas de rendu de `PixiRenderer` : le lot normal, le greffon de couleur `colorMatrix` et un sprite masqué. Puis il libère cette texture.
+
+### Critères d'acceptation
+
+- (Playwright) Voir `html5.perf::no-shader-while-playing` dans [`html5-performance-budgets.md`](html5-performance-budgets.md).

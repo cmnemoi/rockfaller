@@ -52,8 +52,10 @@
       const before = { ...gl };
       const start = performance.now();
       const result = render.call(this, root, ...rest);
+      const target = rest[0];
       perf.frames.push({
         at: start,
+        offscreen: !!(target && (target.renderTexture || target instanceof PIXI.RenderTexture)), // a picture made off the page
         pixiMs: performance.now() - start,
         javascriptMs: javascriptMsSinceLastFrame,
         callbacks: callbacksSinceLastFrame,

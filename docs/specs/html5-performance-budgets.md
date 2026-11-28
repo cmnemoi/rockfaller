@@ -55,13 +55,22 @@ Au tutoriel, en partie et pendant les coups, aucune image ne change de cible de 
 - Étant donné une nouvelle partie, quand la première bulle du tutoriel s'affiche, alors chaque image change de cible au plus 2 fois par sprite masqué, et fait au plus 30 appels GPU.
 - Étant donné le niveau 5 lancé, puis 6 clics sur la grille, alors aucune image ne change de cible, et chacune fait au plus 30 appels GPU.
 
+## Pas de shader compilé en jouant
+
+`{#html5.perf::no-shader-while-playing}`
+
+Lier un programme GPU fige le jeu : 378 ms au premier masque du projecteur du tutoriel. Aucune image montrée sur la page ne lie de programme, jusqu'au projecteur compris. Les shaders sont préparés avant, hors écran (`html5.h2d::shaders-ready-before-play`).
+
+### Critères d'acceptation (Playwright, page du jeu avec `?perf`)
+
+- Étant donné une nouvelle partie, quand le joueur passe la première bulle du tutoriel jusqu'au projecteur, alors aucune image montrée sur la page n'a lié de programme.
+
 ## Budgets à venir
 
 Chaque budget s'écrit ici, avec ses critères, au début de son lot.
 
 | Règle | Lot | Aujourd'hui |
 |---|---|---|
-| `html5.perf::no-shader-while-playing` : aucun programme lié après la première image du jeu | 3 | 2 programmes au projecteur, 378 ms |
 | `html5.perf::one-loop` : un seul rappel `requestAnimationFrame` par image | 4 | 2 |
 | `html5.perf::no-identical-frame` : 30 images rendues par seconde à 60 Hz comme à 120 Hz | 5 | une par rafraîchissement de l'écran |
 | `html5.perf::little-garbage-per-frame` : au plus 100 Ko alloués par image rendue (sonde) | 6 | environ 1 070 Ko |

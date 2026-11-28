@@ -28,6 +28,30 @@ class PixiRenderer {
 		root = new Container();
 		sprites = [];
 		addBlendModesMissingFromPixi(pixiRenderer);
+		prepareShaders(pixiRenderer);
+	}
+
+	/**
+	 * @spec html5.h2d::shaders-ready-before-play: the first picture that uses a shader links it, up to 378 ms frozen.
+	 * Each way this renderer draws is drawn once, off the page: the batch, the color plugin, a masked sprite.
+	 */
+	static function prepareShaders(pixiRenderer:Dynamic) {
+		var cases = new Container();
+		var batched = new Sprite(Texture.WHITE);
+		cases.addChild(batched);
+		var colored = new Sprite(Texture.WHITE);
+		colored.pluginName = ColorMatrixBatch.PLUGIN;
+		untyped colored.colorMatrix = [for (index in 0...20) index % 6 == 0 ? 1.0 : 0.0];
+		cases.addChild(colored);
+		var masked = new Sprite(Texture.WHITE);
+		var mask = new Sprite(Texture.WHITE);
+		masked.mask = mask;
+		cases.addChild(mask);
+		cases.addChild(masked);
+		var target = pixi.core.textures.RenderTexture.create(1, 1);
+		pixiRenderer.render(cases, target);
+		target.destroy(true);
+		cases.destroy({children: true});
 	}
 
 	/**

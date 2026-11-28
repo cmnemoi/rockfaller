@@ -322,6 +322,10 @@ CPU ×1, plafond de 60.
 
 Tous les écrans sont au plafond. Le greffon de lot a suffi : le repli par `Mesh` n'a pas servi. Bug corrigé en passant : un drawable coloré en `Add` était mélangé en `Normal` par le filtre.
 
+### Lot 3 : shaders prêts avant de jouer
+
+Au projecteur du tutoriel : 0 programme lié en jouant (2 avant), et l'image la plus longue passe de 381 ms à **39 ms**. Le démarrage lie 9 programmes au lieu de 7, hors écran.
+
 ## Questions ouvertes
 
 - **Quels téléphones ?** Il faut au moins un téléphone Android modeste, et si possible un iPhone. Le compteur `?perf` du plan permet de mesurer sur l'appareil.
