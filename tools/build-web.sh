@@ -44,7 +44,7 @@ mkdir -p "$site/pixi/assets/data" "$site/pixi/assets/assets"
 cp -R client/client/assetsWeb/. "$site/pixi/assets/"
 cp data/loot.json "$site/pixi/assets/data/"
 cp client/client/assets/BenchNine-Regular.ttf client/client/assets/Mouse_Deco.ttf "$site/pixi/assets/assets/"
-cp html5/game.html "$site/pixi/"
+cp html5/game.html html5/perf-meter.js "$site/pixi/"
 cp html5/index.html client/client/assetsWeb/assets1.png client/client/assetsWeb/assets1.xml client/client/assetsWeb/taupinotron.png client/client/assetsWeb/taupinotron.xml "$site/pixi/"
 
 echo "web version in $site"
