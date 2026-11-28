@@ -38,6 +38,10 @@ const LEVEL_5_UNLOCKED = JSON.stringify({ version: 1, unlockedLevel: 5, bestScor
   tutorialsSeen: [1, 2, 3, 4, 5], inventory: { pickaxes: 1, loots: {} } });
 const LOGIN_CLOSE = [606, 60];
 const LEVEL_5 = [318, 213];
+const PLAY = [320, 692];
+const GRID_CORNER = [184, 209];
+const GRID_CELL = 54;
+const MAX_DRAW_CALLS_IN_GAME = 30; // combos add blend mode breaks: up to 18 measured
 
 /** Clicks the game at its own coordinates, whatever size the page shows its canvas at. */
 async function clickGame(page, [x, y]) {
@@ -71,4 +75,45 @@ test('the map and the level popup draw without any render target switch', async 
   await clickGame(page, LEVEL_5);
   await page.waitForTimeout(3000);
   expectNoRenderPass(await framesDuring(page, 1000), 'the level popup');
+});
+
+/** A masked sprite is a PixiJS filter: 2 render target switches each. Nothing else may switch. */
+function expectOnlyMaskPasses(frames, screen) {
+  expect(frames.length, `${screen}: frames were rendered`).toBeGreaterThan(0);
+  for (const frame of frames) {
+    expect(frame.renderTargetSwitches, `${screen}: render target switches with ${frame.masked} masked sprites`).toBeLessThanOrEqual(2 * frame.masked);
+    expect(frame.drawCalls, `${screen}: draw calls`).toBeLessThanOrEqual(MAX_DRAW_CALLS_IN_GAME);
+  }
+}
+
+/** @spec html5.perf::no-render-pass-in-game */
+test('the tutorial draws without render target switches but for its mask', async ({ page }) => {
+  await startGame(page, '&perf');
+  await page.waitForTimeout(3000);
+
+  expectOnlyMaskPasses(await framesDuring(page, 1000), 'the tutorial');
+});
+
+/** @spec html5.perf::no-render-pass-in-game */
+test('a game of level 5 and its moves draw without any render target switch', async ({ page }) => {
+  await page.addInitScript((progress) => localStorage.setItem('rockfaller.progress', progress), LEVEL_5_UNLOCKED);
+  await startGame(page, '&perf');
+  await page.waitForTimeout(3000);
+  await clickGame(page, LOGIN_CLOSE);
+  await page.waitForTimeout(2000);
+  await clickGame(page, LEVEL_5);
+  await page.waitForTimeout(3000);
+  for (let attempt = 0; attempt < 3; attempt++) { // the popup's button answers once its animation ends
+    await clickGame(page, PLAY);
+    await page.waitForTimeout(2000);
+  }
+
+  expectOnlyMaskPasses(await framesDuring(page, 1000), 'the game');
+
+  await page.evaluate(() => { window.rockfallerPerf.frames.length = 0; });
+  for (let move = 0; move < 6; move++) {
+    await clickGame(page, [GRID_CORNER[0] + GRID_CELL * (1 + move % 4), GRID_CORNER[1] + GRID_CELL * (1 + Math.floor(move / 4))]);
+    await page.waitForTimeout(500);
+  }
+  expectOnlyMaskPasses(await page.evaluate(() => window.rockfallerPerf.frames), 'the moves');
 });

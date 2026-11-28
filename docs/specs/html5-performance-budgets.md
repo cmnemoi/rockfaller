@@ -44,13 +44,23 @@ Sur la carte et sur la fenêtre de niveau, aucune image ne change de cible de re
 - Étant donné le niveau 5 débloqué et la fenêtre LOGIN fermée, quand la carte s'affiche, alors aucune image ne change de cible de rendu, et aucun sprite n'a de filtre.
 - Étant donné la fenêtre du niveau 5 ouverte, alors aucune image ne change de cible de rendu, et aucun sprite n'a de filtre.
 
+## Pas de passe de rendu en partie
+
+`{#html5.perf::no-render-pass-in-game}`
+
+Au tutoriel, en partie et pendant les coups, aucune image ne change de cible de rendu, sauf pour les sprites masqués (`alphaMap`, le projecteur du tutoriel) : un masque PixiJS est un filtre, qui en coûte deux. Une image fait au plus 30 appels GPU : les effets des combos changent de mode de mélange, jusqu'à 18 appels mesurés. Les couleurs qui mélangent les canaux, comme celle des particules de magma, passent par le shader de lot (`html5.h2d.color::color-matrix-in-batch`).
+
+### Critères d'acceptation (Playwright, page du jeu avec `?perf`)
+
+- Étant donné une nouvelle partie, quand la première bulle du tutoriel s'affiche, alors chaque image change de cible au plus 2 fois par sprite masqué, et fait au plus 30 appels GPU.
+- Étant donné le niveau 5 lancé, puis 6 clics sur la grille, alors aucune image ne change de cible, et chacune fait au plus 30 appels GPU.
+
 ## Budgets à venir
 
 Chaque budget s'écrit ici, avec ses critères, au début de son lot.
 
 | Règle | Lot | Aujourd'hui |
 |---|---|---|
-| `html5.perf::no-render-pass-in-game` : au tutoriel, en partie et pendant les coups, aucun changement de cible hors du masque du projecteur ; au plus 15 appels GPU par image | 2 | 632 à 756 changements par image |
 | `html5.perf::no-shader-while-playing` : aucun programme lié après la première image du jeu | 3 | 2 programmes au projecteur, 378 ms |
 | `html5.perf::one-loop` : un seul rappel `requestAnimationFrame` par image | 4 | 2 |
 | `html5.perf::no-identical-frame` : 30 images rendues par seconde à 60 Hz comme à 120 Hz | 5 | une par rafraîchissement de l'écran |

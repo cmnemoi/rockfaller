@@ -49,6 +49,7 @@ class Engine {
 	/** Makes the canvas and calls onReady, as the fork does once its Stage3D context exists. */
 	public function init() {
 		#if pixijs
+		ColorMatrixBatch.register();
 		pixiRenderer = new pixi.core.renderers.webgl.Renderer({width: width, height: height, backgroundColor: 0x000000});
 		renderer = new PixiRenderer(pixiRenderer);
 		js.Browser.document.body.appendChild(pixiRenderer.view);

@@ -101,7 +101,10 @@ async function readColorBench(page) {
     if (pixel[0] + pixel[1] + pixel[2] > brightest[0] + brightest[1] + brightest[2]) brightest = pixel;
   }
   const filtered = await page.evaluate(() => window.rockfallerDebug.renderer.sprites.filter((sprite) => sprite.visible && sprite.filters && sprite.filters.length).length);
-  return { halfRed: await centre(0), alphaByColor: await centre(1), alphaAlone: await centre(2), invisibleRed: await centre(3), text: brightest, filtered };
+  return {
+    halfRed: await centre(0), alphaByColor: await centre(1), alphaAlone: await centre(2), invisibleRed: await centre(3), text: brightest, filtered,
+    magmaOnWhite: await centre(4), magmaOnGrey: await centre(5), batchOpaque: await centre(6), batchHalf: await centre(7), batchAdded: await centre(8),
+  };
 }
 
 function expectNear(actual, expected, what) {
@@ -131,9 +134,36 @@ test('a red square at alpha 0 leaves no trace on black', async ({ page }) => {
   expect((await readColorBench(page)).invisibleRed).toEqual([0, 0, 0]);
 });
 
-/** @spec html5.h2d.color::multiplied-color-as-tint: a filter costs two render target switches */
-test('colours that only multiply draw without a PixiJS filter', async ({ page }) => {
+/** @spec html5.h2d.color::color-matrix-in-batch: a filter costs two render target switches */
+test('no colour of the bench draws with a PixiJS filter', async ({ page }) => {
   expect((await readColorBench(page)).filtered).toBe(0);
+});
+
+// The magma colorize mixes the channels. Its pixels were read with PixiJS's ColorMatrixFilter (lot 1), which
+// follows the fork's shader: they must not change when the colour moves into the batch shader.
+
+/** @spec html5.h2d.color::color-matrix-in-batch */
+test('the magma colorize turns white into (255, 198, 69) and grey into (255, 99, 35)', async ({ page }) => {
+  const bench = await readColorBench(page);
+
+  expectNear(bench.magmaOnWhite, [255, 198, 69], 'white');
+  expectNear(bench.magmaOnGrey, [255, 99, 35], 'grey');
+});
+
+/** @spec html5.h2d.color::color-matrix-in-batch: the colour is not clamped before the alpha multiplies it, like the fork's blending */
+test('in a colorized batch, each element keeps its own alpha', async ({ page }) => {
+  const bench = await readColorBench(page);
+
+  expectNear(bench.batchOpaque, [255, 198, 69], 'the opaque element');
+  expectNear(bench.batchHalf, [255, 99, 35], 'the element at alpha 0.5');
+});
+
+/**
+ * @spec html5.h2d.color::color-matrix-in-batch: the fork adds (SrcAlpha, One): grey 128 + (255+, 198, 69) x 0.5.
+ * PixiJS's ColorMatrixFilter blended its result in Normal mode and lost the Add: it read (255, 163, 99).
+ */
+test('a colorized batch in Add mode adds its colour to the grey under it', async ({ page }) => {
+  expectNear((await readColorBench(page)).batchAdded, [255, 227, 163], 'the added element');
 });
 
 /** @spec html5.h2d.color::blend-mode-like-fork */

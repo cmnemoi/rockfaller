@@ -126,7 +126,11 @@ Piège connu (Kadokadeo) : le premier filtre utilisé compile un shader et fige 
 
 Un filtre PixiJS dessine son sprite dans une texture intermédiaire : deux changements de cible de rendu par sprite, ce qui sature le GPU (voir [`html5-performance.md`](html5-performance.md)). Une matrice qui multiplie seulement chaque canal, par un facteur entre 0 et 1, sans décalage ni mélange des canaux, est donc dessinée par la teinte (`tint`) et l'alpha du sprite PixiJS, sans filtre. C'est le cas des textes colorés. Le résultat est le même, à l'arrondi de la teinte sur 8 bits près.
 
-Les autres matrices gardent leur filtre, jusqu'au lot 2 du plan [`html5-performance-plan.md`](html5-performance-plan.md).
+#### Les autres couleurs passent par le shader de lot
+
+`{#html5.h2d.color::color-matrix-in-batch}`
+
+Une matrice qui n'est pas une teinte (elle mélange les canaux ou ajoute une couleur, comme la colorisation des particules de magma) passe par un greffon de lot PixiJS, `colorMatrix`. Chaque sommet porte les quatre lignes de la matrice et son décalage. Le shader lit la texture, enlève la prémultiplication, applique la matrice et le décalage, puis multiplie la couleur par l'alpha obtenu. Comme le `DrawableShader` du fork, il ne borne pas la couleur avant cette multiplication : c'est le mélange, puis le framebuffer, qui bornent. Les sprites colorés se dessinent ainsi en lot, sans texture intermédiaire.
 
 ### Critères d'acceptation
 
@@ -142,7 +146,10 @@ Les autres matrices gardent leur filtre, jusqu'au lot 2 du plan [`html5-performa
 - (Playwright, banc) Étant donné un carré blanc de couleur (0,5 ; 1 ; 1) et d'alpha 0,5 sur fond noir, alors il se lit (64, 128, 128), à 1 près.
 - (Playwright, banc) Étant donné un carré blanc dont la couleur ne change que l'alpha (0,5), alors il se lit comme un carré blanc d'alpha 0,5.
 - (Playwright, banc) Étant donné un carré blanc coloré en rouge et d'alpha 0, alors il ne laisse aucune trace sur le fond noir.
-- (Playwright, banc) Étant donné ces carrés, alors aucun n'a de filtre PixiJS.
+- (Playwright, banc) Étant donné la colorisation des particules de magma (`getColorizeMatrixH2d(0xD24217, 1, 0)`), alors un carré blanc se lit (255, 198, 69) et un carré gris (255, 99, 35), à 1 près. Ces valeurs ont été relevées avec le `ColorMatrixFilter` de PixiJS, qui suit le shader du fork.
+- (Playwright, banc) Étant donné un lot colorisé, alors son élément opaque se lit (255, 198, 69), et son élément d'alpha 0,5 se lit (255, 99, 35) : le rouge, plus grand que 1 avant l'alpha, n'est pas borné avant.
+- (Playwright, banc) Étant donné un lot colorisé en `Add` d'alpha 0,5 sur un carré gris (128), alors il se lit (255, 227, 163) : 128 plus la couleur fois 0,5, comme les facteurs `SrcAlpha, One` du fork. Bug corrigé en passant : le `ColorMatrixFilter` mélangeait son résultat en `Normal` et perdait l'`Add`, il lisait (255, 163, 99).
+- (Playwright, banc) Étant donné tout le banc de couleurs, alors aucun sprite n'a de filtre PixiJS.
 - (Playwright) Étant donné le canard sur fond noir, quand il passe en `SoftOverlay`, alors le pixel de son centre devient noir (`noir × (1 + source) = noir`), alors qu'il était jaune en `Normal`. Ce test lit le pixel rendu par le GPU : il prouve que le mode ajouté est bien utilisé.
 
 ## `Layers`

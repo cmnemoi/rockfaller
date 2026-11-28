@@ -110,6 +110,33 @@ class Demo {
 					text.textColor = 0x804020;
 					text.text = "IIII";
 					text.setPos(BENCH_X, BENCH_Y + 2 * BENCH_SQUARE);
+					// The magma particles' colorize (Game.bmPartMagmaFX), which mixes the channels: on white, then on grey.
+					var magma = mt.deepnight.Color.getColorizeMatrixH2d(0xD24217, 1, 0);
+					var magmaOnWhite = square(4);
+					magmaOnWhite.colorMatrix = magma;
+					var grey = h2d.Tile.fromColor(0xFF808080, BENCH_SQUARE, BENCH_SQUARE);
+					var magmaOnGrey = new h2d.Bitmap(grey, scene);
+					magmaOnGrey.setPos(BENCH_X + 5 * 2 * BENCH_SQUARE, BENCH_Y);
+					magmaOnGrey.colorMatrix = magma;
+					// A colorized batch whose elements keep their own alpha, then the same in Add over a grey square.
+					var batch = new h2d.SpriteBatch(white, scene);
+					batch.colorMatrix = magma;
+					var opaque = batch.alloc(white);
+					opaque.x = BENCH_X + 6 * 2 * BENCH_SQUARE;
+					opaque.y = BENCH_Y;
+					var halfSeen = batch.alloc(white);
+					halfSeen.x = BENCH_X + 7 * 2 * BENCH_SQUARE;
+					halfSeen.y = BENCH_Y;
+					halfSeen.alpha = 0.5;
+					var under = new h2d.Bitmap(grey, scene);
+					under.setPos(BENCH_X + 8 * 2 * BENCH_SQUARE, BENCH_Y);
+					var added = new h2d.SpriteBatch(white, scene);
+					added.colorMatrix = magma;
+					added.blendMode = Add;
+					var addedElement = added.alloc(white);
+					addedElement.x = BENCH_X + 8 * 2 * BENCH_SQUARE;
+					addedElement.y = BENCH_Y;
+					addedElement.alpha = 0.5;
 					return {square: BENCH_SQUARE, x: BENCH_X, y: BENCH_Y, textY: BENCH_Y + 2 * BENCH_SQUARE, textHeight: text.textHeight};
 				};
 				untyped Browser.window.rockfallerDebug = {colorBench: colorBench, spotlight: spotlight, app: app, scene: scene, renderer: engine.renderer, context: @:privateAccess engine.context, grip: grip, duck: duck, title: title, duckClicks: function() return duckClicks, BlendMode: h2d.BlendMode, Vector: h3d.Vector, FontBuilder: FontBuilder, audio: mt.audio.Audio.backend};

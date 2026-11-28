@@ -306,6 +306,22 @@ CPU ×1, sans temps GPU. Ce jour-là, une page vide recevait 60 rappels `request
 
 Les menus sont au plafond. Le tutoriel et la partie attendent le lot 2 : les 300 particules de magma gardent leur filtre.
 
+### Lot 2 : la matrice de couleur dans le lot
+
+CPU ×1, plafond de 60.
+
+| Écran | Images/s | Plus longue (ms) | Appels GPU | Changements de cible | Sprites (filtrés, masqués) | Ko alloués/image |
+|---|---|---|---|---|---|---|
+| Tutoriel | **61,0** | 44 | 6 | **0** | 862 (0, 0) | 921 |
+| Projecteur | **61,2** | 43 | 12 | 2 (le masque) | 862 (0, 1) | 939 |
+| Carte | 61,2 | 42 | 5 | 0 | 1227 (0, 0) | 968 |
+| Fenêtre du niveau 5 | 61,2 | 31 | 6 | 0 | 1330 (0, 0) | 1070 |
+| Partie | **60,8** | 43 | 7 | **0** | 790 (0, 0) | 845 |
+| Coups | **60,6** | 49 | 18 | **0** | 814 (0, 0) | 867 |
+| Défilement de la carte | 60,8 | 52 | 7 | 0 | 1227 (0, 0) | 992 |
+
+Tous les écrans sont au plafond. Le greffon de lot a suffi : le repli par `Mesh` n'a pas servi. Bug corrigé en passant : un drawable coloré en `Add` était mélangé en `Normal` par le filtre.
+
 ## Questions ouvertes
 
 - **Quels téléphones ?** Il faut au moins un téléphone Android modeste, et si possible un iPhone. Le compteur `?perf` du plan permet de mesurer sur l'appareil.

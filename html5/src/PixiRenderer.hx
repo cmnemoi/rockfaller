@@ -4,7 +4,6 @@ import pixi.core.math.Matrix;
 import pixi.core.math.shapes.Rectangle;
 import pixi.core.sprites.Sprite;
 import pixi.core.textures.Texture;
-import pixi.filters.colormatrix.ColorMatrixFilter;
 
 /**
  * Shows the h2d layer's draw commands with PixiJS: one PixiJS sprite per command, in drawing order.
@@ -15,6 +14,7 @@ class PixiRenderer {
 	static inline var SOFT_ADD = 100;
 	static inline var SOFT_OVERLAY = 101;
 	static inline var WHITE = 0xFFFFFF;
+	static inline var DEFAULT_BATCH = "batch";
 	// Where PixiJS's 5 x 4 color matrix keeps each channel's own factor.
 	static inline var RED_FACTOR = 0;
 	static inline var GREEN_FACTOR = 6;
@@ -47,30 +47,23 @@ class PixiRenderer {
 	}
 
 	/**
-	 * @spec html5.h2d.color::color-like-fork-shader: PixiJS's ColorMatrixFilter works on straight colors, like the fork's shader.
-	 * A sprite keeps its filter, so turning a color on and off does not compile a new one each time.
-	 * @spec html5.h2d.color::multiplied-color-as-tint: a filter costs two render target switches; a color that only
-	 * multiplies is PixiJS's tint and alpha instead.
+	 * @spec html5.h2d.color::color-like-fork-shader: the fork's color, as one matrix on straight colors.
+	 * @spec html5.h2d.color::multiplied-color-as-tint: a color that only multiplies is PixiJS's tint and alpha.
+	 * @spec html5.h2d.color::color-matrix-in-batch: any other goes into the batch shader, not into a filter,
+	 * which would cost two render target switches per sprite.
 	 */
 	static function showColor(sprite:Sprite, colorMatrix:Array<Float>) {
 		sprite.tint = WHITE;
-		if (colorMatrix == null) {
-			if (sprite.filters != null) sprite.filters = null;
+		sprite.pluginName = DEFAULT_BATCH;
+		if (colorMatrix == null)
 			return;
-		}
 		if (onlyMultiplies(colorMatrix)) {
-			if (sprite.filters != null) sprite.filters = null;
 			sprite.tint = channelOf(colorMatrix[RED_FACTOR]) << 16 | channelOf(colorMatrix[GREEN_FACTOR]) << 8 | channelOf(colorMatrix[BLUE_FACTOR]);
 			sprite.alpha = colorMatrix[ALPHA_FACTOR];
 			return;
 		}
-		var filter:ColorMatrixFilter = untyped sprite.__colorFilter;
-		if (filter == null) {
-			filter = new ColorMatrixFilter();
-			untyped sprite.__colorFilter = filter;
-		}
-		filter.matrix = colorMatrix;
-		if (sprite.filters == null) sprite.filters = [filter];
+		sprite.pluginName = ColorMatrixBatch.PLUGIN;
+		untyped sprite.colorMatrix = colorMatrix;
 	}
 
 	/** In PixiJS's 5 x 4 matrix, each output's factor of the same input is on the diagonal: every 6th number. */
