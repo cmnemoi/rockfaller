@@ -1,8 +1,11 @@
 package h2d;
 
 /**
- * The fork's h2d.Tile without the GPU: a cut (x, y, width, height) of a texture, drawn shifted by (dx, dy).
+ * The fork's h2d.Tile without the GPU: a cut (x, y, cutWidth, cutHeight) of a texture, drawn width x height
+ * and shifted by (dx, dy). The cut is the fork's UVs: scaleToSize changes the drawn size only, so a resized
+ * bitmap font draws whole letters, shrunk.
  * The methods are the fork's, ported as the game needs them; a missing one fails at compile time.
+ * @spec html5.h2d::tile-size-like-fork
  */
 @:allow(h2d)
 class Tile {
@@ -14,13 +17,15 @@ class Tile {
 	public var y(default, null):Int;
 	public var width:Int;
 	public var height:Int;
+	var cutWidth:Int;
+	var cutHeight:Int;
 
 	public inline function new(tex:h3d.mat.Texture, x:Int, y:Int, w:Int, h:Int, dx = 0, dy = 0) {
 		this.innerTex = tex;
 		this.x = x;
 		this.y = y;
-		this.width = w;
-		this.height = h;
+		this.width = cutWidth = w;
+		this.height = cutHeight = h;
 		this.dx = dx;
 		this.dy = dy;
 	}
@@ -68,8 +73,8 @@ class Tile {
 	}
 
 	public function setSize(w, h) {
-		this.width = w;
-		this.height = h;
+		this.width = cutWidth = w;
+		this.height = cutHeight = h;
 	}
 
 	public function scaleToSize(w, h) {
@@ -81,13 +86,25 @@ class Tile {
 		this.height = h;
 	}
 
+	/** How much the cut is stretched to be drawn width wide; an empty cut draws nothing, whatever the stretch. */
+	function stretchX():Float {
+		return cutWidth == 0 ? 1.0 : width / cutWidth;
+	}
+
+	function stretchY():Float {
+		return cutHeight == 0 ? 1.0 : height / cutHeight;
+	}
+
 	/** The fork frees the GPU texture; here the tile only lets it go. */
 	public function dispose() {
 		innerTex = null;
 	}
 
 	public inline function clone() {
-		return new Tile(innerTex, x, y, width, height, dx, dy);
+		var tile = new Tile(innerTex, x, y, width, height, dx, dy);
+		tile.cutWidth = cutWidth;
+		tile.cutHeight = cutHeight;
+		return tile;
 	}
 
 	/** Like the fork, copies everything but x and y. */
@@ -97,6 +114,8 @@ class Tile {
 		dy = t.dy;
 		width = t.width;
 		height = t.height;
+		cutWidth = t.cutWidth;
+		cutHeight = t.cutHeight;
 		return t;
 	}
 

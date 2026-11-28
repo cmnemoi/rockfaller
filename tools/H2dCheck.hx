@@ -20,6 +20,10 @@ class H2dCheck {
 		aClonedTileChangesIndependently();
 		aChildIsDrawnThroughItsParentsPositionAndScale();
 		aFlippedBitmapIsMirroredAroundItsPivot();
+		aTileScaledToASizeDrawsItsWholeCutShrunk();
+		aResizedTileFontDrawsWholeLettersShrunk();
+		aBatchElementWithAScaledTileDrawsItsWholeCutShrunk();
+		aTileGivenANewSizeCutsItsTextureToThatSize();
 		childrenAreDrawnInListOrder();
 		aRemovedChildIsNotDrawn();
 		anInvisibleSpriteHidesItsChildren();
@@ -113,6 +117,58 @@ class H2dCheck {
 		var drawn = render(scene)[0];
 
 		check(drawn.tx == 110 && drawn.a == -1, "the flipped cut starts 10 px right of the pivot and goes left (got tx " + drawn.tx + ", a " + drawn.a + ")");
+	}
+
+	/** @spec html5.h2d::tile-size-like-fork: scaleToSize keeps the texture cut, like the fork's UVs */
+	static function aTileScaledToASizeDrawsItsWholeCutShrunk() {
+		var scene = new Scene();
+		var tile = atlasTile().sub(0, 0, 40, 20, 10, 6);
+		tile.scaleToSize(20, 5);
+		new Bitmap(tile, scene);
+
+		var drawn = render(scene)[0];
+
+		check(drawn.cutWidth == 40 && drawn.cutHeight == 20, "the whole 40 x 20 cut is drawn (got " + drawn.cutWidth + " x " + drawn.cutHeight + ")");
+		check(drawn.a == 0.5 && drawn.d == 0.25 && drawn.tx == 5 && drawn.ty == 2, "shrunk to 20 x 5, its offset too (got scale " + drawn.a + ", " + drawn.d + ", at " + drawn.tx + ", " + drawn.ty + ")");
+	}
+
+	/** @spec html5.h2d::tile-size-like-fork: the game's bitmap fonts (mt.heaps.TileFont) are resized this way */
+	static function aResizedTileFontDrawsWholeLettersShrunk() {
+		var scene = new Scene();
+		var font = @:privateAccess new h2d.Font("letters", 100);
+		@:privateAccess font.glyphs.set("A".code, new h2d.Font.FontChar(atlasTile().sub(0, 0, 60, 100), 60));
+		font.resizeTo(50);
+		var text = new h2d.Text(font, scene);
+		text.text = "A";
+
+		var drawn = render(scene)[0];
+
+		check(drawn.cutWidth == 60 && drawn.cutHeight == 100 && drawn.a == 0.5 && drawn.d == 0.5, "the whole letter is drawn at half size (got cut " + drawn.cutWidth + " x " + drawn.cutHeight + ", scale " + drawn.a + ", " + drawn.d + ")");
+	}
+
+	/** @spec html5.h2d::tile-size-like-fork */
+	static function aBatchElementWithAScaledTileDrawsItsWholeCutShrunk() {
+		var scene = new Scene();
+		var batch = new SpriteBatch(atlasTile(), scene);
+		var tile = atlasTile().sub(0, 0, 40, 20);
+		tile.scaleToSize(20, 10);
+		batch.alloc(tile).scaleX = 3;
+
+		var drawn = render(scene)[0];
+
+		check(drawn.cutWidth == 40 && drawn.a == 1.5 && drawn.d == 0.5, "the whole cut, shrunk by the tile then scaled by the element (got cut " + drawn.cutWidth + ", scale " + drawn.a + ", " + drawn.d + ")");
+	}
+
+	/** @spec html5.h2d::tile-size-like-fork: setSize moves the cut's end, like the fork's u2 and v2 */
+	static function aTileGivenANewSizeCutsItsTextureToThatSize() {
+		var scene = new Scene();
+		var tile = atlasTile().sub(0, 0, 40, 20);
+		tile.setSize(10, 10);
+		new Bitmap(tile, scene);
+
+		var drawn = render(scene)[0];
+
+		check(drawn.cutWidth == 10 && drawn.cutHeight == 10 && drawn.a == 1 && drawn.d == 1, "a 10 x 10 cut at scale 1 (got cut " + drawn.cutWidth + " x " + drawn.cutHeight + ", scale " + drawn.a + ")");
 	}
 
 	/** @spec html5.h2d::positions-compose */
