@@ -24,7 +24,10 @@ class SoundCheck {
 		aDownloadThatFailsNamesItsAddress(function() {
 			aLongLoopStartedBeforeTheFirstClickKeepsPlaying(function() {
 				aSoundStartedBeforeTheFirstClickIsHeardOnceTheContextRuns(function() {
-					aShortSoundOverBeforeTheFirstClickIsNotStartedLater(function() trace("PASS"));
+					aShortSoundOverBeforeTheFirstClickIsNotStartedLater(function() {
+						aLongLoopStartedAfterTheFirstClickPlaysInFirefox();
+						trace("PASS");
+					});
 				});
 			});
 		});
@@ -205,6 +208,17 @@ class SoundCheck {
 		}, 80);
 	}
 
+	/** @spec html5::sound-starts-on-first-click: Firefox refuses a duration over 8388607 s, the menu music started after the tutorial threw */
+	static function aLongLoopStartedAfterTheFirstClickPlaysInFirefox() {
+		var setup = webAudioOnSuspendedContext();
+		setup.context.run();
+
+		setup.sfx.playLoop(999999, 0.5);
+
+		check(setup.context.started.length == 1 && setup.sfx.isPlaying(), "a music looped 999999 times after the first click starts, and plays");
+		setup.sfx.stop();
+	}
+
 	static function near(value:Float, expected:Float) {
 		return Math.abs(value - expected) < 1e-9;
 	}
@@ -255,6 +269,9 @@ private class FakeBackend implements AudioBackend {
 
 /** The parts of AudioContext the backend uses. run() is the first gesture: the context starts and says so. */
 private class FakeAudioContext {
+	/** Gecko's WebAudioUtils::IsTimeValid: times past 2^23 - 1 seconds throw a RangeError. */
+	static inline var FIREFOX_MAX_SECONDS = 8388607;
+
 	public var state = "suspended";
 	public var currentTime = 0.0;
 	public var destination = {};
@@ -291,7 +308,11 @@ private class FakeAudioContext {
 		var source:Dynamic = {buffer: null, loop: false, connect: function(gain) {}, stop: function() {}};
 		var gainNode:Dynamic = null;
 		source.connect = function(node) gainNode = node;
-		source.start = function(when, offsetSeconds, ?duration) context.started.push({offsetSeconds: offsetSeconds, gain: gainNode.gain.value});
+		source.start = function(when, offsetSeconds, ?duration) {
+			if (duration != null && duration > FIREFOX_MAX_SECONDS)
+				throw new js.lib.Error.RangeError("AudioBufferSourceNode.start: The value for the duration is outside the valid range.");
+			context.started.push({offsetSeconds: offsetSeconds, gain: gainNode.gain.value});
+		};
 		return source;
 	}
 }

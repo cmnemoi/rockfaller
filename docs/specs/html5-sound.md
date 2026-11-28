@@ -34,9 +34,9 @@ Le jeu télécharge ses deux musiques avec `Sfx.download` (`Rockfaller_interface
 
 `{#html5::sound-starts-on-first-click}` (règle de [`html5-migration.md`](html5-migration.md))
 
-Les navigateurs bloquent le son avant un geste de l'utilisateur. Le moteur Web Audio reprend son contexte au premier appui ou toucher. Avant, les sons « jouent » en silence : `isPlaying` reste vrai et la logique du jeu ne change pas. Quand le contexte démarre, un son qui joue encore en silence continue à voix haute, là où il en est : c'est le cas de la musique du niveau 1, lancée avant le premier clic. Une durée au-delà de la limite de `setTimeout` (2³¹ − 1 ms, comme 999 999 tours d'une musique) ne programme pas de fin.
+Les navigateurs bloquent le son avant un geste de l'utilisateur. Le moteur Web Audio reprend son contexte au premier appui ou toucher. Avant, les sons « jouent » en silence : `isPlaying` reste vrai et la logique du jeu ne change pas. Quand le contexte démarre, un son qui joue encore en silence continue à voix haute, là où il en est : c'est le cas de la musique du niveau 1, lancée avant le premier clic. Une durée au-delà de la limite de `setTimeout` (2³¹ − 1 ms, comme 999 999 tours d'une musique) ne programme pas de fin : le son joue sans fin. Firefox refuse aussi une durée au-delà de 2²³ − 1 s : une telle boucle démarre sans durée.
 
-Bug trouvé en jouant : la musique du niveau 1 ne s'entendait pas, celle du niveau 2 si.
+Bugs trouvés en jouant : la musique du niveau 1 ne s'entendait pas, celle du niveau 2 si. Dans Firefox, la musique du menu, lancée à la fin du tutoriel, levait une `RangeError`.
 
 ### Les sons sont prêts avant le jeu
 

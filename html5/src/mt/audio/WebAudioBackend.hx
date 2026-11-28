@@ -45,6 +45,12 @@ class WebAudioBackend implements AudioBackend {
 }
 
 private class WebAudioSound implements PlayingSound {
+	/**
+	 * Longer than this, a sound plays forever, like 999999 turns of a music: setTimeout fires at once
+	 * past 2^31 - 1 ms (24.8 days), and Firefox refuses a duration past 2^23 - 1 s (97 days).
+	 */
+	public static inline var FOREVER_MS = 2147483647.0;
+
 	var context:js.html.audio.AudioContext;
 	var source:js.html.audio.AudioBufferSourceNode;
 	var gain:js.html.audio.GainNode;
@@ -69,10 +75,14 @@ private class WebAudioSound implements PlayingSound {
 		source.onended = function() if (!stopped) onEnded();
 		startedAt = context.currentTime;
 		var offsetMs = startMs % lengthMs;
+		var durationMs = lengthMs * plays - startMs;
 		if (plays > 1) {
 			// Loops back to the start of the buffer, like Flash, then stops after the last play.
 			source.loop = true;
-			source.start(0, offsetMs / 1000, (lengthMs * plays - startMs) / 1000);
+			if (durationMs < FOREVER_MS)
+				source.start(0, offsetMs / 1000, durationMs / 1000);
+			else
+				source.start(0, offsetMs / 1000);
 		} else
 			source.start(0, offsetMs / 1000);
 	}
@@ -97,9 +107,6 @@ private class WebAudioSound implements PlayingSound {
  * If it is still playing when the context runs, it goes on aloud from where it is.
  */
 private class SilentSound implements PlayingSound {
-	// setTimeout fires at once past 2^31 - 1 ms (24.8 days): a longer sound, like 999999 turns of a music, never ends here.
-	static inline var MAX_DELAY_MS = 2147483647.0;
-
 	var sound:Sound;
 	var startMs:Float;
 	var plays:Int;
@@ -119,7 +126,7 @@ private class SilentSound implements PlayingSound {
 		this.pan = pan;
 		this.onEnded = onEnded;
 		var durationMs = sound.length * plays - startMs;
-		if (durationMs < MAX_DELAY_MS)
+		if (durationMs < WebAudioSound.FOREVER_MS)
 			timer = haxe.Timer.delay(end, Std.int(Math.max(0, durationMs)));
 	}
 
